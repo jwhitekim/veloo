@@ -16,8 +16,8 @@ before reading, that's wasted time.
 - Pulls metadata and author info automatically through the Semantic Scholar
   API.
 - Has Claude summarize the paper's problem, method, and conclusion.
-- Scores the venue's journal quality using a bundled SJR (SCImago Journal
-  Rank) dataset.
+- Scores the venue's journal quality using a bundled SJR (SCImago Journal Rank)
+  dataset.
 
 **How you use it**
 1. Upload a PDF or search by title.
@@ -35,14 +35,15 @@ spend less time on weak-venue papers.
 
 **Why**
 General translators (Google, DeepL, etc.) have no domain knowledge, so they
-translate formulas, proper nouns, and ML/DL terminology literally — which
-often hurts comprehension rather than helping it.
+translate formulas, proper nouns, and ML (Machine Learning)/DL (Deep Learning)
+terminology literally — which often hurts comprehension rather than helping
+it.
 
 **What it does**
-- Streaming English → Korean translation (sentence-by-sentence, real-time).
-- Tuned for ML/DL/CV/NLP writing: leaves formulas and proper nouns alone,
-  and keeps field-specific terms in English where a literal translation
-  would just be confusing.
+- Streaming English > Korean translation (sentence-by-sentence, real-time).
+- Tuned for ML/DL/CV (Computer Vision)/NLP (Natural Language Processing)
+  writing: leaves formulas and proper nouns alone, and keeps field-specific
+  terms in English where a literal translation would just be confusing.
 
 **How you use it**
 1. Copy a paragraph you're stuck on from Paper and paste it into Trans.

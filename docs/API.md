@@ -1,6 +1,6 @@
 # Veloo API 명세서
 
-FastAPI 루트(`backend/main.py`)가 5개 서브앱을 서로 다른 prefix에 mount하고, 인증 라우터는 prefix 없이 루트에 직접 포함되는 구조. 이 문서는 실제 라우터 코드(`@app.get/post/...`, `@router.get/post/...`)와 Pydantic 모델을 근거로 각 엔드포인트의 request/response를 정리한다.
+FastAPI 루트(`backend/main.py`)가 5개 서브앱을 서로 다른 prefix에 mount하고, 인증 라우터는 prefix 없이 루트에 직접 포함되는 구조. 실제 라우터 코드(`@app.get/post/...`, `@router.get/post/...`)와 Pydantic 모델을 근거로 각 엔드포인트의 request/response를 정리.
 
 ## 실제 마운트 prefix
 
@@ -15,11 +15,11 @@ FastAPI 루트(`backend/main.py`)가 5개 서브앱을 서로 다른 prefix에 m
 
 ## 인증 공통 동작
 
-`backend/app/auth.py`의 `AuthMiddleware`(root app에 등록)가 모든 요청을 가로챈다.
+`backend/app/auth.py`의 `AuthMiddleware`(root app에 등록)가 모든 요청을 가로챔.
 
-- `_OPEN_PATHS`(`/`, `/login`, `/signup`, `/logout`, `/register`, `/api/me`, 정적 파일 등)와 `/assets/`, `/workbox-` prefix는 인증 없이 통과.
-- 그 외 경로는 `access_token` 쿠키 → Supabase `sessions` 테이블 조회로 세션 유효성을 검사하고, 유효하면 `request.state.user_id`를 세팅.
-- 세션이 없거나 만료된 경우: 경로가 `/paper/`, `/translate/`, `/model-review/`, `/todo/`, `/contextor/`로 시작하면 `401 {"error": "세션이 만료됐습니다. 다시 로그인해주세요."}` JSON을 반환하고, 그 외 경로는 `/login?redirect=...`로 리다이렉트.
+- OPEN(Open Path) PATHS(Path List) 목록(`_OPEN_PATHS`: `/`, `/login`, `/signup`, `/logout`, `/register`, `/api/me`, 정적 파일 등)와 `/assets/`, `/workbox-` prefix는 인증 없이 통과.
+- OPEN PATHS 외의 경로는 `access_token` 쿠키 > Supabase `sessions` 테이블 조회로 세션 유효성을 검사하고, 유효하면 `request.state.user_id`를 세팅.
+- 세션이 없거나 만료된 경우: 경로가 `/paper/`, `/translate/`, `/model-review/`, `/todo/`, `/contextor/`로 시작하면 `401 {"error": "세션이 만료됐습니다. 다시 로그인해주세요."}` JSON을 반환하고, 위 prefix 외의 경로는 `/login?redirect=...`로 리다이렉트.
 - 즉 아래 모든 서브앱 엔드포인트는 유효한 `access_token` 쿠키가 전제 조건이다(개별 섹션에서 별도로 반복하지 않음).
 - Todo 서브앱의 라우터들은 이와 별개로 자체 `_get_user_id` 의존성에서 같은 쿠키로 세션을 다시 조회한다(중복이지만 동작에는 문제 없음).
 
@@ -61,7 +61,7 @@ Response (count=true): `{"count": int}`
 
 ### POST /paper/search
 
-논문 제목 검색 또는 URL 파싱. **JSON이 아니라 form 필드**(`Form(...)`)로 받는다.
+논문 제목 검색 또는 URL 파싱. **JSON이 아니라 form 필드**(`Form(...)`)로 받음.
 
 Request (`multipart/form-data` 또는 `application/x-www-form-urlencoded`):
 ```
@@ -86,11 +86,11 @@ Response — 제목 검색인 경우:
 }
 ```
 
-에러: 외부 API 오류(권한/레이트리밋) 시 `{"error": string}` + 502, 그 외 예외 시 `{"error": "서버 오류가 발생했습니다."}` + 500.
+에러: 외부 API 오류(권한/레이트리밋) 시 `{"error": string}` + 502, 기타 예외 시 `{"error": "서버 오류가 발생했습니다."}` + 500.
 
 ### POST /paper/analyze
 
-`paper_id`(Semantic Scholar ID) 또는 `url` 중 하나로 논문을 조회·분석. **form 필드**(`Form(None)`)로 받는다.
+`paper_id`(Semantic Scholar ID) 또는 `url` 중 하나로 논문을 조회·분석. **form 필드**(`Form(None)`)로 받음.
 
 Request (`multipart/form-data` 또는 `application/x-www-form-urlencoded`):
 ```
@@ -177,7 +177,7 @@ Response: `POST /paper/analyze`의 응답과 동일한 `basic`/`analysis`/`autho
 }
 ```
 
-PDF에서 arXiv ID나 DOI가 추출되면 Semantic Scholar 재조회로 `basic`/`authors`를 보강하고, 실패 시 PDF 자체 추출값(제목/초록/DOI/arXiv ID)만 사용.
+PDF에서 arXiv ID나 DOI(Digital Object Identifier)가 추출되면 Semantic Scholar 재조회로 `basic`/`authors`를 보강하고, 실패 시 PDF 자체 추출값(제목/초록/DOI/arXiv ID)만 사용.
 
 ---
 
@@ -192,11 +192,11 @@ Request (JSON, `TranslateRequest`):
 { "text": string }
 ```
 
-Response: **스트리밍**(`StreamingResponse`, `media_type: text/plain; charset=utf-8`). JSON이 아니라 번역된 텍스트 토큰이 순차적으로 내려온다.
+Response: **스트리밍**(`StreamingResponse`, `media_type: text/plain; charset=utf-8`). JSON이 아니라 번역된 텍스트 토큰이 순차적으로 내려옴.
 
-- 캐시 히트(Supabase `translation_history`에 동일 `user_id`+`source_text` 존재) 시: 응답 헤더 `X-Cache: HIT`와 함께 캐시된 번역 전체를 단일 청크로 전송.
+- HIT(Cache Hit) 상태(Supabase `translation_history`에 동일 `user_id`+`source_text` 존재)면 응답 헤더 `X-Cache: HIT`와 함께 캐시된 번역 전체를 단일 청크로 전송.
 - 캐시 미스 시: AI provider의 `stream()`을 그대로 프록시하여 토큰 단위로 전송, 완료 후 Supabase에 저장(`type`은 공백 기준 단어 1개면 `"word"`, 아니면 `"sentence"`).
-- 스트림 도중 오류 발생 & 아직 아무것도 못 보냈으면 한국어 에러 문구를 스트림으로 전송(HTTP status는 200 그대로, 별도 에러 JSON이 아님).
+- 스트림 도중 오류가 발생했고 응답 전송 전이면 한국어 에러 문구를 스트림으로 전송(HTTP status는 200 그대로, 별도 에러 JSON이 아님).
 - `text`가 빈 문자열이면 `{"error": "텍스트가 비어 있습니다."}` + 400 (이 경우만 JSON).
 
 ### GET /translate/api/history
@@ -310,7 +310,7 @@ Todo 서브앱은 Supabase가 설정돼 있지 않으면 라우터들이 `Depend
 
 Request (query):
 ```
-filter: string | null (optional)   # "week" | "memo" | "today" | 그 외/생략 시 전체
+filter: string | null (optional)   # "week" | "memo" | "today" | 지정한 값 외 또는 생략 시 전체
 ```
 
 Response: `TodoOut` 배열(아래 스키마).
@@ -368,7 +368,7 @@ Request (JSON, `TodoCreate`):
 
 Response: `TodoOut` (`steps: []`).
 
-### PATCH /todo/api/todos/{todo_id}
+### PATCH (Partial Update) /todo/api/todos/{todo_id}
 
 Request (JSON, `TodoUpdate`, 모든 필드 optional, 전달된 필드만 반영):
 ```
@@ -455,7 +455,7 @@ Response (즉시): `{"status": "generating"}` — 완료 여부는 별도로 폴
 
 ### POST /todo/api/ai/generate-strategy
 
-TODO 하나에 대해 우선순위 조언 한 문장을 생성해 `ai_strategy` 필드에 저장.
+TODO 하나의 우선순위 조언 한 문장을 생성해 `ai_strategy` 필드에 저장.
 
 > 2026-09-01부로 프론트엔드 AI 전략 UI가 제거되어 현재 이 엔드포인트를 호출하는 프론트엔드 코드는 없음(다시 쓰기 쉽도록 의도적으로 남겨둔 상태).
 
@@ -470,7 +470,7 @@ Response: 업데이트된 todo 레코드(`TodoOut`과 동일한 형태, steps �
 
 Request (query):
 ```
-week_start: string (required, ISO 8601)
+week_start: string (required, ISO(International Organization for Standardization) 8601)
 ```
 
 Response:
@@ -498,7 +498,7 @@ Response:
 
 ## Contextor
 
-영어 단어/구를 ML/DL 맥락별 의미로 설명. `backend/app/contextor.py` (폴더 없는 단일 파일).
+영어 단어/구를 ML(Machine Learning)/DL(Deep Learning) 맥락별 의미로 설명. `backend/app/contextor.py` (폴더 없는 단일 파일).
 
 ### POST /contextor/api/lookup
 
@@ -555,7 +555,7 @@ Request (JSON, `RegisterRequest`):
 - `password`는 8자 미만이면 400.
 - 이미 존재하는 username이면 409.
 
-Response: `{"ok": true, "message": "승인 대기 중입니다."}` — 가입 즉시 사용 불가, `users.is_approved`가 별도로 승인돼야 함(승인 경로는 코드상 확인 안 됨 — 대시보드 등 외부에서 처리하는 것으로 추정).
+Response: `{"ok": true, "message": "승인 대기 중입니다."}` — 가입 즉시 사용 불가, `users.is_approved`가 별도로 승인돼야 함(승인 경로는 코드상 미확인 — 대시보드 등 외부에서 처리하는 것으로 추정).
 
 ### POST /login
 
@@ -568,11 +568,11 @@ Request (JSON, `LoginRequest`):
 - 계정 없음/비밀번호 불일치: 401.
 - `is_approved`가 false: 403.
 
-Response(성공): `{"ok": true}` + `Set-Cookie: access_token=...`(httponly, samesite=lax, max_age 30일, `secure`는 `SECURE_COOKIE` env 또는 요청 스킴으로 결정).
+Response(성공): `{"ok": true}` + `Set-Cookie: access_token=...`(httponly, samesite=lax, max_age 30일, SECURE(Secure) COOKIE(Cookie) 관련 환경변수 `SECURE_COOKIE` 값 또는 요청 스킴으로 `secure` 플래그 결정).
 
 ### DELETE /logout
 
-쿠키의 `access_token`으로 Supabase `sessions` 레코드를 삭제하고 쿠키를 지운다.
+쿠키의 `access_token`으로 Supabase `sessions` 레코드를 삭제하고 쿠키를 지움.
 
 Response: `{"ok": true}`
 
@@ -587,6 +587,6 @@ Response(실패): `{"error": string}` + 401 (쿠키 없음/세션 만료/사용�
 
 ## 확인 필요 / 생략한 부분
 
-- 에러 응답의 HTTP status code가 라우트마다 제각각(같은 "잘못된 요청"이어도 200/400/500이 섞여 있음, 특히 `POST /paper/analyze`는 에러 케이스에서도 status_code를 지정하지 않아 200으로 나감) — 라우트별로 위에 개별 명시했고 전체를 통일된 표로 만들지 않았다.
+- 에러 응답의 HTTP status code가 라우트마다 제각각(같은 "잘못된 요청"이어도 200/400/500이 섞여 있음, 특히 `POST /paper/analyze`는 에러 케이스에서도 status_code를 지정하지 않아 200으로 나감) — 라우트별로 위에 개별 명시했고 전체를 통일된 표로는 만들지 않음.
 - `users.is_approved`를 true로 바꾸는 승인 플로우(관리자 API 등)는 코드베이스에서 별도 엔드포인트를 찾지 못함 — Supabase 대시보드에서 직접 처리하는 것으로 추정되나 확인 필요.
-- AI가 생성하는 JSON 필드(`analysis`, `explanation`, `feedback`, `cases`, `steps` 등)는 Pydantic 모델이 아니라 프롬프트의 `<schema>` 블록으로만 강제된다 — 실제 AI 응답이 이 형태를 벗어날 가능성은 코드상 배제되지 않음.
+- AI가 생성하는 JSON 필드(`analysis`, `explanation`, `feedback`, `cases`, `steps` 등)는 Pydantic 모델이 아니라 프롬프트의 `<schema>` 블록으로만 강제 — 실제 AI 응답이 프롬프트 스키마를 벗어날 가능성은 코드상 배제되지 않음.

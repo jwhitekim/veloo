@@ -1,6 +1,6 @@
 # Changelog
 
-이 문서는 git 커밋 이력을 기반으로 재구성되었습니다. 버전 구분은 `frontend/package.json`의 `version` 필드 변경 시점만을 기준으로 삼았습니다.
+본 Changelog는 git 커밋 이력을 기반으로 재구성. 버전 구분은 `frontend/package.json`의 `version` 필드 변경 시점만을 기준으로 함.
 
 > **참고 (정확성 관련 특이사항)**
 > - 저장소 전체 224개 커밋 중 `frontend/package.json`의 `version` 값이 실제로 바뀐 적은 **단 1회**입니다 (`0.1.0` → `2.3.0`, 커밋 `0e05965`, 2026-06-03). 이후 오늘(2026-09-06)까지 3개월·160여 개 커밋 동안 `version` 필드는 `2.3.0`에서 전혀 변경되지 않았습니다.
@@ -9,12 +9,12 @@
 
 ## [2.3.0] - 2026-06-03 ~ 현재 (버전 미변경, 진행 중)
 
-커밋 `0e05965`(스키마 통합·버전 관리 툴링 추가, v2.3.0 표기 시작)부터 HEAD(`9fc57b7`)까지. 도메인 인증 전환, Contextor 신규 서브앱 추가, 타임블로킹 캘린더, PWA 전환, 라우팅/네비게이션 전면 개편, 디자인 시스템 정비 등 프로젝트의 사실상 대부분의 기능 개발이 이 구간에서 이루어졌습니다.
+커밋 `0e05965`(스키마 통합·버전 관리 툴링 추가, v2.3.0 표기 시작)부터 HEAD (Head Commit)인 `9fc57b7`까지. 도메인 인증 전환, Contextor 신규 서브앱 추가, 타임블로킹 캘린더, PWA (Progressive Web App) 전환, 라우팅/네비게이션 전면 개편, 디자인 시스템 정비 등 프로젝트의 사실상 대부분의 기능 개발이 위 커밋 구간에서 진행.
 
 ### Added
 - 프론트엔드 라우팅에 `/:username/` prefix 추가, 확장앱 아이콘 적용
 - 확장앱 "웹에서 열기" 버튼에 `/api/me` 기반 username 경로 적용
-- Contextor 앱 신규 추가, `arch-trainer` → `model-review` 경로 변경, 번역기 정리
+- Contextor 앱 신규 추가, `arch-trainer` > `model-review` 경로 변경, 번역기 정리
 - Todo 메모 줄바꿈 렌더링, 메모 수정 시 AI 단계 자동 재생성
 - Todo 완료 토글 옵티미스틱 업데이트, 메모 수정 시 스텝 재생성
 - 타임블로킹 캘린더·주간 리뷰·마감일 알림 스케줄러 추가
@@ -40,10 +40,10 @@
 - iOS Safari 접속 타임아웃을 유발하던 PWA 정적 파일 서빙 수정, vitePWA 설정 수정
 - 배포 스크립트 수정, `analyze_paper` Gemini 설정 버그 수정
 - 히스토리 추가 안되는 버그, pull 병합 문제 수정
-- Gemini smart-tier 기본 모델명을 GA 버전으로 수정
+- Gemini smart-tier 기본 모델명을 GA (General Availability) 버전으로 수정
 - iOS 입력창 확대(zoom-on-focus)·hover tap-trap 방지
 - 오늘 필터를 마감일 기준으로 통일(주간 필터와 일치)
-- `FEEDBACK_PROMPT` 포맷 템플릿의 JSON 중괄호 이스케이프 처리
+- FEEDBACK_PROMPT (Feedback Prompt Template) 포맷 템플릿의 JSON 중괄호 이스케이프 처리
 - 언어 프로바이더로 앱 전체 래핑, 로그인 화면 "Veloo" 표기 복원
 - Todo 대시보드를 기본 상세 뷰로 복원
 - 무한 루프를 유발하던 Stop 훅 제거
@@ -51,21 +51,21 @@
 - model-review `/api/feedback` 500 에러 해결 (max_tokens, 빈 AI 응답, 스키마 문제)
 - Todo 행 접근성(a11y) 복원, NavFilter 라벨 중복 제거, 폴링 타이머 정리
 - AI JSON 파싱 하드닝(태그 누출 방지), 출력 계약 중복 제거
-- 모바일 독 드래그 제스처가 브라우저에 의해 취소되는 문제 방지
+- 모바일 독 드래그 제스처를 브라우저가 취소하는 문제 방지
 - 버그 수정 다수 (`fix: bug fixes`, 상세 미기재)
 
 ### Changed
 - 번역기 프롬프트 단일화 + 단어 번역 지원 추가
 - Contextor / arch_trainer 프롬프트를 XML 구조로 재정리, 응답 스키마 개선
-- 프론트엔드 폴더 구조를 type-based → feature-based로 재편
+- 프론트엔드 폴더 구조를 type-based > feature-based로 재편
 - 백엔드 Supabase 초기화를 `backend/database.py`로 단일화
 - `main.py` 인증 로직을 `backend/auth.py`로 분리
-- 메인 페이지 라우팅을 사이드바 단일 SPA 구조로 전환
+- 메인 페이지 라우팅을 사이드바 단일 SPA (Single Page Application) 구조로 전환
 - Todo 프롬프트 반복 수정(제약 조건, 스텝 단순화·목적 변경 등, 4건)
 - 스텝 재생성 시 기존 스텝 삭제 후 재생성
 - Contextor 검색 속도 개선
 - Todo 필터 위치를 리스트 상단으로 이동
-- Todo 마감일 입력을 텍스트 입력 → 달력 선택으로 변경, 시작일-마감일 코드 제거
+- Todo 마감일 입력을 텍스트 입력 > 달력 선택으로 변경, 시작일-마감일 코드 제거
 - 백엔드 폴더 구조 정리, `setup-veloo-linux.sh`를 `setup-nginx-https.sh`로 재작성
 - Todo 탭 UX 단순화(인라인 편집·AI 전략 제거), Todo AI 단계 프롬프트를 메모 기반으로 개선
 - paper_analyzer 프롬프트에 출력 스키마 태그 추가
@@ -92,7 +92,7 @@
 - 프론트엔드 npm 빌드 관련 "하지 말 것" 규칙 추가, 문서 표 재포맷
 
 ### Chore
-- CLAUDE.md 통합, 브랜치 전략 수립(dev 단일화 → 이후 main 단일화로 재변경), `bump.py` 관련 작업(양방향 업데이트 → 이후 참조 제거)
+- CLAUDE.md 통합, 브랜치 전략 수립(dev 단일화 > 이후 main 단일화로 재변경), `bump.py` 관련 작업(양방향 업데이트 > 이후 참조 제거)
 - 확장앱 배포 워크플로우 추가 후 미사용 Chrome 확장/워크플로우 제거
 - `.claude` 커맨드 구조를 스킬 구조로 정리, `settings.json` 추가
 - 설정 스크립트를 `scripts/`로 이동(2회), `generate_i18n.py`를 `scripts/`로 이동
@@ -103,11 +103,11 @@
 - `임시 테스트`, `테스트 완료` (내용 미상, 접두어 없음)
 - `prompt.md 제외` (gitignore 성격으로 추정)
 - `wip: Veloo workspace/캘린더 리디자인 복원` (작업 중 커밋)
-- 이 구간에는 dev 브랜치 병합에 따른 Merge 커밋 다수가 포함되어 있으나(총 14건), 실제 변경 내용은 위 항목들에 이미 반영되어 있어 별도 나열하지 않음
+- 위 [2.3.0] 구간에는 dev 브랜치 병합에 따른 Merge 커밋 다수 포함(총 14건), 실제 변경 내용은 위 항목들에 이미 반영되어 있어 별도 나열하지 않음
 
 ## [0.1.0] - 2026-04-28 ~ 2026-05-26
 
-최초 커밋(`061b521`)부터 `2.3.0`으로 버전이 바뀌기 직전 마지막 상태(`f9ec5d6`)까지. 총 62개 커밋. 초기 프로젝트명은 `lab-toolkit`이었다가 이 구간 후반부에 `veloo`로 개명되었습니다.
+최초 커밋(`061b521`)부터 `2.3.0`으로 버전이 바뀌기 직전 마지막 상태(`f9ec5d6`)까지. 총 62개 커밋. 초기 프로젝트명은 `lab-toolkit`이었으며, 해당 구간 후반부에 `veloo`로 개명.
 
 ### Added
 - 라우팅별 브라우저 탭 제목 동적 업데이트

@@ -24,7 +24,7 @@ Job `deploy` 전 스텝 성공:
 - Deploy — success
 - Complete job — success
 
-→ 워크플로우 자체는 문제 없이 완료됨. `gh run view --log-failed` 대상 실패 스텝 없음.
+워크플로우 자체는 문제 없이 완료됨. `gh run view --log-failed` 대상 실패 스텝 없음.
 
 ## 2. 프로덕션 스모크 테스트
 
@@ -40,22 +40,22 @@ WebFetch로 아래 인증 불필요 경로를 테스트 시도(초기 1회 + 재
 
 ### 원인 확인 (DNS 조사)
 
-이것이 페치 도구(샌드박스) 국한 문제인지 실제 장애인지 구분하기 위해 공용 리졸버로 직접 조회:
+DNS 해석 실패가 페치 도구(샌드박스) 국한 문제인지 실제 장애인지 구분하기 위해, AAAA (Address record)·CNAME (Canonical Name)·NS (Name Server) 레코드를 공용 리졸버로 직접 조회함:
 
 ```
-dig +short A     veloo.page @1.1.1.1  → (없음)
-dig +short AAAA  veloo.page @1.1.1.1  → (없음)
-dig +short CNAME veloo.page @1.1.1.1  → (없음)
-dig +short A     veloo.page @8.8.8.8  → (없음)
-dig +short NS    veloo.page @1.1.1.1  →
+dig +short A     veloo.page @1.1.1.1  > (없음)
+dig +short AAAA  veloo.page @1.1.1.1  > (없음)
+dig +short CNAME veloo.page @1.1.1.1  > (없음)
+dig +short A     veloo.page @8.8.8.8  > (없음)
+dig +short NS    veloo.page @1.1.1.1  >
     curitiba.ns.porkbun.com.
     fortaleza.ns.porkbun.com.
     maceio.ns.porkbun.com.
     salvador.ns.porkbun.com.
 ```
 
-- **Cloudflare/8.8.8.8 두 공용 리졸버 모두** veloo.page 아펙스에 A/AAAA/CNAME 레코드가 **전혀 없음** → 특정 샌드박스 문제가 아니라 누구도 도메인을 IP로 해석할 수 없는 상태.
-- 네임서버가 Cloudflare가 아닌 **porkbun 등록기관 기본 네임서버**로 남아 있음. CLAUDE.md상 배포 구조는 Docker + Cloudflare Tunnel인데, Cloudflare Tunnel 이 정상 동작하려면 도메인이 Cloudflare NS + 터널 CNAME(`*.cfargotunnel.com`)으로 구성돼야 함. 현재 그 구성이 반영돼 있지 않음.
+- **Cloudflare/8.8.8.8 두 공용 리졸버 모두** veloo.page 아펙스에 A/AAAA/CNAME 레코드가 **없음** — 특정 샌드박스 문제가 아니라 누구도 도메인을 IP로 해석할 수 없는 상태.
+- 네임서버가 Cloudflare가 아닌 **porkbun 등록기관 기본 네임서버**로 남아 있음. CLAUDE.md상 배포 구조는 Docker + Cloudflare Tunnel인데, Cloudflare Tunnel 이 정상 동작하려면 도메인이 Cloudflare NS + 터널 CNAME(`*.cfargotunnel.com`)으로 구성돼야 함. 현재 해당 구성은 반영돼 있지 않음.
 
 즉, 서버 컨테이너/배포 워크플로우와 무관하게 **공개 도메인 자체가 해석 불가**하여 사이트에 도달할 수 없음.
 
