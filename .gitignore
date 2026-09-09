@@ -40,3 +40,7 @@ design-refs/
 
 # prompts
 prompt.md
+
+# todo-guard local state
+.claude/todo-guard/
+.claude/settings.json.bak-*
