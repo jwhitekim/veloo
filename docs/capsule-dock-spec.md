@@ -249,7 +249,15 @@ iOS `UISegmentedControl`의 네이티브 드래그 동작을 웹 포인터 이�
 손을 뗄 때(`finishGesture`)만 최종 위치로 state를 동기화해 React 트리와 다시 맞춤. width는
 드래그 중 안 바뀌므로 state 값 그대로 사용.
 
-**2026-09-10 원인 분석 — "밝기가 늘어났다가 마는 버그" (미해결)**: `isPressed`가
+**2026-09-10 실제 수정 완료 — "밝기가 늘어났다가 마는 버그"**: `.shell-mobile-tabs.is-dragging`
+에 `transition: filter 0s`를 추가해, is-dragging이 붙는 순간 `filter` 전환 시간을 0으로 만듦.
+드래그가 아닌 일반 해제(탭)는 이 규칙에 안 걸리므로 기존 0.15초 페이드아웃은 그대로 유지되고,
+드래그로 이어질 때만 애니메이션 없이 즉시 꺼짐 — 중간에 방향을 트는 역방향 애니메이션 자체가
+사라짐.
+
+아래는 수정 전 원인 분석 기록 (참고용):
+
+**2026-09-10 원인 분석 — "밝기가 늘어났다가 마는 버그"**: `isPressed`가
 `pointerdown` 즉시 켜져 `filter`가 `brightness(1)→(1.45)`로 0.15초 동안 올라가기
 시작하는데, 5px 이상 움직여 `isDragging`이 켜지는 순간 `.is-pressed:not(.is-dragging)`
 조건이 깨지면서 목표값이 그 순간 즉시 `brightness(1)`로 바뀜. CSS는 이걸 새 전환으로
