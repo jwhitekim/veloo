@@ -562,4 +562,78 @@
       transition-duration: 0.01ms;
     }
   }
+
+  /* 2026-09-10: Android용 하단 네비게이션 (docs/os-nav-switching-plan.md 참고). iOS 캡슐 독과
+     달리 화면 하단에 고정된 바(container) — 떠 있지 않고 좌우로 화면 끝까지 붙음. 선택된
+     항목만 배경에 알약형(pill) 하이라이트를 준다(Material 3 관례). 구체적 색상/치수는
+     기존 디자인 토큰(--accent-soft, --bg-base)으로 임시 배치한 것 — 실기기 확인 전 조정 가능. */
+  .shell-android-tabs {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 64px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--bg-base);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .shell-android-tab {
+    flex: 1 1 20%;
+    height: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  .shell-android-tab-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 28px;
+    border-radius: 9999px;
+    background: transparent;
+    transition: background-color 0.15s ease-out;
+  }
+
+  .shell-android-tab.is-active {
+    color: var(--accent);
+  }
+
+  .shell-android-tab.is-active .shell-android-tab-pill {
+    background: var(--accent-soft);
+  }
+
+  .shell-android-tab svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.8;
+  }
+
+  .shell-android-tab span:last-child {
+    max-width: 62px;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: var(--fw-medium);
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .shell-android-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
 }

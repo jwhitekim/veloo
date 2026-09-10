@@ -1,6 +1,6 @@
 # OS별 모바일 네비게이션 스위칭 방향
 
-모바일 하단 네비게이션을 iOS/Android 구분 없이 캡슐(pill) 독 하나로 통일해 쓰던 상태에서, iOS 전용 디자인을 Android에 그대로 노출하는 문제 정리. 현재 캡슐 독 스펙은 [`capsule-dock-spec.md`](./capsule-dock-spec.md) 참고. 2026-09-10 기준 논의안이며 구현 전 단계.
+모바일 하단 네비게이션을 iOS/Android 구분 없이 캡슐(pill) 독 하나로 통일해 쓰던 상태에서, iOS 전용 디자인을 Android에 그대로 노출하는 문제 정리. 현재 캡슐 독 스펙은 [`capsule-dock-spec.md`](./capsule-dock-spec.md) 참고. 2026-09-10 구현 완료 — Android 네비게이션 바의 색상/치수는 사용자 협의 없이 기존 디자인 토큰으로 임시 배치함(아래 "구현 방향" 참고), 실기기 확인 후 조정 필요.
 
 ## 배경
 
@@ -41,6 +41,6 @@ Material 3 Expressive 가이드라인(2025~2026 기준) 참고.
 
 ## 구현 방향(요약)
 
-- `useDeviceOS()` 훅 신설 — UA 판별 + 오버라이드 값 우선 적용
-- `Shell.tsx`에서 기존 캡슐 독 컴포넌트는 그대로 두고, Android용 네비게이션 바 컴포넌트를 별도 추가해 훅 결과로 분기 렌더
-- 사용자 확인 필요: Android 네비게이션 바의 구체적 색상/치수는 착수 전 별도 협의
+- `useDeviceOS()` 훅 신설(`frontend/src/shared/hooks/useDeviceOS.ts`) — UA 판별 + 오버라이드 값 우선 적용
+- `WorkspaceLayout.tsx`에서 기존 캡슐 독 컴포넌트는 그대로 두고, Android용 네비게이션 바 컴포넌트(`MobileAndroidNavigation.tsx`)를 별도 추가해 훅 결과로 분기 렌더
+- Android 네비게이션 바 색상/치수는 별도 협의 없이 기존 디자인 토큰(`--bg-base`, `--border-subtle`, `--accent`, `--accent-soft`)으로 임시 배치 — 바 높이 64px(iOS 캡슐 독과 동일값 재사용), 선택 항목 pill 52×28px. 실기기 확인 전 조정 가능한 값.
