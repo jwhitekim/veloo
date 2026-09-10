@@ -36,6 +36,7 @@ export default function MobileCapsuleNavigation() {
 
   const tabsRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const indicatorRef = useRef<HTMLDivElement>(null)
   const tabRefs = useRef<Partial<Record<MobilePrimaryKey, HTMLButtonElement | null>>>({})
   // offsetWidth를 읽는 건 강제 리플로우를 유발할 수 있는 레이아웃 읽기라, 드래그가 진행되는
   // 동안(pointermove가 매 프레임 부르는 moveIndicator 안) 매번 다시 읽지 않고 제스처 시작
@@ -52,6 +53,12 @@ export default function MobileCapsuleNavigation() {
   const [isPressed, setIsPressed] = useState(false)
   const gestureRef = useRef<{ startX: number; moved: boolean; target: MobilePrimaryKey } | null>(null)
   const suppressClickRef = useRef(false)
+  // 2026-09-10: pointermove는 기기에 따라 화면 주사율보다 훨씬 자주(디바운스 없이) 발생할 수
+  // 있는데, 매번 바로 moveIndicator()를 불러 setState하면 프레임당 여러 번 렌더가 몰려
+  // 드래그가 끊겨 보였다("옆으로 밀리는 애니메이션이 뚝뚝 끊김"). 최신 좌표만 ref에 저장해두고
+  // requestAnimationFrame으로 프레임당 한 번만 실제 갱신하도록 코얼레싱한다.
+  const pendingClientXRef = useRef<number | null>(null)
+  const rafIdRef = useRef<number | null>(null)
 
   useLayoutEffect(() => {
     if (isDragging) return
@@ -98,7 +105,12 @@ export default function MobileCapsuleNavigation() {
     const maxX = last.offsetLeft + last.offsetWidth - INDICATOR_INSET - width
     const x = Math.min(maxX, Math.max(minX, pointerX))
     const target = nearestTab(clientX)
-    setIndicatorRect({ x, width })
+    // 2026-09-10: 드래그 중엔 setState 대신 DOM을 직접 건드린다 — state를 매 프레임 바꾸면
+    // 인디케이터 하나 때문에 컴포넌트 전체(탭 5개, 아이콘, Plan 스위처)가 매 프레임 리렌더된다.
+    // 위치만 바뀌면 되므로 ref로 transform만 직접 갱신하고, 손을 뗄 때(finishGesture)만
+    // state를 최종값으로 동기화해 React 트리와 다시 맞춘다 — width는 드래그 중 안 바뀌므로
+    // state 그대로 둬도 무방.
+    if (indicatorRef.current) indicatorRef.current.style.transform = `translateX(${x}px)`
     // 손가락이 양 끝(첫/마지막 탭)을 넘어서려 하면, 바 전체가 옮겨가는 게 아니라 반대쪽 모서리는
     // 그 자리에 고정된 채 밀리는 쪽 모서리(굴곡선)만 늘어나 끌려가는 느낌을 낸다 — 넘어간
     // 만큼(overshoot)을 감쇠시켜서(sqrt로 체감) scaleX로 그 끝만 늘리고, transform-origin을
@@ -131,10 +143,21 @@ export default function MobileCapsuleNavigation() {
     event.preventDefault()
     gesture.moved = true
     setIsDragging(true)
-    moveIndicator(event.clientX)
+    pendingClientXRef.current = event.clientX
+    if (rafIdRef.current == null) {
+      rafIdRef.current = requestAnimationFrame(() => {
+        rafIdRef.current = null
+        if (pendingClientXRef.current != null) moveIndicator(pendingClientXRef.current)
+      })
+    }
   }
 
   const finishGesture = (event: React.PointerEvent<HTMLElement>, cancelled = false) => {
+    if (rafIdRef.current != null) {
+      cancelAnimationFrame(rafIdRef.current)
+      rafIdRef.current = null
+    }
+    pendingClientXRef.current = null
     const gesture = gestureRef.current
     gestureRef.current = null
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
@@ -184,6 +207,7 @@ export default function MobileCapsuleNavigation() {
           <div ref={trackRef} className="shell-mobile-tabs-track">
             {indicatorRect && (
               <div
+                ref={indicatorRef}
                 className="shell-mobile-tab-indicator"
                 style={{
                   width: indicatorRect.width,

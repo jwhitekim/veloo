@@ -73,7 +73,7 @@ transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
 
 | 속성 | 값 |
 |---|---|
-| 높이 | 58px |
+| 높이 | 64px (2026-09-10, 이전 58px — "독 전체가 작아 보인다"는 피드백으로 확대) |
 | 모서리 | `9999px` (완전한 캡슐) |
 | 배경 | `linear-gradient(135deg, rgba(255,255,255,.56), rgba(242,242,247,.32))` |
 | 블러 | `blur(24px) saturate(175%)` |
@@ -149,10 +149,14 @@ transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
   안 먹히게 만듦("드래그 중엔 밝아지면 안 되고 원래 색 그대로여야 한다"는 피드백). 대신 드래그
   중엔 아래 "러버밴드 엣지 스트레치"가 별도로 반응함.
 
+**2026-09-10 높이 확대**: 바 58px→64px, 인디케이터 44px→48px, top 인셋 7px→8px(`(64-48)/2`)로
+같이 조정함 — "캡슐 독 전체가 낮아 보인다"는 피드백. 세그먼트 폭(~70px)보다는 여전히 낮게
+유지해서 원형으로 깨지지 않는 비율을 지킴.
+
 ```css
 /* .shell-mobile-tab-indicator */
-top: 7px;                  /* 돌출 없음 — 58px 바 안에 대칭으로 들어감((58-44)/2) */
-height: 44px;
+top: 8px;                  /* 돌출 없음 — 64px 바 안에 대칭으로 들어감((64-48)/2) */
+height: 48px;
 border-radius: 9999px;
 background: #c4c4c4;                        /* 고정값 — 절대 다른 색으로 스와핑하지 않음 */
 box-shadow: 0 4px 12px rgba(0,0,0,.18);     /* 2026-09-06: accent 톤 링 글로우 제거, 중립 그림자만 */
@@ -173,6 +177,14 @@ transition: transform .15s ease-out, filter .15s ease-out;
 filter: brightness(1.45);                   /* 바 전체(안의 아이콘 5개 전부 포함) 공통 —
                                                 2026-09-06: 1.25에서 1.45로 상향, "값을 더 올려달라"는 요청 */
 ```
+
+**2026-09-10 버그 수정 — "밝기가 올라가다가 갑자기 어두워짐"**: `.shell-mobile-tabs`
+기본 상태에 `filter` 선언 자체가 없었음(암묵적으로 `none`). `is-pressed` 해제 시
+`filter: brightness(1.45)` → (선언 없음, 즉 `none`)으로 전환되는데, 브라우저는 필터 함수
+목록이 다른 두 값(`brightness()` 함수 vs 필터 없음) 사이를 보간하지 못해 트랜지션 없이
+그 프레임에 바로 스냅됨 — 이게 "밝아지다가 뚝 어두워지는" 것처럼 보인 원인. 기본 상태에도
+`filter: brightness(1);`을 명시해서 양끝이 같은 `brightness()` 함수가 되게 맞춰 정상
+보간되도록 수정.
 - **폭 = 탭 버튼 `offsetWidth`에서 좌우 각 3px씩 인셋**(`INDICATOR_INSET`,
   `MobileCapsuleNavigation.tsx`의 `indicatorRectFor()`) — 5개 탭 세그먼트 폭이 전부 동일하게
   좁은 화면(~70px)에서 인셋을 너무 크게 주면 폭이 다시 높이(44px)보다 좁아져 원형이 됨.
@@ -219,6 +231,23 @@ iOS `UISegmentedControl`의 네이티브 드래그 동작을 웹 포인터 이�
 2. `onPointerMove`: 시작점에서 5px 이상 움직이면 "드래그 시작" 확정 — 5px 미만은 단순 탭으로 간주. 확정 시점에 `event.preventDefault()`도 호출함(2026-09-06 추가). 드래그 중엔 인디케이터(캡슐)가 포인터 x좌표를 실시간 추적, 양끝 탭 경계에서 클램프. **단, 아이콘이 굵어지는/면형으로 바뀌는 것(`is-active`)은 위 실시간 추적과 분리돼 있음** — `isActive`는 `activeMobileKey`(실제 선택 확정)만 보고, 한때 있었던 `dragTarget`(드래그 중 캡슐이 지나가는 탭)은 더 이상 보지 않음. 드래그 중 캡슐이 여러 탭을 스치듯 지나가도, 지나가는 아이콘들은 손을 떼서 실제로 선택되기 전까지 그대로 선형/얇은 채로 남음(2026-09-06, "지나가기만 해도 굵어지면 안 되고 실제로 선택돼야 굵어져야 한다"는 피드백).
 3. `onPointerUp`: 실제로 드래그했다면 가장 가까운 탭으로 전환(`selectMobileItem`). 클릭 이벤트 중복 방지 목적으로 `suppressMobileClickRef`를 짧게 세워둠.
 4. `onPointerCancel`: 브라우저가 제스처를 가로챌 때도 동일하게 마무리 — 단, `cancelled=true`라 `activeMobileKey`(원래 탭)로 스냅되고 `selectMobileItem`은 호출되지 않음. 해당 콜백 자체가 자주 발생하면(=드래그를 자주 "놓침") 사용자 경험상 버그이므로, `touch-action: none` + `preventDefault()`로 애초에 브라우저가 제스처를 가로채지 못하게 막는 것이 근본 대책(2026-09-06, "알약을 놓친다"는 피드백으로 추가).
+
+**2026-09-10 버그 수정 — "드래그 애니메이션이 뚝뚝 끊김"**: `onPointerMove`가 매 이벤트마다
+바로 `moveIndicator()`를 호출해 `setState`를 트리거하고 있었음 — 기기에 따라 `pointermove`가
+화면 주사율보다 훨씬 잦게 발생할 수 있는데, 그때마다 즉시 렌더를 유발하면 한 프레임에 렌더가
+여러 번 몰려 오히려 끊겨 보임(transition을 끄는 것과는 별개 문제). `pendingClientXRef`에
+최신 좌표만 기록해두고 `requestAnimationFrame`으로 프레임당 한 번만 `moveIndicator()`를
+실행하도록 코얼레싱함 — `finishGesture()`에서 예약된 rAF가 있으면 취소하고 pending 좌표도
+비움. `.shell-mobile-tabs.is-dragging .shell-mobile-tab-indicator { transition: none; }`
+자체는 원래도 정상 동작하고 있었음(스펙 문서 오기 아님) — 문제는 transition이 아니라 렌더
+빈도였음.
+
+**2026-09-10 추가 개선 — 드래그 중 setState 제거**: rAF 코얼레싱 이후에도 프레임마다
+`setIndicatorRect()`로 state를 갱신해 컴포넌트 전체(탭 5개, 아이콘, Plan 스위처 포함)가
+매 프레임 리렌더되는 구조는 남아 있었음. 인디케이터 위치만 바뀌면 되므로, 드래그 중엔
+`indicatorRef.current.style.transform`을 직접 갱신하고 state는 건드리지 않도록 변경 —
+손을 뗄 때(`finishGesture`)만 최종 위치로 state를 동기화해 React 트리와 다시 맞춤. width는
+드래그 중 안 바뀌므로 state 값 그대로 사용.
 
 **러버밴드 엣지 스트레치 (2026-09-06 추가, 같은 날 방식 1번 교체)** — 드래그로 첫/마지막 탭
 경계를 넘어서려 하면 인디케이터만 경계에 멈추는 게 아니라 바(`.shell-mobile-tabs`)도 반응함.
