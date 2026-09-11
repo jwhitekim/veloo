@@ -541,8 +541,10 @@
     font-weight: 650;
   }
 
-  .shell-plan-switcher button.is-active { background: var(--bg-base); color: var(--accent); box-shadow: 0 1px 4px rgba(24, 25, 48, 0.08); }
-  .shell-plan-switcher button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  /* 2026-09-11: --accent(그린) 대신 --text-primary(검정) — "모두 초록이 아니라 검정"
+     피드백. 하단 탭바(.shell-mobile-tab/.shell-android-tab)와 같은 방침으로 통일. */
+  .shell-plan-switcher button.is-active { background: var(--bg-base); color: var(--text-primary); box-shadow: 0 1px 4px rgba(24, 25, 48, 0.08); }
+  .shell-plan-switcher button:focus-visible { outline: 2px solid var(--text-primary); outline-offset: -2px; }
   .shell-plan-switcher svg { width: 14px; height: 14px; }
 
   .shell-mobile-tab:focus-visible {
@@ -582,6 +584,9 @@
     border-top: 1px solid var(--border-subtle);
   }
 
+  /* 2026-09-11: 색으로 선택을 표시하지 않는다("모두 초록이 아니라 검정, 선택 여부와 무관하게
+     검정") — iOS 캡슐 독(.shell-mobile-tab)과 동일한 방침. color는 active/inactive 구분 없이
+     항상 --text-primary 하나만 쓴다. */
   .shell-android-tab {
     flex: 1 1 20%;
     height: 100%;
@@ -592,34 +597,32 @@
     gap: 2px;
     border: 0;
     background: transparent;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     cursor: pointer;
     font-family: var(--font-sans);
   }
 
+  /* 2026-09-11: pill 배경 하이라이트(인디케이터) 제거 — "안드에서는 인디케이터 없어야 한다"는
+     피드백. 아이콘 정렬용 wrapper만 남기고 배경색 전환은 없앰(구조는 남겨 레이아웃 안 깨짐). */
   .shell-android-tab-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 28px;
-    border-radius: 9999px;
-    background: transparent;
-    transition: background-color 0.15s ease-out;
-  }
-
-  .shell-android-tab.is-active {
-    color: var(--accent);
-  }
-
-  .shell-android-tab.is-active .shell-android-tab-pill {
-    background: var(--accent-soft);
+    width: 64px;
+    height: 32px;
   }
 
   .shell-android-tab svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     stroke-width: 1.8;
+  }
+
+  /* 2026-09-11: iOS와 동일하게, 선택 시 색이 아니라 아이콘 자체(선형→면형 교체는 JSX에서
+     Icon/IconSolid로 이미 처리, 여기선 굵기)로 표시 — GlobeAltIcon처럼 solid 버전이 없어
+     교체가 안 통하는 아이콘도 이 규칙으로 "선택됨"이 드러남. */
+  .shell-android-tab.is-active svg {
+    stroke-width: 3;
   }
 
   .shell-android-tab span:last-child {
