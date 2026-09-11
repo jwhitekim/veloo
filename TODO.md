@@ -1,6 +1,7 @@
 # TODO
 
 ## 완료
+- [x] 모바일 캡슐 독 드래그 중 인디케이터 화이트아웃 수정 (brightness 1.45→1.2, 인디케이터가 배경과 안 섞이게)
 - [x] 모바일 캡슐 독 러버밴드 엣지 스트레치 수정 (transform-origin 점프 제거, translateX 보정으로 대체 — 고정 쪽이 진짜로 안 움직이게)
 - [x] 모바일 캡슐 독 밝기 버그 근본 해결 ("드래그 중엔 밝아지면 안 된다" 결정을 뒤집음 — 손 뗄 때까지 계속 밝게 유지)
 - [x] OS별(iOS/Android) 모바일 네비게이션 스위칭 구현 (useDeviceOS 훅, MobileAndroidNavigation 추가)
