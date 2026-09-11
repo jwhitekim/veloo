@@ -339,15 +339,21 @@
     touch-action: none;
     /* 2026-09-06: scale(부풀기)과 드래그 러버밴드(모서리 스트레치)를 동시에 걸 수 있어야 해서
        두 값을 CSS 변수로 합성한다 — 인라인 스타일로 직접 transform을 주면 .is-pressed의 scale을
-       덮어써버리므로, MobileCapsuleNavigation.tsx는 --shell-edge-scale/transform-origin만
+       덮어써버리므로, MobileCapsuleNavigation.tsx는 --shell-edge-scale/--shell-edge-shift만
        imperatively 갱신하고 scale은 계속 클래스(.is-pressed)가 담당한다.
-       처음엔 바 전체를 translateX로 밀어내는 방식이었는데, "바가 통째로 옮겨가지 말고 반대쪽
-       모서리는 고정된 채 미는 쪽 굴곡선만 늘어나 끌려가는 느낌이어야 한다"는 피드백으로
-       scaleX + transform-origin(반대쪽 끝 고정) 방식으로 교체함. */
+       2026-09-11: transform-origin을 'left center'/'right center'로 순간 전환하던 방식은
+       버렸다 — 부풀기(중심 기준 대칭 스케일)와 엣지 스트레치(한쪽 고정)가 transform-origin을
+       공유하다 보니, 경계를 넘는 순간 origin이 즉시(트랜지션 불가능한 속성이라) 점프해
+       "이미 중심 기준으로 부풀어 있던 왼쪽 끝"이 그 순간 오른쪽으로 튕겨 보이는 문제가
+       있었다("왼쪽 끝도 움직인다"는 피드백). 대신 origin은 항상 center로 고정하고
+       translateX로 절반만큼 보정한다 — 중심 기준 scaleX는 양쪽을 push/2씩 대칭으로 늘리는데,
+       거기에 push/2만큼 반대 방향 translateX를 더하면 한쪽은 정확히 고정되고 반대쪽만 push
+       전체만큼 늘어나는 효과를 origin 전환 없이 얻는다(수학적으로 동일한 결과, 점프 없음). */
     --shell-edge-scale: 1;
+    --shell-edge-shift: 0px;
     --shell-press-scale: 1;
     transform-origin: center center;
-    transform: scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
+    transform: translateX(var(--shell-edge-shift)) scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
     /* 2026-09-06: 드래그 내내 transform이 매 프레임 바뀌는 요소라 will-change로 미리
        컴포지팅 레이어 승격을 예약해둔다 — 애니메이션 시작 시점의 승격 비용(끊김)을 줄임. */
     will-change: transform;

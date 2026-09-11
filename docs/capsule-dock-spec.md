@@ -161,11 +161,13 @@ box-shadow: 0 4px 12px rgba(0,0,0,.18);     /* 2026-09-06: accent 톤 링 글로
 transition: transform .3s cubic-bezier(.4,0,.2,1),
             width .3s cubic-bezier(.4,0,.2,1);
 
-/* .shell-mobile-tabs — 부풀기(scale)+엣지 스트레치(scaleX)를 변수로 합성, 아래 "러버밴드" 참고 */
+/* .shell-mobile-tabs — 부풀기(scale)+엣지 스트레치(scaleX+translateX 보정)를 변수로 합성,
+   아래 "러버밴드" 참고. transform-origin은 항상 center 고정(2026-09-11) */
 --shell-edge-scale: 1;
+--shell-edge-shift: 0px;
 --shell-press-scale: 1;
 transform-origin: center center;
-transform: scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
+transform: translateX(var(--shell-edge-shift)) scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
 transition: transform .15s ease-out, filter .15s ease-out;
 
 /* .shell-mobile-tabs.is-pressed */
@@ -266,47 +268,56 @@ iOS `UISegmentedControl`의 네이티브 드래그 동작을 웹 포인터 이�
 의존해 효과 없었고, filter 전환 0s 시도는 되돌림 자체는 안 보이게 했지만 "꺼진다"는
 사실은 그대로라 근본 해결이 아니었음.
 
-**러버밴드 엣지 스트레치 (2026-09-06 추가, 같은 날 방식 1번 교체)** — 드래그로 첫/마지막 탭
-경계를 넘어서려 하면 인디케이터만 경계에 멈추는 게 아니라 바(`.shell-mobile-tabs`)도 반응함.
-**처음엔 바 전체를 `translateX`로 밀어내는 방식으로 만들었는데**, "바가 통째로 옮겨가는 게
-아니라 반대쪽 모서리는 원래 위치에 고정된 채 미는 쪽 모서리(굴곡선)만 늘어나 끌려가는 느낌이어야
-한다"는 피드백으로 **`transform-origin`을 반대쪽 끝에 고정하고 `scaleX`로 미는 쪽만 늘리는
-방식**으로 교체했음.
+**러버밴드 엣지 스트레치 (2026-09-06 추가, 같은 날 방식 1번 교체, 2026-09-11 방식 2번 교체)** —
+드래그로 첫/마지막 탭 경계를 넘어서려 하면 인디케이터만 경계에 멈추는 게 아니라 바
+(`.shell-mobile-tabs`)도 반응함. **처음엔 바 전체를 `translateX`로 밀어내는 방식으로 만들었는데**,
+"바가 통째로 옮겨가는 게 아니라 반대쪽 모서리는 원래 위치에 고정된 채 미는 쪽 모서리(굴곡선)만
+늘어나 끌려가는 느낌이어야 한다"는 피드백으로 **`transform-origin`을 반대쪽 끝에 고정하고
+`scaleX`로 미는 쪽만 늘리는 방식**으로 교체했음.
 
-`moveIndicator()`가 클램프 전 원래 포인터 위치와 경계값의 차이(overshoot)를 구해서 `sqrt`로
-체감시킨 뒤 `EDGE_PUSH_MAX_PX`(8px)를 상한으로 늘어날 폭을 정하고, 바의 실측 폭(`offsetWidth`)
-기준으로 `scaleX` 비율을 계산해서 `--shell-edge-scale` CSS 변수 + `transform-origin`을
-imperatively 반영함(`tabsRef.current.style.setProperty`/`.style.transformOrigin`,
-LandingPage.tsx의 커서 추적 패턴과 동일 관례). 오른쪽으로 넘어가면 `transform-origin: left
-center`(왼쪽 끝 고정, 오른쪽 굴곡선만 늘어남), 왼쪽으로 넘어가면 반대쪽 끝을 고정하고 마찬가지로 적용. 손을 떼면
-(`finishGesture`) `--shell-edge-scale`만 1로 리셋 — 바의 `transition`이 복귀도 자연스럽게
-애니메이션.
+**2026-09-11 원인 진단 + 재교체**: `transform-origin` 전환 방식은 부풀기(`--shell-press-scale`,
+중심 기준 대칭)와 엣지 스트레치(`--shell-edge-scale`, 한쪽 고정)가 같은 `transform-origin`을
+공유한다는 구조적 문제가 있었음 — 경계를 넘는 순간 origin이 `center`에서 `left`/`right`로
+즉시(트랜지션 불가능한 속성이라) 점프하는데, 그 직전까지 `center` 기준으로 대칭 부풀어 있던
+왼쪽(또는 오른쪽) 끝이 그 순간 반대쪽으로 튕겨 보였음("오른쪽으로 늘어날 때 왼쪽 끝도 움직인다"는
+피드백 — 인스타그램은 이런 스냅 없이 고정된 쪽이 완전히 정지해 있음).
 
-**2026-09-06 `transform-origin`은 리셋하지 않음** — 처음엔 손을 뗄 때 `transform-origin`도
-`center center`로 같이 되돌렸는데, `transform-origin`은 트랜지션이 안 되는(즉시 바뀌는) 속성이라
-scale이 줄어드는 애니메이션이 재생되는 도중에 기준점이 갑자기 바뀌면 화면이 튀는(흔들리는)
-문제가 있었음("되돌아올 때 흔들림이 있다"는 피드백). scale이 1로 완전히 돌아오면 origin이
-어디든 시각적 차이가 없고, 다음 드래그 때 `moveIndicator()`가 다시 알맞은 값으로 설정해주므로
-마지막 값 그대로 둬도 무방해서 리셋 자체를 없앰.
+**해결**: `transform-origin`을 항상 `center center`로 고정하고, 대신 `translateX`로 절반만큼
+보정함. 중심 기준 `scaleX`는 양쪽을 `push/2`씩 대칭으로 늘리는데, 여기에 `push/2`만큼 반대
+방향 `translateX`를 더하면 미는 쪽은 `push` 전체만큼 늘고 반대쪽은 정확히 고정되는 효과를
+수학적으로 동일하게 얻으면서 origin 전환(=점프)이 아예 없어짐. `moveIndicator()`가 overshoot을
+`sqrt`로 체감시켜 `push`(`EDGE_PUSH_MAX_PX` 8px 상한)를 구하고, `--shell-edge-scale`과
+`--shell-edge-shift`(px 단위 `translateX` 보정값) 두 CSS 변수를 imperatively 반영함
+(`tabsRef.current.style.setProperty`). 손을 떼면(`finishGesture`) 둘 다 기본값(1, 0px)으로
+리셋 — 바의 `transition`이 복귀를 자연스럽게 애니메이션(이제 `transform-origin`을 안 건드리므로
+전처럼 "리셋 시점을 고민할 필요"도 없어짐).
+
+**(지난 기록, 대체됨) 2026-09-06 `transform-origin`은 리셋하지 않음** — 처음엔 손을 뗄 때
+`transform-origin`도 `center center`로 같이 되돌렸는데, 트랜지션이 안 되는(즉시 바뀌는)
+속성이라 scale이 줄어드는 애니메이션 도중 기준점이 갑자기 바뀌면 화면이 튀는 문제가 있었음.
+당시엔 "부풀기(1.05)는 작아서 origin이 모서리로 옮겨져도 티가 안 난다"고 판단해 놔뒀으나,
+실제로는 이 판단이 틀렸음 — 위 "2026-09-11 원인 진단"에서 나왔듯 이 작은 티가 "왼쪽 끝도
+움직인다"는 형태로 눈에 띄었음. `transform-origin` 자체를 안 건드리는 지금 방식(위 참고)으로
+교체되며 이 문제 자체가 해소됨.
 
 ```css
-/* .shell-mobile-tabs */
+/* .shell-mobile-tabs — 현재 방식 */
 --shell-edge-scale: 1;
+--shell-edge-shift: 0px;
 --shell-press-scale: 1;
-transform-origin: center center;              /* JS가 드래그 중엔 left/right center로 바꿈 */
-transform: scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
+transform-origin: center center;              /* 항상 고정, JS가 안 건드림 */
+transform: translateX(var(--shell-edge-shift)) scale(var(--shell-press-scale)) scaleX(var(--shell-edge-scale));
 ```
 ```js
 // moveIndicator() 안, overshoot 계산 후
 const push = Math.min(EDGE_PUSH_MAX_PX, Math.sqrt(Math.abs(overshoot)) * EDGE_PUSH_FACTOR)
-bar.style.transformOrigin = overshoot > 0 ? 'left center' : overshoot < 0 ? 'right center' : 'center center'
+const shift = overshoot > 0 ? push / 2 : overshoot < 0 ? -push / 2 : 0
 bar.style.setProperty('--shell-edge-scale', `${(barWidth + push) / barWidth}`)
+bar.style.setProperty('--shell-edge-shift', `${shift}px`)
 ```
 부풀기(`.is-pressed`가 `--shell-press-scale`만 갱신)와 엣지 스트레치(JS가 `--shell-edge-scale`/
-`transform-origin`만 갱신)를 이렇게 변수로 분리 합성해야 함 — 인라인 스타일로 `transform`을
-통째로 덮어쓰면 클래스가 주는 scale이 지워지기 때문. `transform-origin`은 두 효과가 하나의
-`transform`을 공유하므로 같이 적용되는데, 부풀기(1.05)는 작아서 origin이 모서리 쪽으로 옮겨져도
-크게 티가 나지 않음.
+`--shell-edge-shift`만 갱신)를 이렇게 변수로 분리 합성해야 함 — 인라인 스타일로 `transform`을
+통째로 덮어쓰면 클래스가 주는 scale이 지워지기 때문.
 
 **성능(2026-09-06 추가)**:
 - `.shell-mobile-tabs`/`.shell-mobile-tab-indicator` 둘 다 `will-change: transform` — 드래그

@@ -114,15 +114,20 @@ export default function MobileCapsuleNavigation() {
     if (indicatorRef.current) indicatorRef.current.style.transform = `translateX(${x}px)`
     // 손가락이 양 끝(첫/마지막 탭)을 넘어서려 하면, 바 전체가 옮겨가는 게 아니라 반대쪽 모서리는
     // 그 자리에 고정된 채 밀리는 쪽 모서리(굴곡선)만 늘어나 끌려가는 느낌을 낸다 — 넘어간
-    // 만큼(overshoot)을 감쇠시켜서(sqrt로 체감) scaleX로 그 끝만 늘리고, transform-origin을
-    // 반대쪽 끝에 고정해서 그쪽은 전혀 안 움직이게 한다.
+    // 만큼(overshoot)을 감쇠시켜서(sqrt로 체감) scaleX로 늘리되, transform-origin은 항상
+    // center로 고정하고 translateX로 절반을 보정해 한쪽만 고정한 효과를 낸다(아래 참고,
+    // 2026-09-11 — 예전엔 transform-origin 자체를 옮겼는데, "왼쪽 끝도 움직인다"는 문제가 있었음).
     const bar = tabsRef.current
     const barWidth = barWidthRef.current
     if (bar && barWidth) {
       const overshoot = pointerX < minX ? pointerX - minX : pointerX > maxX ? pointerX - maxX : 0
       const push = Math.min(EDGE_PUSH_MAX_PX, Math.sqrt(Math.abs(overshoot)) * EDGE_PUSH_FACTOR)
-      bar.style.transformOrigin = overshoot > 0 ? 'left center' : overshoot < 0 ? 'right center' : 'center center'
+      // 중심 기준(transform-origin: center center)으로 scaleX하면 양쪽이 push/2씩 대칭으로
+      // 늘어난다. 여기에 push/2만큼 반대 방향 translateX를 더하면, 미는 쪽은 push만큼 늘고
+      // 반대쪽은 정확히 고정된다 — origin을 옮기지 않고도 "한쪽 고정" 효과를 낸다(2026-09-11).
+      const shift = overshoot > 0 ? push / 2 : overshoot < 0 ? -push / 2 : 0
       bar.style.setProperty('--shell-edge-scale', `${(barWidth + push) / barWidth}`)
+      bar.style.setProperty('--shell-edge-shift', `${shift}px`)
     }
     if (gestureRef.current) gestureRef.current.target = target
   }
@@ -171,13 +176,11 @@ export default function MobileCapsuleNavigation() {
     const button = tabRefs.current[snapKey]
     if (button) setIndicatorRect(indicatorRectFor(button))
     // 손을 떼면(또는 제스처가 취소되면) 러버밴드로 늘어났던 모서리가 원래 모양으로 되돌아온다 —
-    // .shell-mobile-tabs의 transition이 이 복귀도 부드럽게 애니메이션해준다.
-    // transform-origin은 여기서 되돌리지 않는다 — transform-origin은 트랜지션이 안 되는
-    // 속성이라, scale이 줄어드는 애니메이션이 재생되는 도중에 기준점을 즉시 바꾸면 화면이
-    // 튀는(흔들리는) 문제가 있었다(2026-09-06 피드백). scale이 1로 완전히 돌아오면 origin이
-    // 어디든 시각적 차이가 없고, 다음 드래그 때 moveIndicator()가 다시 알맞게 설정해주므로
-    // 그냥 마지막 값 그대로 둬도 무방하다.
+    // .shell-mobile-tabs의 transition이 이 복귀도 부드럽게 애니메이션해준다. 2026-09-11부터
+    // transform-origin을 안 건드리므로(항상 center 고정) 예전처럼 origin을 그대로 둘지
+    // 고민할 필요가 없어짐 — edge-scale/edge-shift 둘 다 그냥 기본값으로 되돌리면 됨.
     tabsRef.current?.style.setProperty('--shell-edge-scale', '1')
+    tabsRef.current?.style.setProperty('--shell-edge-shift', '0px')
     setIsDragging(false)
     setIsPressed(false)
   }
