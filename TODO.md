@@ -1,6 +1,7 @@
 # TODO
 
 ## 완료
+- [x] 모바일 캡슐 독 밝기 버그 근본 해결 ("드래그 중엔 밝아지면 안 된다" 결정을 뒤집음 — 손 뗄 때까지 계속 밝게 유지)
 - [x] OS별(iOS/Android) 모바일 네비게이션 스위칭 구현 (useDeviceOS 훅, MobileAndroidNavigation 추가)
 - [x] 모바일 캡슐 독 밝기 버그 실제 수정 (is-dragging 순간 filter 전환 0s로 즉시 컷오프)
 - [x] OS별(iOS/Android) 네비게이션 스위칭 방향 문서 정리

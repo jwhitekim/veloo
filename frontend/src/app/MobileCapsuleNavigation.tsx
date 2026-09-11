@@ -47,9 +47,10 @@ export default function MobileCapsuleNavigation() {
   const [isDragging, setIsDragging] = useState(false)
   // 실제 인스타그램 앱 터치 동작 재현: 탭(드래그 없이 누르기만)일 때 바 전체(.shell-mobile-tabs,
   // 안의 인디케이터·아이콘 전부 포함)가 살짝 부풀고 filter: brightness()로 밝아진다(색 자체는
-  // #c4c4c4 고정, WorkspaceLayout.css 참고) — 드래그가 시작되면 밝기는 즉시 꺼지고 원래 색으로
-  // 돌아간다("드래그 중엔 밝아지면 안 된다"는 피드백). isDragging(5px 이상 움직여야 켜짐)과 달리
-  // isPressed는 pointerdown 즉시 켜진다 — 살짝 눌렀다 떼는 탭에도 피드백이 있어야 하므로.
+  // #c4c4c4 고정, WorkspaceLayout.css 참고) — isPressed가 유지되는 동안은 드래그로 이어져도
+  // 계속 밝고, 손을 뗄 때만 꺼진다(2026-09-11, "밝기가 늘어났다가 마는 버그"를 근본적으로
+  // 수정하며 "드래그 중엔 밝아지면 안 된다"던 이전 결정을 뒤집음). isPressed는 pointerdown
+  // 즉시 켜진다 — 살짝 눌렀다 떼는 탭에도 피드백이 있어야 하므로.
   const [isPressed, setIsPressed] = useState(false)
   const gestureRef = useRef<{ startX: number; moved: boolean; target: MobilePrimaryKey } | null>(null)
   const suppressClickRef = useRef(false)
