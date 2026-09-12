@@ -47,6 +47,7 @@
   .auth-story > div > p { margin-top: 18px; font-size: 13px; }
   .auth-story blockquote { display: none; }
   .auth-panel { padding: 54px 22px 72px; }
+  .auth-form input { font-size: var(--fs-input); }
 }
 
 @media (prefers-reduced-motion: reduce) {

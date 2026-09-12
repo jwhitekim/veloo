@@ -121,19 +121,11 @@
 }
 
 .contextor-empty { width: 100%; display: flex; flex-direction: column; justify-content: flex-start; gap: var(--page-section-gap); margin: 0; }
-.contextor-empty-heading { max-width: 620px; }
-.contextor-empty-heading > span { width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 18px; border-radius: 16px; background: var(--accent-soft); color: var(--accent); }
-.contextor-empty-heading > span svg { width: 23px; height: 23px; }
-.contextor-empty-heading h2 { margin: 0; color: var(--text-primary); font-size: 22px; letter-spacing: -0.025em; }
-.contextor-empty-heading p { margin: 9px 0 0; color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
-.contextor-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
-.contextor-suggestions button { height: 30px; padding: 0 11px; border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border-subtle)); border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent); cursor: pointer; font: inherit; font-size: 11px; font-weight: 650; }
+.contextor-suggestions { display: flex; align-items: center; gap: var(--space-md); }
+.contextor-suggestions-label { flex-shrink: 0; color: var(--text-disabled); font-size: var(--fs-meta); font-weight: var(--fw-semibold); letter-spacing: .04em; }
+.contextor-suggestion-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.contextor-suggestions button { height: 30px; padding: 0 11px; border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border-subtle)); border-radius: var(--radius-pill); background: var(--bg-base); color: var(--accent); cursor: pointer; font: inherit; font-size: var(--fs-meta); font-weight: var(--fw-semibold); }
 .contextor-suggestions button:hover { background: var(--accent); color: var(--selected-text); }
-.contextor-guide { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.contextor-guide article { min-height: 132px; padding: 19px; border: 1px solid var(--border-subtle); border-radius: 15px; background: var(--surface-tint-card); }
-.contextor-guide article > svg { width: 20px; height: 20px; color: var(--accent); }
-.contextor-guide strong { display: block; margin-top: 16px; color: var(--text-primary); font-size: 14px; }
-.contextor-guide p { margin: 6px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.55; }
 
 .contextor-spin {
   animation: contextor-spin 0.9s linear infinite;
@@ -247,13 +239,5 @@
     grid-template-columns: 1fr;
   }
   .contextor-empty { justify-content: flex-start; gap: 16px; }
-  .contextor-empty-heading > span { width: 42px; height: 42px; margin-bottom: 12px; border-radius: 13px; }
-  .contextor-empty-heading > span svg { width: 20px; height: 20px; }
-  .contextor-empty-heading h2 { font-size: 19px; }
-  .contextor-empty-heading p { margin-top: 6px; font-size: 11.5px; line-height: 1.55; }
-  .contextor-suggestions { margin-top: 12px; }
-  .contextor-guide { grid-template-columns: 1fr; }
-  .contextor-guide article { min-height: 106px; padding: 15px; }
-  .contextor-guide strong { margin-top: 12px; font-size: 13px; }
-  .contextor-guide p { font-size: 11px; }
+  .contextor-suggestions { align-items: flex-start; flex-direction: column; gap: var(--space-sm); }
 }

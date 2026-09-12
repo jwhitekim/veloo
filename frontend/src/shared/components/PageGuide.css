@@ -1,0 +1,40 @@
+.app-page-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.app-page-guide-card {
+  position: relative;
+  min-height: 142px;
+  padding: var(--space-lg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-tint-card);
+}
+
+.app-page-guide-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.app-page-guide-icon > svg { width: 18px; height: 18px; }
+.app-page-guide-number { position: absolute; top: var(--space-lg); right: var(--space-lg); color: var(--text-disabled); font-size: var(--fs-meta); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
+.app-page-guide-card strong { display: block; margin-top: var(--space-md); color: var(--text-primary); font-size: var(--fs-label); line-height: var(--lh-snug); }
+.app-page-guide-card p { margin: var(--space-xs) 0 0; color: var(--text-secondary); font-size: var(--fs-small); line-height: var(--lh-relaxed); }
+
+@media (max-width: 640px) {
+  .app-page-guide { grid-template-columns: 1fr; }
+  .app-page-guide-card { min-height: 0; padding: 14px; }
+  .app-page-guide-icon { width: 32px; height: 32px; }
+  .app-page-guide-icon > svg { width: 16px; height: 16px; }
+  .app-page-guide-number { top: 14px; right: 14px; }
+  .app-page-guide-card strong { margin-top: 10px; font-size: var(--fs-body); }
+  .app-page-guide-card p { font-size: var(--fs-meta); }
+}

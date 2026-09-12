@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ListTodo } from 'lucide-react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import 'dayjs/locale/en'
@@ -11,6 +12,7 @@ import { useIsMobile } from '@/shared/hooks/useIsMobile'
 import { useT, useLanguage } from '@/shared/i18n'
 import TodoList from './TodoList'
 import FocusPanel from './FocusPanel'
+import PageHeader from '@/shared/components/PageHeader'
 import * as api from '@/shared/api/client'
 import './Todo.css'
 
@@ -224,6 +226,14 @@ export default function TodoPage() {
           />
         ) : (
           <>
+            <div className="app-page-intro-shell app-page-intro-shell--workspace todo-page-intro">
+              <PageHeader
+                kicker="Research planning"
+                icon={<ListTodo />}
+                title={t('todo.overview.heroTitle')}
+                description={t('todo.overview.heroDescription')}
+              />
+            </div>
             <TodoSummaryBar todos={todos} filter={filter} />
             <TodoList
               todos={todos}

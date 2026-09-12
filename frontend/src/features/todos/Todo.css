@@ -85,6 +85,9 @@
   background: var(--bg-base);
 }
 
+.todo-page-intro { padding-top: var(--space-xl); }
+.todo-page-intro .app-page-header { margin-bottom: 0; }
+
 .todo-desktop-loading {
   flex: 1;
   display: grid;
@@ -280,4 +283,5 @@
 
 @media (max-width: 840px) {
   .todo-list-panel { border-left: 0; }
+  .todo-list-filter-select select { font-size: var(--fs-input); }
 }

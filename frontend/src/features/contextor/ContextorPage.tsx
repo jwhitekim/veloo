@@ -4,6 +4,8 @@ import { SessionExpiredMessage } from '@/shared/components/SessionExpiredMessage
 import { HistoryDropdown } from '@/shared/components/HistoryDropdown'
 import { useIsMobile } from '@/shared/hooks/useIsMobile'
 import PageHeader from '@/shared/components/PageHeader'
+import PageGuide from '@/shared/components/PageGuide'
+import PageEmptyIntro from '@/shared/components/PageEmptyIntro'
 import { useT } from '@/shared/i18n'
 import * as api from './api'
 import type { ContextorResult, ContextorHistoryItem } from './api'
@@ -59,13 +61,14 @@ export default function Contextor() {
       <div className="app-page-intro-shell app-page-intro-shell--reading">
         <PageHeader
           kicker="Model Lab"
+          icon={<Braces />}
           title={t('contextor.heroTitle')}
           description={t('contextor.heroDescription')}
           badge={<><Braces size={14} /> {t('contextor.recentLookups', { count: history.length })}</>}
         />
       </div>
       <main className="contextor-shell">
-        <div className="contextor-searchbar">
+        <div className="contextor-searchbar app-search-bar">
           <Search size={16} className="contextor-search-icon" />
           <input
             className="contextor-input"
@@ -142,19 +145,24 @@ export default function Contextor() {
 
           {!sessionExpired && !loading && !error && !result && (
             <div className="contextor-empty">
-              <div className="contextor-empty-heading">
-                <span><Braces aria-hidden="true" /></span>
-                <h2>{t('contextor.emptyTitle')}</h2>
-                <p>{t('contextor.emptyDescription')}</p>
-                <div className="contextor-suggestions" aria-label={t('contextor.suggestionsAria')}>
-                  {suggestions.map(term => <button key={term} type="button" onClick={() => { setQuery(term); doLookup(term) }}>{term}</button>)}
-                </div>
-              </div>
-              <section className="contextor-guide">
-                <article><Code2 /><strong>{t('contextor.guide.implementationTitle')}</strong><p>{t('contextor.guide.implementationDesc')}</p></article>
-                <article><BookOpenText /><strong>{t('contextor.guide.paperTitle')}</strong><p>{t('contextor.guide.paperDesc')}</p></article>
-                <article><Columns3 /><strong>{t('contextor.guide.comparisonTitle')}</strong><p>{t('contextor.guide.comparisonDesc')}</p></article>
-              </section>
+              <PageEmptyIntro
+                icon={Braces}
+                title={t('contextor.emptyTitle')}
+                description={t('contextor.emptyDescription')}
+                actions={
+                  <div className="contextor-suggestions" aria-label={t('contextor.suggestionsAria')}>
+                    <span className="contextor-suggestions-label">{t('contextor.suggestionsAria')}</span>
+                    <div className="contextor-suggestion-list">
+                      {suggestions.map(term => <button key={term} type="button" onClick={() => { setQuery(term); doLookup(term) }}>{term}</button>)}
+                    </div>
+                  </div>
+                }
+              />
+              <PageGuide ariaLabel={t('contextor.emptyTitle')} items={[
+                { icon: Code2, title: t('contextor.guide.implementationTitle'), description: t('contextor.guide.implementationDesc') },
+                { icon: BookOpenText, title: t('contextor.guide.paperTitle'), description: t('contextor.guide.paperDesc') },
+                { icon: Columns3, title: t('contextor.guide.comparisonTitle'), description: t('contextor.guide.comparisonDesc') },
+              ]} />
             </div>
           )}
         </div>

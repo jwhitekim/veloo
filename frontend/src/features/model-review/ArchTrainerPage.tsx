@@ -3,7 +3,10 @@ import { BadgeCheck, BrainCircuit, ImagePlus, MessageSquareText, RotateCcw, Scan
 import { useIsMobile } from '@/shared/hooks/useIsMobile'
 import { useT, useDateLocale } from '@/shared/i18n'
 import PageHeader from '@/shared/components/PageHeader'
+import PageGuide from '@/shared/components/PageGuide'
+import { HistoryDropdown } from '@/shared/components/HistoryDropdown'
 import StatePanel from '@/shared/components/StatePanel'
+import { ActionButton } from '@/shared/components/WorkspaceControls'
 import * as api from './api'
 import type { ExplanationJSON, ExplanationModule, ExplanationFlowStep, FeedbackJSON, ArchHistoryItem } from './api'
 import './ArchTrainer.css'
@@ -56,7 +59,6 @@ export default function ArchTrainer() {
   const [historyId, setHistoryId] = useState<number | null>(null)
   const [archHistory, setArchHistory] = useState<ArchHistoryItem[]>([])
   const [dragOver, setDragOver] = useState(false)
-  const [textareaFocused, setTextareaFocused] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { api.getArchHistory().then(setArchHistory) }, [])
@@ -127,21 +129,13 @@ export default function ArchTrainer() {
   }
 
   return (
-    <div className="arch-root" style={{ background: C.bg, color: C.text }}>
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .reselect-btn { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 7px 11px; border-radius: 9px; font-size: 0.78rem; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.92); color: var(--accent); border: 1px solid var(--border-subtle); transition: background 0.18s, transform 0.12s; }
-        .reselect-btn:hover { background: var(--accent-soft); }
-        .reselect-btn:active { transform: scale(0.97); }
-        textarea::placeholder { color: var(--text-secondary); }
-      `}</style>
-
+    <div className="arch-root">
       <div className="app-page-intro-shell app-page-intro-shell--workspace">
         <PageHeader
           kicker="Model learning lab"
+          icon={<BrainCircuit />}
           title={t('reviewer.heroTitle')}
           description={t('reviewer.heroDescription')}
-          badge={<><BrainCircuit size={14} /> {t('reviewer.historyBadge', { count: archHistory.length })}</>}
         />
       </div>
       <div className="arch-shell">
@@ -150,57 +144,25 @@ export default function ArchTrainer() {
         )}
 
 
-        {/* History */}
-        {!previewUrl && archHistory.length > 0 && (
-          <Card compact={isMobile}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px', color: C.textMuted, marginBottom: 12 }}>{t('reviewer.recentAnalysis')}</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {archHistory.map((item, i) => (
-                <button
-                  key={item.id}
-                  onClick={() => loadFromHistory(item)}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '10px 0', textAlign: 'left', background: 'none', border: 'none',
-                    borderBottom: i < archHistory.length - 1 ? `1px solid ${C.border}` : 'none',
-                    cursor: 'pointer', width: '100%',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: 13, color: C.text, fontWeight: 500 }}>
-                      {item.image_name ?? t('reviewer.untitledImage')}
-                    </div>
-                    <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>
-                      {item.explanation.overview.slice(0, 60)}…
-                    </div>
-                  </div>
-                  <span style={{ fontSize: 12, color: C.textMuted, marginLeft: 12, flexShrink: 0 }}>
-                    {new Date(item.created_at).toLocaleDateString(dateLocale, { month: 'short', day: 'numeric' })}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </Card>
-        )}
 
         {/* Step 1 — Upload */}
         <Card compact={isMobile}>
-          <CardTitle step={1}>{t('reviewer.uploadTitle')}</CardTitle>
+          <div className="arch-upload-toolbar">
+            <CardTitle step={1}>{t('reviewer.uploadTitle')}</CardTitle>
+            <HistoryDropdown items={archHistory} label={t('reviewer.recentAnalysis')} onSelect={loadFromHistory} renderItem={item => (
+              <><strong>{item.image_name ?? t('reviewer.untitledImage')}</strong><small className="arch-history-date">{new Date(item.created_at).toLocaleDateString(dateLocale)}</small></>
+            )} />
+          </div>
           {!previewUrl ? (
             <div
+              className={`arch-upload-zone${dragOver ? ' is-dragging' : ''}`}
+              role="button"
+              tabIndex={0}
               onClick={() => fileInputRef.current?.click()}
+              onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') fileInputRef.current?.click() }}
               onDragOver={e => { e.preventDefault(); setDragOver(true) }}
               onDragLeave={() => setDragOver(false)}
               onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f?.type.startsWith('image/')) setFile(f) }}
-              style={{
-                border: `1.5px dashed ${dragOver ? C.accent : C.border}`,
-                borderRadius: 'var(--radius-lg)',
-                padding: '40px 20px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                background: C.card,
-                transition: 'border-color 0.15s',
-              }}
             >
               <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files?.[0]) setFile(e.target.files[0]) }} />
               <div className="arch-upload-icon"><ImagePlus size={26} /></div>
@@ -210,18 +172,18 @@ export default function ArchTrainer() {
               <p className="arch-upload-formats">{t('reviewer.uploadFormats')}</p>
             </div>
           ) : (
-            <div style={{ position: 'relative' }}>
+            <div className="arch-preview">
               <img
                 src={previewUrl}
                 alt={t('reviewer.previewAlt')}
-                style={{ width: '100%', maxHeight: 400, objectFit: 'contain', borderRadius: 8, border: `1px solid ${C.border}`, background: C.card }}
+                className="arch-preview-image"
               />
               <button onClick={resetUpload} className="reselect-btn">
                 <RotateCcw size={11} />{t('reviewer.reselect')}
               </button>
             </div>
           )}
-          <div style={{ marginTop: 16 }}>
+          <div className="arch-card-actions">
             <Btn primary disabled={!imageFile || loadingExplain} onClick={doExplain} loading={loadingExplain}>
               {loadingExplain ? t('reviewer.analyzingButton') : t('reviewer.getExplanationButton')}
             </Btn>
@@ -229,11 +191,11 @@ export default function ArchTrainer() {
         </Card>
 
         {!previewUrl && archHistory.length === 0 && (
-          <section className="arch-guide" aria-label={t('reviewer.guideAria')}>
-            <article><ScanSearch size={20} /><span>01</span><strong>{t('reviewer.guide.analyzeTitle')}</strong><p>{t('reviewer.guide.analyzeDesc')}</p></article>
-            <article><MessageSquareText size={20} /><span>02</span><strong>{t('reviewer.guide.explainTitle')}</strong><p>{t('reviewer.guide.explainDesc')}</p></article>
-            <article><BadgeCheck size={20} /><span>03</span><strong>{t('reviewer.guide.feedbackTitle')}</strong><p>{t('reviewer.guide.feedbackDesc')}</p></article>
-          </section>
+          <PageGuide ariaLabel={t('reviewer.guideAria')} numbered items={[
+            { icon: ScanSearch, title: t('reviewer.guide.analyzeTitle'), description: t('reviewer.guide.analyzeDesc') },
+            { icon: MessageSquareText, title: t('reviewer.guide.explainTitle'), description: t('reviewer.guide.explainDesc') },
+            { icon: BadgeCheck, title: t('reviewer.guide.feedbackTitle'), description: t('reviewer.guide.feedbackDesc') },
+          ]} />
         )}
 
         {/* Step 2 — User Input */}
@@ -244,19 +206,10 @@ export default function ArchTrainer() {
             <textarea
               value={userText}
               onChange={e => setUserText(e.target.value)}
-              onFocus={() => setTextareaFocused(true)}
-              onBlur={() => setTextareaFocused(false)}
               placeholder={t('reviewer.textareaPlaceholder')}
-              style={{
-                width: '100%', minHeight: 130, outline: 'none',
-                border: `1px solid ${textareaFocused ? 'var(--accent)' : C.border}`,
-                borderRadius: 'var(--radius-md)', padding: 14, fontSize: 14,
-                fontFamily: 'inherit', resize: 'vertical', lineHeight: 1.85,
-                background: C.bg, color: C.text,
-                transition: 'border-color 0.15s',
-              }}
+              className="arch-textarea"
             />
-            <div style={{ marginTop: 14 }}>
+            <div className="arch-card-actions">
               <Btn primary disabled={loadingFeedback} onClick={doFeedback} loading={loadingFeedback}>
                 {loadingFeedback ? t('reviewer.generatingFeedback') : t('reviewer.getFeedbackButton')}
               </Btn>
@@ -369,11 +322,7 @@ function FlowListBlock({ label, items }: { label: string; items: ExplanationFlow
 }
 
 function Card({ children, compact }: { children: React.ReactNode; compact?: boolean }) {
-  return (
-    <div style={{ background: 'var(--bg-base)', borderRadius: 16, padding: compact ? 16 : 24, border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
-      {children}
-    </div>
-  )
+  return <section className={`arch-card${compact ? ' is-compact' : ''}`}>{children}</section>
 }
 
 function CardTitle({ step, children }: { step: number; children: React.ReactNode }) {
@@ -389,37 +338,14 @@ function Btn({ children, primary, ghost, disabled, loading, onClick }: {
   children: React.ReactNode; primary?: boolean; ghost?: boolean
   disabled?: boolean; loading?: boolean; onClick?: () => void
 }) {
-  const base: React.CSSProperties = {
-    display: 'inline-flex', alignItems: 'center', gap: 8,
-    padding: '8px 20px', borderRadius: 'var(--radius-md)',
-    fontSize: 14, fontWeight: 600, fontFamily: 'inherit',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.4 : 1,
-    transition: 'background 0.15s',
-    border: 'none',
-  }
-  const variant = primary
-    ? { background: 'var(--accent)', color: 'var(--selected-text)' }
-    : ghost
-      ? { background: 'transparent', color: 'var(--text-primary)', border: '1.5px solid var(--border-subtle)' }
-      : { background: 'var(--bg-additive)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)' }
   return (
-    <button style={{ ...base, ...variant }} disabled={disabled} onClick={onClick}>
+    <ActionButton variant={primary ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick} className={ghost ? 'arch-btn-ghost' : ''}>
       {loading && <Spinner />}
       {children}
-    </button>
+    </ActionButton>
   )
 }
 
 function Spinner() {
-  return (
-    <span style={{
-      width: 13, height: 13,
-      border: '2px solid var(--border-subtle)',
-      borderTopColor: 'var(--text-primary)',
-      borderRadius: '50%',
-      display: 'inline-block',
-      animation: 'spin 0.7s linear infinite',
-    }} />
-  )
+  return <span className="arch-spinner" />
 }

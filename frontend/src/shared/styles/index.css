@@ -182,9 +182,6 @@ input, textarea, select {
   animation: checkDraw 0.22s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* ── Panel resizer cursor ──────────────────────────────────── */
-.is-resizing * { user-select: none; cursor: col-resize !important; }
-
 /* ── Sidebar nav items ─────────────────────────────────────── */
 .sidebar-item {
   width: 100%;

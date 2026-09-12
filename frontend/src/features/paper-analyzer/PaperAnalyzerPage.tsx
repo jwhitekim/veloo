@@ -4,6 +4,8 @@ import { BadgeCheck, BrainCircuit, FileSearch, FileText, Search, X } from 'lucid
 import { useIsMobile } from '@/shared/hooks/useIsMobile'
 import { HistoryDropdown } from '@/shared/components/HistoryDropdown'
 import PageHeader from '@/shared/components/PageHeader'
+import PageGuide from '@/shared/components/PageGuide'
+import PageEmptyIntro from '@/shared/components/PageEmptyIntro'
 import { useT, useDateLocale } from '@/shared/i18n'
 import * as api from './api'
 import type { Candidate, PaperResult, PaperHistoryItem } from './api'
@@ -93,7 +95,7 @@ export default function PaperAnalyzer() {
   }
 
   const searchBar = (
-    <div className="paper-searchbar">
+    <div className="paper-searchbar app-search-bar">
       <Search size={16} className="paper-search-icon" />
       <input
         ref={inputRef}
@@ -148,6 +150,7 @@ export default function PaperAnalyzer() {
       <div className="app-page-intro-shell app-page-intro-shell--reading">
         <PageHeader
           kicker="Research workspace"
+          icon={<FileSearch />}
           title={t('paper.heroTitle')}
           description={t('paper.heroDescription')}
         />
@@ -208,19 +211,8 @@ function EmptyState() {
   ]
   return (
     <div className="paper-empty">
-      <div className="paper-empty-heading">
-        <span className="paper-empty-icon"><FileText /></span>
-        <h2>{t('paper.emptyTitle')}</h2>
-        <p>{t('paper.emptyDescription')}</p>
-      </div>
-      <section className="paper-workflow" aria-label={t('paper.workflowAria')}>
-        {workflow.map(({ Icon, title, description }, index) => <article key={title}>
-          <span className="paper-workflow-number">0{index + 1}</span>
-          <Icon aria-hidden="true" />
-          <strong>{title}</strong>
-          <p>{description}</p>
-        </article>)}
-      </section>
+      <PageEmptyIntro icon={FileText} title={t('paper.emptyTitle')} description={t('paper.emptyDescription')} />
+      <PageGuide ariaLabel={t('paper.workflowAria')} numbered items={workflow.map(({ Icon, title, description }) => ({ icon: Icon, title, description }))} />
     </div>
   )
 }

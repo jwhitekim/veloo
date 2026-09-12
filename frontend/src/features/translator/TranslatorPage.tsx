@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Check, Copy, History as HistoryIcon, Languages, Loader2, Radio, ScanText, X } from 'lucide-react'
+import { ArrowRight, Check, Copy, History as HistoryIcon, Languages, Loader2, Radio, ScanText, X } from 'lucide-react'
 import { SessionExpiredMessage } from '@/shared/components/SessionExpiredMessage'
 import { HistoryDropdown } from '@/shared/components/HistoryDropdown'
 import PageHeader from '@/shared/components/PageHeader'
+import PageGuide from '@/shared/components/PageGuide'
 import { useT } from '@/shared/i18n'
 import * as api from './api'
 import type { TranslationHistoryItem } from './api'
@@ -102,6 +103,7 @@ export default function Translator() {
       <div className="app-page-intro-shell app-page-intro-shell--workspace">
         <PageHeader
           kicker="Translation workspace"
+          icon={<Languages />}
           title={t('translator.heroTitle')}
           description={t('translator.heroDescription')}
           badge={<><Languages size={14} /> {t('translator.quickStart')}</>}
@@ -141,6 +143,8 @@ export default function Translator() {
               <span>{t('translator.autoTranslate')}</span>
             </div>
           </div>
+
+          <div className="translator-flow" aria-hidden="true"><ArrowRight /></div>
 
           <div className="translator-panel translator-panel--result">
             <div className="translator-panel-header">
@@ -205,11 +209,11 @@ export default function Translator() {
           </div>
         </section>
         {!source && !streamedText && !error && (
-          <section className="translator-feature-grid" aria-label={t('translator.quickStart')}>
-            <article><ScanText /><strong>{t('translator.feature.autoDetectTitle')}</strong><p>{t('translator.feature.autoDetectDesc')}</p></article>
-            <article><Radio /><strong>{t('translator.feature.streamingTitle')}</strong><p>{t('translator.feature.streamingDesc')}</p></article>
-            <article><HistoryIcon /><strong>{t('translator.feature.historyTitle')}</strong><p>{t('translator.feature.historyDesc')}</p></article>
-          </section>
+          <PageGuide ariaLabel={t('translator.quickStart')} items={[
+            { icon: ScanText, title: t('translator.feature.autoDetectTitle'), description: t('translator.feature.autoDetectDesc') },
+            { icon: Radio, title: t('translator.feature.streamingTitle'), description: t('translator.feature.streamingDesc') },
+            { icon: HistoryIcon, title: t('translator.feature.historyTitle'), description: t('translator.feature.historyDesc') },
+          ]} />
         )}
       </main>
     </div>
