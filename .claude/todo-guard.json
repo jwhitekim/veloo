@@ -1,3 +1,4 @@
 {
-  "docRules": true
+  "docRules": true,
+  "allowOutside": ["/Users/joon/.claude/skills/todo-guard/scripts"]
 }
