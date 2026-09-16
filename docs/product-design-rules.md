@@ -1,8 +1,8 @@
-# Veloo 제품 디자인 스펙
+# Veloo 제품 디자인 규칙
 
 Veloo 화면 구조와 시각 의사결정을 고정하는 기준 문서. 세부 토큰은
-[디자인 시스템](design-system.md), 모바일 내비게이션은
-[캡슐 독 스펙](capsule-dock-spec.md) 참조.
+[UI 디자인 시스템](ui-design-system.md), 모바일 내비게이션은
+[iOS 캡슐 내비게이션](ios-capsule-navigation.md) 참조.
 
 ## 1. 제품 정의
 

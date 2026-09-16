@@ -1,8 +1,8 @@
-# veloo 디자인 시스템
+# Veloo UI 디자인 시스템
 
 앱 전체에 적용되는 디자인 토큰과 규칙. 토큰 정의는 `frontend/src/shared/styles/index.css`.
 제품 수준의 화면 구조, 정보 위계, 이미지, 완료 기준은
-[`product-design-spec.md`](./product-design-spec.md)를 우선 적용.
+[`product-design-rules.md`](./product-design-rules.md)를 우선 적용.
 
 ## 브랜드 정체성
 
@@ -33,12 +33,13 @@
 ```
 
 **규칙**
+
 - 새 UI에 색을 추가할 때는 항상 위 토큰에서 골라 씀. 새 hex 값 직접 박아넣기 금지.
 - 빨강(`--c-error`)은 삭제·에러 등 파괴적/경고 동작에만 사용. 액센트(`--accent`)와 혼동 금지.
 - `--bg-canvas`는 페이지 바깥(헤더 등), `--bg-base`는 실제 작업 패널/카드에 사용 — 두 토큰을 같은 색으로 섞어 쓰지 않음.
 - `--bg-additive`는 "패널 전체"가 아니라 "작은 웰(필터 탭 트랙 등)"에만 사용 — Todo 리스트 패널 전체를 회색으로 칠했다가 흰색으로 되돌린 전례 있음(`465bb06` 이전 작업, `frontend/src/features/todos/TodoList.tsx`). 현재는 웰 배경 위에 그린 액센트가 얹힌 구조이므로 재적용 시 참고.
 - 레거시 별칭(`--c-card`, `--c-sidebar`, `--c-accent` 등)이 `index.css`에 남아있음 — Todo/Login 하위호환용. 새 코드에서는 위 1차 토큰만 쓸 것.
-- `--border-subtle`은 원래 `#e5e5e5`로 `--bg-canvas`/`--bg-base` 대비 1.17~1.26:1(사실상 식별 불가)이었음 — `#cfd3cd`(1.41~1.52:1)로 조정. `--accent-soft`도 같은 이유로 `#e6f0ec`(1.08~1.16:1)에서 `#cfe6da`(1.22~1.31:1)로 조정.
+- `--border-subtle`은 원래 `#e5e5e5`로 `--bg-canvas`/`--bg-base` 대비 1.17~~1.26:1(사실상 식별 불가)이었음 — `#cfd3cd`(1.41~~1.52:1)로 조정. `--accent-soft`도 같은 이유로 `#e6f0ec`(1.08~~1.16:1)에서 `#cfe6da`(1.22~~1.31:1)로 조정.
 - `--shadow-card`는 원래 `index.css`에 정의가 없어 `Todo.css`/`ArchTrainerPage.tsx`의 `var(--shadow-card)` 참조가 조용히 무효화(그림자 없음)되던 버그였음 — 이제 정의됨. 카드/패널에 그림자를 줄 땐 값을 새로 만들지 말고 위 토큰을 쓸 것.
 
 ## 타이포그래피
@@ -56,6 +57,7 @@
 ```
 
 **규칙**
+
 - 헤더 워드마크만 예외로 `Space Grotesk` 사용. 나머지 모든 텍스트는 `--font-sans`.
 - **모바일 입력창(input/textarea/select)은 무조건 `font-size: 16px` 이상.** 16px 미만이면 iOS Safari가 포커스 시 자동 확대(줌인)한다 — 실제 버그였고 앱 전체(Todo/Login/Paper Analyzer)에 퍼져 있던 걸 일괄 수정함(`6d3674c`). 새 입력 필드 추가 시 반드시 16px 이상으로 시작할 것.
 
@@ -84,6 +86,7 @@
 ```
 
 **규칙**
+
 - Papers·Concepts는 `--page-reading-max`, Translate·Models는 `--page-content-max` 레일을 사용하고 레일 자체를 `margin-inline: auto`로 중앙 배치함.
 - 헤더, 검색/입력, 초기 안내와 결과 본문은 같은 레일을 사용해 왼쪽 시작선과 오른쪽 끝선을 맞춤.
 - **레일 폭이 같은 `width: min(100%, --page-*-max); margin-inline: auto` 값이어도, 그중 하나만 `overflow-y: auto`로 스크롤되면 실제 렌더링 폭이 어긋남.** 스크롤 안 되는 헤더/검색바는 항상 전체 폭을 쓰는데, 스크롤되는 결과 영역은 콘텐츠가 길어져 스크롤바가 생기는 순간 그만큼 폭이 줄기 때문 — Mac 오버레이 스크롤바에서는 안 보이고 Windows 클래식 스크롤바에서만 보여서 놓치기 쉬움(`PaperAnalyzerPage.tsx` 실제 발생 사례, 2026-08-25). **레일 안에서 `overflow-y: auto`를 쓰는 컨테이너는 반드시 `scrollbar-gutter: stable`을 같이 써서 스크롤바 유무와 무관하게 폭을 고정할 것** (`Todo.css`의 `.todo-list-scroll`이 기존 예시).
@@ -101,26 +104,32 @@
 ## 컴포넌트 패턴
 
 ### 히스토리 드롭다운
+
 - `frontend/src/shared/components/HistoryDropdown.tsx` — Translator/Contextor/Paper Analyzer가 공유.
 - 규칙: 최근 기록을 페이지 본문에 상시 노출하지 않음. 헤더의 아이콘 버튼(시계 아이콘) 클릭 시에만 드롭다운으로 펼침. 항목이 0개면 버튼 자체를 숨김.
 - 배경 클릭 시 자동으로 닫힘.
 
 ### 우선순위 표시 (Todo / Calendar)
+
 공유 모듈은 `frontend/src/features/todos/priority.ts` 하나. 용도별로 export가 나뉨 — **컴포넌트마다 새로 정의하지 말고 반드시 `priority.ts`에서 import할 것.**
 
-| export | 용도 | 값 |
-|---|---|---|
-| `priorityStyle` | 배지(배경+글자 쌍) — Todo 리스트/상세 | `urgent`=`--selected-bg` 채움, `mid`=`--bg-additive` 채움, `normal`=투명+테두리 (모노톤) |
-| `priorityLabels(t)` | 라벨 텍스트 | i18n 함수 — `t()`를 받아 언어별 라벨 반환. 상수 아님 |
-| `priorityAccent` | 점·텍스트·막대 등 단독 색상표시 — Calendar | `urgent`=`#a32d2d`, `mid`=`#854f0b`, `normal`=`var(--accent)` |
+
+| export              | 용도                            | 값                                                                            |
+| ------------------- | ----------------------------- | ---------------------------------------------------------------------------- |
+| `priorityStyle`     | 배지(배경+글자 쌍) — Todo 리스트/상세     | `urgent`=`--selected-bg` 채움, `mid`=`--bg-additive` 채움, `normal`=투명+테두리 (모노톤) |
+| `priorityLabels(t)` | 라벨 텍스트                        | i18n 함수 — `t()`를 받아 언어별 라벨 반환. 상수 아님                                         |
+| `priorityAccent`    | 점·텍스트·막대 등 단독 색상표시 — Calendar | `urgent`=`#a32d2d`, `mid`=`#854f0b`, `normal`=`var(--accent)`                |
+
 
 - `priorityStyle`이 아니라 `priorityAccent`가 따로 있는 이유: `priorityStyle`의 `mid`(옅은 회색 배경)·`normal`(투명)은 배지 형태(배경+글자)로 쓸 땐 괜찮지만, 점이나 텍스트처럼 색 하나로만 우선순위를 나타내면 거의 안 보인다. Calendar는 빽빽한 주간 그리드에서 한눈에 구분돼야 해서 빨강/주황/초록을 그대로 유지하기로 함(모노톤 강제 안 함) — 대신 값을 한 곳에만 정의.
 - 과거 `TodoItem.tsx`/`FocusPanel.tsx`가 서로 다른 배지 색을 썼고, `CalendarPage.tsx`/`WeekGrid.tsx`/`WeeklyReviewPage.tsx` 3곳이 각자 다른 빨강/주황 hex를 하드코딩했던 버그가 있었음 — 전부 위 표의 공유 export로 통일함.
 
 ### 터치 대상 (모바일)
+
 - `:hover`로만 나타나는 요소(예: `opacity-0 group-hover:opacity-100`)를 클릭 가능한 요소 위에 두지 않음. iOS Safari에서 첫 탭이 호버 진입으로 소비되고 2번째 탭에서야 클릭이 발생하는 버그를 유발함(`TodoItem.tsx` 연필 아이콘, `6d3674c`에서 수정). 꼭 필요하면 `@media (hover: hover)`로 감싸서 터치 기기에서는 상시 노출.
 
 ### 다국어 (i18n)
+
 - `frontend/src/shared/i18n/` — `LanguageContext.tsx`(provider) + `locales/{ko,en,zh}.json` + `index.ts`의 `useT()` 훅.
 - 화면에 보이는 문자열은 하드코딩하지 않고 `t('네임스페이스.키')`로 가져옴 (예: `t('shell.nav.todo')`). 새 문자열 추가 시 `ko.json`을 기준으로 세 언어 파일에 전부 키를 넣을 것 — 하나만 빠뜨리면 해당 언어에서 키가 그대로 노출됨.
 - 언어 전환 UI는 `LanguageSwitcher` 컴포넌트, 데스크톱 헤더 우측(`shell-topbar-end`)에 위치.

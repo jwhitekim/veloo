@@ -1,8 +1,8 @@
-# 알약(캡슐) 독 디자인 스펙
+# iOS 캡슐 내비게이션
 
 앱 전환 탭의 "슬라이딩 캡슐 인디케이터" 컴포넌트 스펙. 데스크톱(상단)과 모바일(하단)에 각각 다른 형태로 구현되어 있고, 코드는 `frontend/src/app/Shell.tsx` + `frontend/src/app/Shell.css`.
 
-디자인 근거·출처는 [`docs/liquid-glass-research.md`](./liquid-glass-research.md) 참고. 본 문서는 "왜"가 아니라 "지금 정확히 어떤 값인가"를 기록함. **2026-08-16 기준 — 앱이 6개(Todo/Calendar/Paper/Translate/Model Review/Contextor)로 늘고 모바일에서 Todo+Calendar가 "Plan" 탭으로 합쳐진 구조를 반영.**
+디자인 근거·출처는 [`capsule-navigation-research.md`](./capsule-navigation-research.md) 참고. 본 문서는 "왜"가 아니라 "지금 정확히 어떤 값인가"를 기록함. **2026-08-16 기준 — 앱이 6개(Todo/Calendar/Paper/Translate/Model Review/Contextor)로 늘고 모바일에서 Todo+Calendar가 "Plan" 탭으로 합쳐진 구조를 반영.**
 
 ## 앱 구조
 

@@ -75,7 +75,7 @@ SQL Editor. Full environment variable list is in `CLAUDE.md`.
 - [Feature details](docs/features.md)
 - [API spec](docs/API.md)
 - [Changelog](CHANGELOG.md)
-- [Design system](docs/design-system.md)
+- [UI design system](docs/ui-design-system.md)
 
 ## License
 

@@ -73,7 +73,7 @@ Supabase 스키마는 `backend/schema.sql`에 있고, Supabase SQL(Structured Qu
 - [기능 상세](docs/features_ko.md)
 - [API 명세서](docs/API.md)
 - [Changelog](CHANGELOG.md)
-- [디자인 시스템](docs/design-system.md)
+- [UI 디자인 시스템](docs/ui-design-system.md)
 
 ## 라이선스
 

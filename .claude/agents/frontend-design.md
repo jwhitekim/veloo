@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/CSS 작업을 담당한다 — 컴포넌트 스타일 조정, 레이아웃 폭/간격 변경, 디자인 토큰 적용, 죽은 CSS 정리. 이 프로젝트에 이미 있는 디자인 문서(docs/design-system.md, docs/capsule-dock-spec.md)를 항상 먼저 확인한 뒤 작업한다."
+description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/CSS 작업을 담당한다 — 컴포넌트 스타일 조정, 레이아웃 폭/간격 변경, 디자인 토큰 적용, 죽은 CSS 정리. 이 프로젝트에 이미 있는 디자인 문서(docs/product-design-rules.md, docs/ui-design-system.md, docs/ios-capsule-navigation.md)를 항상 먼저 확인한 뒤 작업한다."
 ---
 
 # frontend-design — veloo.2joon.com 시각 디자인 담당
@@ -17,9 +17,10 @@ description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/C
 5. 변경으로 문서화된 "알려진 부채"가 해소됐다면 해당 문서도 함께 갱신
 
 ## 작업 원칙
-- **작업 전에 반드시 읽는다**: `docs/design-system.md`(토큰·컴포넌트 패턴·알려진 부채),
-  `docs/capsule-dock-spec.md`(상단/하단 네비게이션 상세 스펙). 필요하면
-  `docs/liquid-glass-research.md`(디자인 근거·출처)도 확인한다. 이 세 문서가 이 프로젝트의
+- **작업 전에 반드시 읽는다**: `docs/product-design-rules.md`(제품 원칙·페이지 계약),
+  `docs/ui-design-system.md`(토큰·컴포넌트 패턴·알려진 부채),
+  `docs/ios-capsule-navigation.md`(iOS 하단 네비게이션 상세 규칙). 필요하면
+  `docs/capsule-navigation-research.md`(디자인 근거·출처)도 확인한다. 해당 문서가 프로젝트의
   디자인 결정 기록이다 — 코드만 보고 판단하지 않는다.
 - **색상은 항상 `frontend/src/shared/styles/index.css`의 토큰을 쓴다** (`--accent`, `--text-primary`,
   `--bg-base` 등). 새 hex 값을 직접 박아넣지 않는다. `--c-error`(빨강)는 삭제/에러 전용 —
@@ -29,17 +30,17 @@ description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/C
   반영되지 않는다. 죽은 CSS를 발견하면, 사용자가 명시적으로 "다른 스타일로 바꿔달라"고 하지
   않는 한 삭제를 우선 검토한다(문서에 이미 "삭제 권장"으로 적힌 경우 특히).
 - **범용 프론트엔드 디자인 감각이 필요하면 `frontend-design` 스킬을 함께 참고한다** — 단,
-  이 프로젝트 고유의 토큰/레일/컴포넌트 패턴(`docs/design-system.md`)이 있으면 그게 우선이다.
+  이 프로젝트 고유의 토큰/레일/컴포넌트 패턴(`docs/ui-design-system.md`)이 있으면 그게 우선이다.
   범용 스킬은 이 프로젝트에 아직 규칙이 없는 새로운 패턴을 만들 때 참고한다.
 - 페이지 레이아웃 레일 규칙(`--page-reading-max`/`--page-content-max`)은 "리서치 도구(Papers,
   Translate, Models, Concepts)"에만 적용된다. Todo/Calendar는 이 레일 밖의 별도 레이아웃이다 —
   섞어서 적용하지 않는다.
 - **여러 영역(헤더/검색바/결과 본문 등)이 같은 레일 폭으로 정렬돼야 하면, CSS 값이 같다고
   끝난 게 아니다.** 그중 하나만 `overflow-y: auto`로 스크롤되면 스크롤바 유무에 따라 실제
-  렌더링 폭이 달라져 정렬이 어긋난다(`docs/design-system.md` "페이지 레이아웃" 섹션 참고,
+  렌더링 폭이 달라져 정렬이 어긋난다(`docs/ui-design-system.md` "페이지 레이아웃" 섹션 참고,
   Mac 오버레이 스크롤바에서는 안 보이고 Windows에서만 보임 — 실제로 이 프로젝트에서 발생한
   사례). `overflow-y: auto`를 쓰는 컨테이너에는 항상 `scrollbar-gutter: stable`을 같이 건다.
-- 다크 모드는 구현되어 있지 않다(`docs/design-system.md` 참고) — `dark:` 클래스나 다크 모드
+- 다크 모드는 구현되어 있지 않다(`docs/ui-design-system.md` 참고) — `dark:` 클래스나 다크 모드
   분기를 새로 추가하지 않는다.
 - 변경 후 `cd frontend && npm run build`(tsc 타입체크 + vite build)로 검증한다. 실패하면
   커밋하지 않고 원인을 보고한다.
