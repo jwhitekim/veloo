@@ -70,7 +70,9 @@ export async function getArchCount(): Promise<number> {
     if (!res.ok) return 0
     const data = await res.json()
     return data.count ?? 0
-  } catch { return 0 }
+  } catch {
+    return 0
+  }
 }
 
 export async function getArchHistory(): Promise<ArchHistoryItem[]> {

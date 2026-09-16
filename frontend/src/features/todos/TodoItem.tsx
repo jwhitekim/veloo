@@ -16,7 +16,7 @@ export default function TodoItem({ todo, selected, onSelect, onToggle }: Props) 
   const priorityLabel = priorityLabels(t)
   const [animating, setAnimating] = useState(false)
 
-  const completedSteps = todo.steps.filter(s => s.done).length
+  const completedSteps = todo.steps.filter((s) => s.done).length
   const totalSteps = todo.steps.length
 
   const handleToggle = (e: React.MouseEvent) => {
@@ -31,18 +31,24 @@ export default function TodoItem({ todo, selected, onSelect, onToggle }: Props) 
   }
 
   const deadline = todo.deadline
-    ? (/^\d{4}-\d{2}-\d{2}$/.test(todo.deadline) ? dayjs(todo.deadline).format('M/D') : todo.deadline)
+    ? /^\d{4}-\d{2}-\d{2}$/.test(todo.deadline)
+      ? dayjs(todo.deadline).format('M/D')
+      : todo.deadline
     : null
 
   return (
-    <article
-      onClick={onSelect}
-      className={`todo-item${selected ? ' is-selected' : ''}${todo.done ? ' is-done' : ''}`}
-    >
+    <article onClick={onSelect} className={`todo-item${selected ? ' is-selected' : ''}${todo.done ? ' is-done' : ''}`}>
       <button onClick={handleToggle} className="todo-item-check" aria-label={todo.name}>
         {todo.done && (
           <svg viewBox="0 0 12 10" fill="none">
-            <path className={animating ? 'check-path' : ''} d="M1 5l3.5 3.5L11 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              className={animating ? 'check-path' : ''}
+              d="M1 5l3.5 3.5L11 1"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </button>
@@ -58,7 +64,9 @@ export default function TodoItem({ todo, selected, onSelect, onToggle }: Props) 
           {(deadline || totalSteps > 0) && (
             <span className="todo-item-meta">
               {deadline && <span>{deadline}</span>}
-              {totalSteps > 0 && <span>{t('todo.detail.stepsCompleted', { done: completedSteps, total: totalSteps })}</span>}
+              {totalSteps > 0 && (
+                <span>{t('todo.detail.stepsCompleted', { done: completedSteps, total: totalSteps })}</span>
+              )}
             </span>
           )}
         </button>
@@ -66,7 +74,9 @@ export default function TodoItem({ todo, selected, onSelect, onToggle }: Props) 
       </div>
 
       <div className="todo-item-side">
-        <span className="todo-item-priority" style={priorityStyle[todo.priority]}>{priorityLabel[todo.priority]}</span>
+        <span className="todo-item-priority" style={priorityStyle[todo.priority]}>
+          {priorityLabel[todo.priority]}
+        </span>
       </div>
     </article>
   )

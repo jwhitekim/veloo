@@ -20,7 +20,7 @@ interface Props {
 
 export default function TodoList({ todos, filter, onFilter, selectedId, onSelect, onToggle, onAdd }: Props) {
   const t = useT()
-  const filterTabs: { label: string; key: NavFilter }[] = NAV_FILTERS.map(key => ({
+  const filterTabs: { label: string; key: NavFilter }[] = NAV_FILTERS.map((key) => ({
     key,
     label: t(`todo.filters.${key}`),
   }))
@@ -28,8 +28,8 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
   const [showCompleted, setShowCompleted] = useState(false)
   const isMobile = useIsMobile()
 
-  const active = todos.filter(todo => !todo.done)
-  const done = todos.filter(todo => todo.done)
+  const active = todos.filter((todo) => !todo.done)
+  const done = todos.filter((todo) => todo.done)
   const completionRate = todos.length ? Math.round((done.length / todos.length) * 100) : 0
 
   return (
@@ -44,31 +44,27 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
             <strong>{t('todo.researchFlow')}</strong>
           </div>
           {isMobile ? (
-            <button
-              onClick={() => setShowModal(true)}
-              type="button"
-              className="todo-list-add-mobile"
-            >
+            <button onClick={() => setShowModal(true)} type="button" className="todo-list-add-mobile">
               <Plus size={14} />
               {t('todo.addButton')}
             </button>
           ) : (
             <div className="todo-list-header-actions">
-              <button
-                type="button"
-                className="todo-list-add-compact"
-                onClick={() => setShowModal(true)}
-              >
+              <button type="button" className="todo-list-add-compact" onClick={() => setShowModal(true)}>
                 <Plus aria-hidden="true" />
                 {t('todo.addButton')}
               </button>
               <label className="todo-list-filter-select">
                 <select
                   value={filter}
-                  onChange={event => onFilter(event.target.value as NavFilter)}
+                  onChange={(event) => onFilter(event.target.value as NavFilter)}
                   aria-label={t('todo.filterAriaLabel')}
                 >
-                  {filterTabs.map(item => <option key={item.key} value={item.key}>{item.label}</option>)}
+                  {filterTabs.map((item) => (
+                    <option key={item.key} value={item.key}>
+                      {item.label}
+                    </option>
+                  ))}
                 </select>
                 <ChevronDown aria-hidden="true" />
               </label>
@@ -79,18 +75,18 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
 
         {isMobile && (
           <div className="todo-list-progress-row">
-            <div className="todo-list-progress"><span style={{ width: `${completionRate}%` }} /></div>
-            <small>{done.length} / {todos.length}</small>
+            <div className="todo-list-progress">
+              <span style={{ width: `${completionRate}%` }} />
+            </div>
+            <small>
+              {done.length} / {todos.length}
+            </small>
           </div>
         )}
 
         {isMobile && (
-          <div
-            role="tablist"
-            aria-label={t('todo.filterAriaLabel')}
-            className="todo-filter-tabs"
-          >
-            {filterTabs.map(item => {
+          <div role="tablist" aria-label={t('todo.filterAriaLabel')} className="todo-filter-tabs">
+            {filterTabs.map((item) => {
               const isActive = filter === item.key
               return (
                 <button
@@ -110,7 +106,7 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
       </div>
 
       <div className={`todo-list-scroll${isMobile ? '' : ' flex-1 overflow-y-auto'}`}>
-        {active.map(todo => (
+        {active.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}
@@ -126,30 +122,35 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
               type="button"
               className="todo-completed-toggle"
               aria-expanded={showCompleted}
-              onClick={() => setShowCompleted(open => !open)}
+              onClick={() => setShowCompleted((open) => !open)}
             >
               <span>{t('todo.completedToggle')}</span>
               <span className="todo-completed-count">{done.length}</span>
               <ChevronDown className={showCompleted ? 'is-open' : ''} size={14} />
             </button>
-            {showCompleted && done.map(todo => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                selected={todo.id === selectedId}
-                onSelect={() => onSelect(todo.id)}
-                onToggle={() => onToggle(todo.id)}
-              />
-            ))}
+            {showCompleted &&
+              done.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  selected={todo.id === selectedId}
+                  onSelect={() => onSelect(todo.id)}
+                  onToggle={() => onToggle(todo.id)}
+                />
+              ))}
           </>
         )}
 
         {todos.length === 0 && (
           <div className="todo-list-empty">
-            <span className="todo-list-empty-mark"><Plus size={18} /></span>
+            <span className="todo-list-empty-mark">
+              <Plus size={18} />
+            </span>
             <strong>{t('todo.noTodos')}</strong>
             <p>{t('todo.overview.emptyActive')}</p>
-            <button type="button" onClick={() => setShowModal(true)}>{t('todo.addButton')}</button>
+            <button type="button" onClick={() => setShowModal(true)}>
+              {t('todo.addButton')}
+            </button>
           </div>
         )}
       </div>
@@ -157,7 +158,9 @@ export default function TodoList({ todos, filter, onFilter, selectedId, onSelect
       {showModal && (
         <AddTodoModal
           onClose={() => setShowModal(false)}
-          onSave={async data => { await onAdd(data) }}
+          onSave={async (data) => {
+            await onAdd(data)
+          }}
         />
       )}
     </section>

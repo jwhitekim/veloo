@@ -12,7 +12,7 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
   const t = useT()
   const priorities: { value: Priority; label: string }[] = [
     { value: 'urgent', label: t('todo.priority.urgent') },
-    { value: 'mid',    label: t('todo.priority.mid') },
+    { value: 'mid', label: t('todo.priority.mid') },
     { value: 'normal', label: t('todo.priority.normal') },
   ]
   const [name, setName] = useState('')
@@ -47,11 +47,13 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
           maxHeight: 'calc(100dvh - 32px)',
           overflowY: 'auto',
         }}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-0">
-          <h2 className="text-[length:var(--fs-label)] [font-weight:var(--fw-semibold)] text-gray-800">{t('todo.modal.title')}</h2>
+          <h2 className="text-[length:var(--fs-label)] [font-weight:var(--fw-semibold)] text-gray-800">
+            {t('todo.modal.title')}
+          </h2>
           <button
             onClick={onClose}
             className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-black/5 transition-colors"
@@ -65,8 +67,8 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
           <input
             autoFocus
             value={name}
-            onChange={e => setName(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSave()}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSave()}
             placeholder={t('todo.modal.namePlaceholder')}
             className="w-full text-[length:var(--fs-input)] [font-weight:var(--fw-medium)] placeholder:text-gray-300 bg-transparent outline-none text-gray-900 border-b pb-2 transition-colors focus:border-[var(--selected-bg)]"
             style={{ borderColor: 'var(--border)' }}
@@ -75,7 +77,7 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
           {/* Memo */}
           <textarea
             value={memo}
-            onChange={e => setMemo(e.target.value)}
+            onChange={(e) => setMemo(e.target.value)}
             placeholder={t('todo.modal.memoPlaceholder')}
             rows={3}
             className="w-full text-[length:var(--fs-input)] placeholder:text-gray-300 bg-transparent outline-none resize-none text-gray-700 rounded-lg px-3 py-2.5 transition-colors"
@@ -86,14 +88,24 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
           <div>
             <div className="text-[length:var(--fs-meta)] text-gray-400 mb-2">{t('todo.modal.priorityLabel')}</div>
             <div className="flex gap-2">
-              {priorities.map(p => (
+              {priorities.map((p) => (
                 <button
                   key={p.value}
                   onClick={() => setPriority(p.value)}
                   className="flex-1 py-1.5 rounded-lg text-[length:var(--fs-small)] [font-weight:var(--fw-medium)] border transition-colors"
-                  style={priority === p.value
-                    ? { background: 'var(--selected-bg)', borderColor: 'var(--selected-bg)', color: 'var(--selected-text)' }
-                    : { background: 'transparent', borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}
+                  style={
+                    priority === p.value
+                      ? {
+                          background: 'var(--selected-bg)',
+                          borderColor: 'var(--selected-bg)',
+                          color: 'var(--selected-text)',
+                        }
+                      : {
+                          background: 'transparent',
+                          borderColor: 'var(--border-subtle)',
+                          color: 'var(--text-secondary)',
+                        }
+                  }
                 >
                   {p.label}
                 </button>
@@ -107,7 +119,7 @@ export default function AddTodoModal({ onClose, onSave }: Props) {
             <input
               type="date"
               value={deadline}
-              onChange={e => setDeadline(e.target.value)}
+              onChange={(e) => setDeadline(e.target.value)}
               className="w-full text-[length:var(--fs-input)] rounded-lg px-3 py-2 outline-none border bg-transparent text-gray-700 focus:border-[var(--selected-bg)] transition-colors"
               style={{ borderColor: 'var(--input-border)' }}
             />

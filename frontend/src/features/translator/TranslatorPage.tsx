@@ -24,43 +24,46 @@ export default function Translator() {
   const timerRef = useRef<ReturnType<typeof setTimeout>>()
   const abortRef = useRef<AbortController | null>(null)
 
-  const doTranslate = useCallback(async (text: string) => {
-    if (!text.trim()) return
-    abortRef.current?.abort()
-    const controller = new AbortController()
-    abortRef.current = controller
-    setTranslating(true)
-    setStreamedText('')
-    setError('')
-    setSessionExpired(false)
-    try {
-      const res = await fetch('/translate/api/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
-        signal: controller.signal,
-      })
-      if (res.status === 401) {
-        setSessionExpired(true)
+  const doTranslate = useCallback(
+    async (text: string) => {
+      if (!text.trim()) return
+      abortRef.current?.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+      setTranslating(true)
+      setStreamedText('')
+      setError('')
+      setSessionExpired(false)
+      try {
+        const res = await fetch('/translate/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text }),
+          signal: controller.signal,
+        })
+        if (res.status === 401) {
+          setSessionExpired(true)
+          setTranslating(false)
+          return
+        }
+        if (!res.ok) throw new Error(t('translator.errors.translateFailed', { status: res.status }))
+        if (!res.body) throw new Error(t('translator.errors.noStreaming'))
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          setStreamedText((prev) => prev + decoder.decode(value, { stream: true }))
+        }
         setTranslating(false)
-        return
+      } catch (e) {
+        if ((e as DOMException).name === 'AbortError') return
+        setError((e as Error).message)
+        setTranslating(false)
       }
-      if (!res.ok) throw new Error(t('translator.errors.translateFailed', { status: res.status }))
-      if (!res.body) throw new Error(t('translator.errors.noStreaming'))
-      const reader = res.body.getReader()
-      const decoder = new TextDecoder()
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        setStreamedText(prev => prev + decoder.decode(value, { stream: true }))
-      }
-      setTranslating(false)
-    } catch (e) {
-      if ((e as DOMException).name === 'AbortError') return
-      setError((e as Error).message)
-      setTranslating(false)
-    }
-  }, [t])
+    },
+    [t],
+  )
 
   const handleCopy = async () => {
     if (!streamedText) return
@@ -80,7 +83,9 @@ export default function Translator() {
 
   useEffect(() => {
     api.getTranslationHistory().then(setTxHistory)
-    return () => { abortRef.current?.abort() }
+    return () => {
+      abortRef.current?.abort()
+    }
   }, [])
 
   const handleInput = (val: string) => {
@@ -102,11 +107,15 @@ export default function Translator() {
     <div className="translator-root">
       <div className="app-page-intro-shell app-page-intro-shell--workspace">
         <PageHeader
-          kicker="Translation workspace"
+          kicker={t('translator.kicker')}
           icon={<Languages />}
           title={t('translator.heroTitle')}
           description={t('translator.heroDescription')}
-          badge={<><Languages size={14} /> {t('translator.quickStart')}</>}
+          badge={
+            <>
+              <Languages size={14} /> {t('translator.quickStart')}
+            </>
+          }
         />
       </div>
       <main className="translator-shell">
@@ -127,8 +136,8 @@ export default function Translator() {
             <textarea
               className="translator-textarea"
               value={source}
-              onChange={e => handleInput(e.target.value)}
-              onKeyDown={e => {
+              onChange={(e) => handleInput(e.target.value)}
+              onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
                   e.preventDefault()
                   clearTimeout(timerRef.current)
@@ -139,12 +148,16 @@ export default function Translator() {
             />
 
             <div className="translator-panel-footer">
-              <span>{source.length.toLocaleString()} / {MAX_CHARS.toLocaleString()}</span>
+              <span>
+                {source.length.toLocaleString()} / {MAX_CHARS.toLocaleString()}
+              </span>
               <span>{t('translator.autoTranslate')}</span>
             </div>
           </div>
 
-          <div className="translator-flow" aria-hidden="true"><ArrowRight /></div>
+          <div className="translator-flow" aria-hidden="true">
+            <ArrowRight />
+          </div>
 
           <div className="translator-panel translator-panel--result">
             <div className="translator-panel-header">
@@ -157,11 +170,35 @@ export default function Translator() {
                   items={txHistory}
                   label={t('translator.recentTranslation')}
                   triggerClassName="translator-icon-btn"
-                  onSelect={item => { setSource(item.source_text); setStreamedText(item.translated_text) }}
-                  renderItem={item => (
+                  onSelect={(item) => {
+                    setSource(item.source_text)
+                    setStreamedText(item.translated_text)
+                  }}
+                  renderItem={(item) => (
                     <>
-                      <div style={{ fontSize: 13, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.source_text}</div>
-                      <div style={{ fontSize: 12, color: 'var(--text-disabled)', marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.translated_text}</div>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: 'var(--text-primary)',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {item.source_text}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: 'var(--text-disabled)',
+                          marginTop: 3,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {item.translated_text}
+                      </div>
                     </>
                   )}
                 />
@@ -187,9 +224,7 @@ export default function Translator() {
                 </div>
               )}
 
-              {!sessionExpired && error && (
-                <div className="translator-error">{error}</div>
-              )}
+              {!sessionExpired && error && <div className="translator-error">{error}</div>}
 
               {!sessionExpired && streamedText && (
                 <div className="translator-result-text">
@@ -200,7 +235,9 @@ export default function Translator() {
 
               {!sessionExpired && !translating && !error && !streamedText && (
                 <div className="translator-empty-output">
-                  <span><Languages aria-hidden="true" /></span>
+                  <span>
+                    <Languages aria-hidden="true" />
+                  </span>
                   <strong>{t('translator.resultEmptyTitle')}</strong>
                   <p>{t('translator.resultEmptyDesc')}</p>
                 </div>
@@ -209,11 +246,26 @@ export default function Translator() {
           </div>
         </section>
         {!source && !streamedText && !error && (
-          <PageGuide ariaLabel={t('translator.quickStart')} items={[
-            { icon: ScanText, title: t('translator.feature.autoDetectTitle'), description: t('translator.feature.autoDetectDesc') },
-            { icon: Radio, title: t('translator.feature.streamingTitle'), description: t('translator.feature.streamingDesc') },
-            { icon: HistoryIcon, title: t('translator.feature.historyTitle'), description: t('translator.feature.historyDesc') },
-          ]} />
+          <PageGuide
+            ariaLabel={t('translator.quickStart')}
+            items={[
+              {
+                icon: ScanText,
+                title: t('translator.feature.autoDetectTitle'),
+                description: t('translator.feature.autoDetectDesc'),
+              },
+              {
+                icon: Radio,
+                title: t('translator.feature.streamingTitle'),
+                description: t('translator.feature.streamingDesc'),
+              },
+              {
+                icon: HistoryIcon,
+                title: t('translator.feature.historyTitle'),
+                description: t('translator.feature.historyDesc'),
+              },
+            ]}
+          />
         )}
       </main>
     </div>

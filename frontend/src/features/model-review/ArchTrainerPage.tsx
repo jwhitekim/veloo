@@ -12,19 +12,19 @@ import type { ExplanationJSON, ExplanationModule, ExplanationFlowStep, FeedbackJ
 import './ArchTrainer.css'
 
 const C = {
-  bg:         'var(--bg-canvas)',
-  surface:    'var(--bg-base)',
-  card:       'var(--bg-additive)',
-  border:     'var(--border-subtle)',
-  accent:     'var(--accent)',
-  accentDim:  'var(--accent-soft)',
+  bg: 'var(--bg-canvas)',
+  surface: 'var(--bg-base)',
+  card: 'var(--bg-additive)',
+  border: 'var(--border-subtle)',
+  accent: 'var(--accent)',
+  accentDim: 'var(--accent-soft)',
   accentText: 'var(--accent)',
-  text:       'var(--text-primary)',
-  textSub:    'var(--text-secondary)',
-  textMuted:  'var(--text-disabled)',
-  green:      'var(--c-green)',
-  greenDim:   'var(--c-green-dim)',
-  error:      'var(--c-error)',
+  text: 'var(--text-primary)',
+  textSub: 'var(--text-secondary)',
+  textMuted: 'var(--text-disabled)',
+  green: 'var(--c-green)',
+  greenDim: 'var(--c-green-dim)',
+  error: 'var(--c-error)',
 }
 
 type Step = 'upload' | 'train' | 'feedback'
@@ -35,16 +35,16 @@ export default function ArchTrainer() {
   const isMobile = useIsMobile()
 
   const SECTION_LABELS: Record<keyof ExplanationJSON, string> = {
-    overview:     t('reviewer.sections.overview'),
-    modules:      t('reviewer.sections.modules'),
-    data_flow:    t('reviewer.sections.data_flow'),
+    overview: t('reviewer.sections.overview'),
+    modules: t('reviewer.sections.modules'),
+    data_flow: t('reviewer.sections.data_flow'),
     contribution: t('reviewer.sections.contribution'),
   }
 
   const FEEDBACK_LABELS: Record<keyof FeedbackJSON, string> = {
-    correct:    t('reviewer.feedback.correct'),
-    missing:    t('reviewer.feedback.missing'),
-    incorrect:  t('reviewer.feedback.incorrect'),
+    correct: t('reviewer.feedback.correct'),
+    missing: t('reviewer.feedback.missing'),
+    incorrect: t('reviewer.feedback.incorrect'),
     suggestion: t('reviewer.feedback.suggestion'),
   }
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -61,9 +61,11 @@ export default function ArchTrainer() {
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { api.getArchHistory().then(setArchHistory) }, [])
+  useEffect(() => {
+    api.getArchHistory().then(setArchHistory)
+  }, [])
 
-  const show = (s: Step) => setStep(prev => new Set([...prev, s]))
+  const show = (s: Step) => setStep((prev) => new Set([...prev, s]))
 
   const setFile = (file: File) => {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
@@ -96,10 +98,17 @@ export default function ArchTrainer() {
   }
 
   const doFeedback = async () => {
-    if (!userText.trim()) { setError(t('reviewer.enterDescriptionError')); return }
+    if (!userText.trim()) {
+      setError(t('reviewer.enterDescriptionError'))
+      return
+    }
     setLoadingFeedback(true)
     setError(null)
-    setStep(prev => { const s = new Set(prev); s.delete('feedback'); return s })
+    setStep((prev) => {
+      const s = new Set(prev)
+      s.delete('feedback')
+      return s
+    })
     try {
       const data = await api.feedback(explanation!, userText, historyId)
       setFeedback(data.feedback)
@@ -113,7 +122,9 @@ export default function ArchTrainer() {
 
   const resetAll = () => {
     resetUpload()
-    setExplanation(null); setUserText(''); setFeedback(null)
+    setExplanation(null)
+    setUserText('')
+    setFeedback(null)
     setHistoryId(null)
     setStep(new Set(['upload']))
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -132,26 +143,32 @@ export default function ArchTrainer() {
     <div className="arch-root">
       <div className="app-page-intro-shell app-page-intro-shell--workspace">
         <PageHeader
-          kicker="Model learning lab"
+          kicker={t('reviewer.kicker')}
           icon={<BrainCircuit />}
           title={t('reviewer.heroTitle')}
           description={t('reviewer.heroDescription')}
         />
       </div>
       <div className="arch-shell">
-        {error && (
-          <StatePanel compact kind="error" title={t('reviewer.requestFailedTitle')} description={error} />
-        )}
-
-
+        {error && <StatePanel compact kind="error" title={t('reviewer.requestFailedTitle')} description={error} />}
 
         {/* Step 1 — Upload */}
         <Card compact={isMobile}>
           <div className="arch-upload-toolbar">
             <CardTitle step={1}>{t('reviewer.uploadTitle')}</CardTitle>
-            <HistoryDropdown items={archHistory} label={t('reviewer.recentAnalysis')} onSelect={loadFromHistory} renderItem={item => (
-              <><strong>{item.image_name ?? t('reviewer.untitledImage')}</strong><small className="arch-history-date">{new Date(item.created_at).toLocaleDateString(dateLocale)}</small></>
-            )} />
+            <HistoryDropdown
+              items={archHistory}
+              label={t('reviewer.recentAnalysis')}
+              onSelect={loadFromHistory}
+              renderItem={(item) => (
+                <>
+                  <strong>{item.image_name ?? t('reviewer.untitledImage')}</strong>
+                  <small className="arch-history-date">
+                    {new Date(item.created_at).toLocaleDateString(dateLocale)}
+                  </small>
+                </>
+              )}
+            />
           </div>
           {!previewUrl ? (
             <div
@@ -159,27 +176,45 @@ export default function ArchTrainer() {
               role="button"
               tabIndex={0}
               onClick={() => fileInputRef.current?.click()}
-              onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') fileInputRef.current?.click() }}
-              onDragOver={e => { e.preventDefault(); setDragOver(true) }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') fileInputRef.current?.click()
+              }}
+              onDragOver={(e) => {
+                e.preventDefault()
+                setDragOver(true)
+              }}
               onDragLeave={() => setDragOver(false)}
-              onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f?.type.startsWith('image/')) setFile(f) }}
+              onDrop={(e) => {
+                e.preventDefault()
+                setDragOver(false)
+                const f = e.dataTransfer.files[0]
+                if (f?.type.startsWith('image/')) setFile(f)
+              }}
             >
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files?.[0]) setFile(e.target.files[0]) }} />
-              <div className="arch-upload-icon"><ImagePlus size={26} /></div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  if (e.target.files?.[0]) setFile(e.target.files[0])
+                }}
+              />
+              <div className="arch-upload-icon">
+                <ImagePlus size={26} />
+              </div>
               <p className="arch-upload-hint">
-                <strong>{t('reviewer.uploadHintBold')}</strong>{t('reviewer.uploadHintSuffix')}
+                <strong>{t('reviewer.uploadHintBold')}</strong>
+                {t('reviewer.uploadHintSuffix')}
               </p>
               <p className="arch-upload-formats">{t('reviewer.uploadFormats')}</p>
             </div>
           ) : (
             <div className="arch-preview">
-              <img
-                src={previewUrl}
-                alt={t('reviewer.previewAlt')}
-                className="arch-preview-image"
-              />
+              <img src={previewUrl} alt={t('reviewer.previewAlt')} className="arch-preview-image" />
               <button onClick={resetUpload} className="reselect-btn">
-                <RotateCcw size={11} />{t('reviewer.reselect')}
+                <RotateCcw size={11} />
+                {t('reviewer.reselect')}
               </button>
             </div>
           )}
@@ -190,12 +225,28 @@ export default function ArchTrainer() {
           </div>
         </Card>
 
-        {!previewUrl && archHistory.length === 0 && (
-          <PageGuide ariaLabel={t('reviewer.guideAria')} numbered items={[
-            { icon: ScanSearch, title: t('reviewer.guide.analyzeTitle'), description: t('reviewer.guide.analyzeDesc') },
-            { icon: MessageSquareText, title: t('reviewer.guide.explainTitle'), description: t('reviewer.guide.explainDesc') },
-            { icon: BadgeCheck, title: t('reviewer.guide.feedbackTitle'), description: t('reviewer.guide.feedbackDesc') },
-          ]} />
+        {!previewUrl && (
+          <PageGuide
+            ariaLabel={t('reviewer.guideAria')}
+            numbered
+            items={[
+              {
+                icon: ScanSearch,
+                title: t('reviewer.guide.analyzeTitle'),
+                description: t('reviewer.guide.analyzeDesc'),
+              },
+              {
+                icon: MessageSquareText,
+                title: t('reviewer.guide.explainTitle'),
+                description: t('reviewer.guide.explainDesc'),
+              },
+              {
+                icon: BadgeCheck,
+                title: t('reviewer.guide.feedbackTitle'),
+                description: t('reviewer.guide.feedbackDesc'),
+              },
+            ]}
+          />
         )}
 
         {/* Step 2 — User Input */}
@@ -205,7 +256,7 @@ export default function ArchTrainer() {
             <p style={{ fontSize: '0.85rem', color: C.textMuted, marginBottom: 12 }}>{t('reviewer.readyPrompt')}</p>
             <textarea
               value={userText}
-              onChange={e => setUserText(e.target.value)}
+              onChange={(e) => setUserText(e.target.value)}
               placeholder={t('reviewer.textareaPlaceholder')}
               className="arch-textarea"
             />
@@ -224,7 +275,18 @@ export default function ArchTrainer() {
 
             {/* AI 설명 */}
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px', color: C.textMuted, marginBottom: 10 }}>{t('reviewer.aiExplanationLabel')}</div>
+              <div
+                style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.2px',
+                  color: C.textMuted,
+                  marginBottom: 10,
+                }}
+              >
+                {t('reviewer.aiExplanationLabel')}
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <SectionBlock label={SECTION_LABELS.overview} content={explanation.overview} />
                 <ModuleListBlock label={SECTION_LABELS.modules} items={explanation.modules} />
@@ -235,7 +297,18 @@ export default function ArchTrainer() {
 
             {/* 피드백 */}
             <div>
-              <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px', color: C.textMuted, marginBottom: 10 }}>{t('reviewer.feedbackLabel')}</div>
+              <div
+                style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '1.2px',
+                  color: C.textMuted,
+                  marginBottom: 10,
+                }}
+              >
+                {t('reviewer.feedbackLabel')}
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <ListBlock label={FEEDBACK_LABELS.correct} items={feedback.correct} />
                 <ListBlock label={FEEDBACK_LABELS.missing} items={feedback.missing} />
@@ -246,7 +319,19 @@ export default function ArchTrainer() {
 
             <p style={{ fontSize: '0.82rem', color: C.textMuted, marginTop: 16 }}>{t('reviewer.tryAgainHint')}</p>
             <div style={{ marginTop: 14, display: 'flex', gap: 10 }}>
-              <Btn ghost onClick={() => { setUserText(''); setStep(prev => { const s = new Set(prev); s.delete('feedback'); return s }) }}>{t('reviewer.explainAgain')}</Btn>
+              <Btn
+                ghost
+                onClick={() => {
+                  setUserText('')
+                  setStep((prev) => {
+                    const s = new Set(prev)
+                    s.delete('feedback')
+                    return s
+                  })
+                }}
+              >
+                {t('reviewer.explainAgain')}
+              </Btn>
               <Btn onClick={resetAll}>{t('reviewer.newUpload')}</Btn>
             </div>
           </Card>
@@ -259,7 +344,16 @@ export default function ArchTrainer() {
 function SectionBlock({ label, content }: { label: string; content: string }) {
   return (
     <div style={{ borderRadius: 'var(--radius-md)', padding: '10px 14px', background: 'var(--bg-additive)' }}>
-      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 6, color: 'var(--text-secondary)' }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.8px',
+          textTransform: 'uppercase',
+          marginBottom: 6,
+          color: 'var(--text-secondary)',
+        }}
+      >
         {label}
       </div>
       <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.75, margin: 0 }}>{content}</p>
@@ -273,11 +367,22 @@ function ListBlock({ label, items }: { label: string; items: string[] }) {
   if (!items?.length) return null
   return (
     <div style={{ borderRadius: 'var(--radius-md)', padding: '10px 14px', background: 'var(--bg-additive)' }}>
-      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 6, color: 'var(--text-secondary)' }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.8px',
+          textTransform: 'uppercase',
+          marginBottom: 6,
+          color: 'var(--text-secondary)',
+        }}
+      >
         {label}
       </div>
       <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.75 }}>
-        {items.map((item, i) => <li key={i}>{item}</li>)}
+        {items.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
       </ul>
     </div>
   )
@@ -289,7 +394,16 @@ function ModuleListBlock({ label, items }: { label: string; items: ExplanationMo
   if (!items?.length) return null
   return (
     <div style={{ borderRadius: 'var(--radius-md)', padding: '10px 14px', background: 'var(--bg-additive)' }}>
-      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 6, color: 'var(--text-secondary)' }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.8px',
+          textTransform: 'uppercase',
+          marginBottom: 6,
+          color: 'var(--text-secondary)',
+        }}
+      >
         {label}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -297,7 +411,9 @@ function ModuleListBlock({ label, items }: { label: string; items: ExplanationMo
           <div key={i} style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.6 }}>
             <strong>{m.name}</strong>
             {m.role && <span style={{ color: 'var(--text-secondary)' }}> — {m.role}</span>}
-            {m.operation && <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>{m.operation}</div>}
+            {m.operation && (
+              <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>{m.operation}</div>
+            )}
           </div>
         ))}
       </div>
@@ -311,11 +427,22 @@ function FlowListBlock({ label, items }: { label: string; items: ExplanationFlow
   const sorted = [...items].sort((a, b) => a.step - b.step)
   return (
     <div style={{ borderRadius: 'var(--radius-md)', padding: '10px 14px', background: 'var(--bg-additive)' }}>
-      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 6, color: 'var(--text-secondary)' }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.8px',
+          textTransform: 'uppercase',
+          marginBottom: 6,
+          color: 'var(--text-secondary)',
+        }}
+      >
         {label}
       </div>
       <ol style={{ margin: 0, paddingLeft: 18, fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.75 }}>
-        {sorted.map(s => <li key={s.step}>{s.description}</li>)}
+        {sorted.map((s) => (
+          <li key={s.step}>{s.description}</li>
+        ))}
       </ol>
     </div>
   )
@@ -334,12 +461,28 @@ function CardTitle({ step, children }: { step: number; children: React.ReactNode
   )
 }
 
-function Btn({ children, primary, ghost, disabled, loading, onClick }: {
-  children: React.ReactNode; primary?: boolean; ghost?: boolean
-  disabled?: boolean; loading?: boolean; onClick?: () => void
+function Btn({
+  children,
+  primary,
+  ghost,
+  disabled,
+  loading,
+  onClick,
+}: {
+  children: React.ReactNode
+  primary?: boolean
+  ghost?: boolean
+  disabled?: boolean
+  loading?: boolean
+  onClick?: () => void
 }) {
   return (
-    <ActionButton variant={primary ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick} className={ghost ? 'arch-btn-ghost' : ''}>
+    <ActionButton
+      variant={primary ? 'primary' : 'secondary'}
+      disabled={disabled}
+      onClick={onClick}
+      className={ghost ? 'arch-btn-ghost' : ''}
+    >
       {loading && <Spinner />}
       {children}
     </ActionButton>

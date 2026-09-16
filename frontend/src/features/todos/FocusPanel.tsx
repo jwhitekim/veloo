@@ -91,13 +91,14 @@ export default function FocusPanel({
     if (memoChanged && hadSteps) {
       setRegeneratingSteps(true)
       try {
-        await Promise.all(todo.steps.map(s => onDeleteStep(s.id)))
+        await Promise.all(todo.steps.map((s) => onDeleteStep(s.id)))
         const result = await onGenerateSteps({ ...todo, memo: editMemo })
         for (let i = 0; i < result.steps.length; i++) {
           await onAddStep(todo.id, result.steps[i], i)
         }
-      } catch { /* 조용히 실패 */ }
-      finally {
+      } catch {
+        /* 조용히 실패 */
+      } finally {
         setRegeneratingSteps(false)
       }
     }
@@ -112,7 +113,7 @@ export default function FocusPanel({
   const handleGenerateSteps = async () => {
     setRegeneratingSteps(true)
     try {
-      await Promise.all(todo.steps.map(s => onDeleteStep(s.id)))
+      await Promise.all(todo.steps.map((s) => onDeleteStep(s.id)))
       const result = await onGenerateSteps(todo)
       for (let i = 0; i < result.steps.length; i++) {
         await onAddStep(todo.id, result.steps[i], i)
@@ -123,7 +124,7 @@ export default function FocusPanel({
   }
 
   const steps = todo.steps ?? []
-  const completedSteps = steps.filter(s => s.done).length
+  const completedSteps = steps.filter((s) => s.done).length
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden" style={{ background: 'var(--panel)' }}>
@@ -131,7 +132,18 @@ export default function FocusPanel({
         <div className="px-4 py-2 flex-shrink-0 border-b" style={{ borderColor: 'var(--border)' }}>
           <button
             onClick={onBack}
-            style={{ fontSize: 'var(--fs-body)', color: 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{
+              fontSize: 'var(--fs-body)',
+              color: 'var(--text-secondary)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '4px 0',
+              fontFamily: 'var(--font-sans)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+            }}
           >
             {t('todo.detail.backToList')}
           </button>
@@ -143,21 +155,21 @@ export default function FocusPanel({
           <div className="space-y-3">
             <input
               value={editName}
-              onChange={e => setEditName(e.target.value)}
+              onChange={(e) => setEditName(e.target.value)}
               className="w-full text-[length:var(--fs-input)] [font-weight:var(--fw-semibold)] border-b pb-1 outline-none border-[var(--selected-bg)] bg-transparent text-gray-900"
             />
             <textarea
               value={editMemo}
-              onChange={e => setEditMemo(e.target.value)}
+              onChange={(e) => setEditMemo(e.target.value)}
               rows={10}
               placeholder={t('todo.detail.memoPlaceholder')}
               className="w-full border rounded-lg px-3 py-2 text-[length:var(--fs-input)] outline-none focus:border-[var(--selected-bg)] resize-none bg-transparent text-gray-700"
-              style={{ borderColor: 'var(--input-border)'}}
+              style={{ borderColor: 'var(--input-border)' }}
             />
             <div className="flex gap-3">
               <select
                 value={editPriority}
-                onChange={e => setEditPriority(e.target.value as Priority)}
+                onChange={(e) => setEditPriority(e.target.value as Priority)}
                 className="border rounded px-2 py-1 text-[length:var(--fs-input)] outline-none bg-transparent text-gray-700"
                 style={{ borderColor: 'var(--input-border)' }}
               >
@@ -168,29 +180,46 @@ export default function FocusPanel({
               <input
                 type="date"
                 value={editDeadline}
-                onChange={e => setEditDeadline(e.target.value)}
+                onChange={(e) => setEditDeadline(e.target.value)}
                 className="border rounded px-2 py-1 text-[length:var(--fs-input)] outline-none flex-1 bg-transparent text-gray-700"
                 style={{ borderColor: 'var(--input-border)' }}
               />
             </div>
             <div className="flex gap-2">
-              <button onClick={saveEdit} className="px-3 py-1.5 text-[length:var(--fs-small)] bg-[var(--selected-bg)] text-[var(--selected-text)] rounded-lg">{t('common.save')}</button>
-              <button onClick={() => setEditMode(false)} className="px-3 py-1.5 text-[length:var(--fs-small)] text-gray-500 hover:bg-black/5 rounded-lg">{t('common.cancel')}</button>
+              <button
+                onClick={saveEdit}
+                className="px-3 py-1.5 text-[length:var(--fs-small)] bg-[var(--selected-bg)] text-[var(--selected-text)] rounded-lg"
+              >
+                {t('common.save')}
+              </button>
+              <button
+                onClick={() => setEditMode(false)}
+                className="px-3 py-1.5 text-[length:var(--fs-small)] text-gray-500 hover:bg-black/5 rounded-lg"
+              >
+                {t('common.cancel')}
+              </button>
             </div>
           </div>
         ) : (
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[length:var(--fs-caption)] px-1.5 py-0.5 rounded [font-weight:var(--fw-medium)]" style={priorityStyle[todo.priority]}>
+                <span
+                  className="text-[length:var(--fs-caption)] px-1.5 py-0.5 rounded [font-weight:var(--fw-medium)]"
+                  style={priorityStyle[todo.priority]}
+                >
                   {priorityLabel[todo.priority]}
                 </span>
                 {todo.deadline && <span className="text-[length:var(--fs-meta)] text-gray-400">{todo.deadline}</span>}
                 {steps.length > 0 && (
-                  <span className="text-[length:var(--fs-meta)] text-gray-400">{t('todo.detail.stepsCompleted', { done: completedSteps, total: steps.length })}</span>
+                  <span className="text-[length:var(--fs-meta)] text-gray-400">
+                    {t('todo.detail.stepsCompleted', { done: completedSteps, total: steps.length })}
+                  </span>
                 )}
               </div>
-              <h2 className="text-[length:var(--fs-title)] [font-weight:var(--fw-semibold)] leading-snug text-gray-900">{todo.name}</h2>
+              <h2 className="text-[length:var(--fs-title)] [font-weight:var(--fw-semibold)] leading-snug text-gray-900">
+                {todo.name}
+              </h2>
             </div>
             <div className="flex gap-1 flex-shrink-0">
               <button
@@ -228,20 +257,22 @@ export default function FocusPanel({
         <div style={{ opacity: regeneratingSteps ? 0.5 : 1, transition: 'opacity 0.2s' }}>
           <SectionHeader
             label={t('todo.detail.aiSteps')}
-            action={regeneratingSteps ? (
-              <span className="text-[length:var(--fs-caption)] text-gray-500 flex items-center gap-1">
-                <RefreshCw size={10} className="animate-spin" />
-                {t('todo.detail.regenerating')}
-              </span>
-            ) :
-              <button
-                onClick={handleGenerateSteps}
-                disabled={generatingSteps || regeneratingSteps}
-                className="flex items-center gap-1 text-[length:var(--fs-caption)] text-gray-500 hover:text-gray-800 disabled:opacity-50 [font-weight:var(--fw-regular)] normal-case"
-              >
-                <RefreshCw size={10} className={generatingSteps ? 'animate-spin' : ''} />
-                {generatingSteps ? t('todo.detail.generating') : t('todo.detail.aiRegenerate')}
-              </button>
+            action={
+              regeneratingSteps ? (
+                <span className="text-[length:var(--fs-caption)] text-gray-500 flex items-center gap-1">
+                  <RefreshCw size={10} className="animate-spin" />
+                  {t('todo.detail.regenerating')}
+                </span>
+              ) : (
+                <button
+                  onClick={handleGenerateSteps}
+                  disabled={generatingSteps || regeneratingSteps}
+                  className="flex items-center gap-1 text-[length:var(--fs-caption)] text-gray-500 hover:text-gray-800 disabled:opacity-50 [font-weight:var(--fw-regular)] normal-case"
+                >
+                  <RefreshCw size={10} className={generatingSteps ? 'animate-spin' : ''} />
+                  {generatingSteps ? t('todo.detail.generating') : t('todo.detail.aiRegenerate')}
+                </button>
+              )
             }
           />
 
@@ -249,7 +280,7 @@ export default function FocusPanel({
             <StepSkeleton />
           ) : (
             <div className="space-y-1">
-              {steps.map(step => (
+              {steps.map((step) => (
                 <StepRow
                   key={step.id}
                   step={step}
@@ -264,8 +295,8 @@ export default function FocusPanel({
             <div className="flex gap-2 mt-2">
               <input
                 value={newStep}
-                onChange={e => setNewStep(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAddStep()}
+                onChange={(e) => setNewStep(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddStep()}
                 placeholder={t('todo.detail.addStepPlaceholder')}
                 className="flex-1 text-[length:var(--fs-input)] text-gray-500 px-2 py-1.5 border-b outline-none focus:border-[var(--selected-bg)] bg-transparent transition-colors"
                 style={{ borderColor: 'var(--border)' }}
@@ -302,7 +333,10 @@ export default function FocusPanel({
                 {t('common.cancel')}
               </button>
               <button
-                onClick={async () => { await onDelete(todo.id); setShowDeleteConfirm(false) }}
+                onClick={async () => {
+                  await onDelete(todo.id)
+                  setShowDeleteConfirm(false)
+                }}
                 className="px-3 py-1.5 text-[length:var(--fs-body)] text-[var(--selected-text)] bg-[var(--c-error)] hover:opacity-90 rounded-lg"
               >
                 {t('common.delete')}

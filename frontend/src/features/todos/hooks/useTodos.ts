@@ -24,15 +24,16 @@ export function useTodos(filter: NavFilter) {
     }
   }, [filter])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+  }, [load])
 
-  const refresh = (updated: Todo) =>
-    setTodos(prev => prev.map(t => (t.id === updated.id ? updated : t)))
+  const refresh = (updated: Todo) => setTodos((prev) => prev.map((t) => (t.id === updated.id ? updated : t)))
 
   const addTodo = async (data: { name: string; memo?: string; priority?: string; deadline?: string }) => {
     const todo = await api.createTodo(data)
     const normalized = { ...todo, steps: todo.steps ?? [] }
-    setTodos(prev => [normalized, ...prev])
+    setTodos((prev) => [normalized, ...prev])
     return normalized
   }
 
@@ -44,22 +45,34 @@ export function useTodos(filter: NavFilter) {
 
   const removeTodo = async (id: number) => {
     await api.deleteTodo(id)
-    setTodos(prev => prev.filter(t => t.id !== id))
+    setTodos((prev) => prev.filter((t) => t.id !== id))
   }
 
   const toggleDone = async (id: number) => {
-    const original = todos.find(t => t.id === id)
+    const original = todos.find((t) => t.id === id)
     if (!original) return
-    setTodos(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
+    setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
     try {
       const updated = await api.toggleTodoDone(id)
       refresh(updated)
       return updated
     } catch {
-      setTodos(prev => prev.map(t => t.id === id ? { ...t, done: original.done } : t))
+      setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: original.done } : t)))
       setToastError(t('todo.errors.toggleDoneFailed'))
     }
   }
 
-  return { todos, loading, error, toastError, clearToastError: () => setToastError(null), reload: load, addTodo, editTodo, removeTodo, toggleDone, refresh }
+  return {
+    todos,
+    loading,
+    error,
+    toastError,
+    clearToastError: () => setToastError(null),
+    reload: load,
+    addTodo,
+    editTodo,
+    removeTodo,
+    toggleDone,
+    refresh,
+  }
 }

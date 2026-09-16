@@ -45,7 +45,9 @@ export async function getTranslationCount(): Promise<number> {
     if (!res.ok) return 0
     const data = await res.json()
     return data.count ?? 0
-  } catch { return 0 }
+  } catch {
+    return 0
+  }
 }
 
 export async function getTranslationHistory(): Promise<TranslationHistoryItem[]> {

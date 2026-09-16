@@ -13,12 +13,23 @@ export interface Candidate {
 export interface PaperResult {
   basic: { title: string; year: number; venue: string; doi: string; arxivId: string; citationCount: number }
   analysis: {
-    relevance: string; relevance_reason: string; keywords: string[]
-    problem: string; problem_short: string
-    method: string; method_short: string
-    conclusion: string; conclusion_short: string
+    relevance: string
+    relevance_reason: string
+    keywords: string[]
+    problem: string
+    problem_short: string
+    method: string
+    method_short: string
+    conclusion: string
+    conclusion_short: string
   }
-  authors: { name: string; authorId: string; hIndex: number; citationCount: number; topPapers: { title: string; citationCount: number }[] }[]
+  authors: {
+    name: string
+    authorId: string
+    hIndex: number
+    citationCount: number
+    topPapers: { title: string; citationCount: number }[]
+  }[]
   quality: { quartile: string; matched_title: string; sjr: string; type: string; country: string } | null
 }
 
@@ -38,7 +49,9 @@ async function checkRes(res: Response, label: string): Promise<void> {
   throw new Error(`${label} (${res.status})${detail ? ': ' + detail : ''}`)
 }
 
-export async function search(query: string): Promise<{ type: string; query?: string; data?: Candidate[]; error?: string }> {
+export async function search(
+  query: string,
+): Promise<{ type: string; query?: string; data?: Candidate[]; error?: string }> {
   const fd = new FormData()
   fd.append('query', query)
   const res = await fetch(`${BASE}/search`, { method: 'POST', body: fd })
@@ -85,7 +98,9 @@ export async function getPaperCount(): Promise<number> {
     if (!res.ok) return 0
     const data = await res.json()
     return data.count ?? 0
-  } catch { return 0 }
+  } catch {
+    return 0
+  }
 }
 
 export async function getHistory(): Promise<PaperHistoryItem[]> {

@@ -31,14 +31,25 @@ export default function WeeklyReview() {
   useEffect(() => {
     setLoading(true)
     setError('')
-    api.getWeeklyReview(weekStart.toISOString())
+    api
+      .getWeeklyReview(weekStart.toISOString())
       .then(setData)
       .catch(() => setError(t('weeklyReview.loadError')))
       .finally(() => setLoading(false))
   }, [weekStart, t])
 
-  const prevWeek = () => setWeekStart(ws => { const d = new Date(ws); d.setDate(d.getDate() - 7); return d })
-  const nextWeek = () => setWeekStart(ws => { const d = new Date(ws); d.setDate(d.getDate() + 7); return d })
+  const prevWeek = () =>
+    setWeekStart((ws) => {
+      const d = new Date(ws)
+      d.setDate(d.getDate() - 7)
+      return d
+    })
+  const nextWeek = () =>
+    setWeekStart((ws) => {
+      const d = new Date(ws)
+      d.setDate(d.getDate() + 7)
+      return d
+    })
 
   const statCard = (label: string, value: string | number) => (
     <div style={{ flex: 1, minWidth: 110, background: 'var(--bg-additive)', borderRadius: 10, padding: '14px 16px' }}>
@@ -48,17 +59,72 @@ export default function WeeklyReview() {
   )
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-base)', overflow: 'hidden' }}>
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'var(--bg-base)',
+        overflow: 'hidden',
+      }}
+    >
       {/* Toolbar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 20px', borderBottom: '1px solid var(--border-subtle)' }}>
-        <button onClick={prevWeek} style={{ background: 'none', border: '1px solid var(--border-subtle)', borderRadius: 6, width: 28, height: 28, cursor: 'pointer', fontSize: 16, color: 'var(--text-secondary)' }}>‹</button>
-        <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', minWidth: 180, textAlign: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          padding: '8px 20px',
+          borderBottom: '1px solid var(--border-subtle)',
+        }}
+      >
+        <button
+          onClick={prevWeek}
+          style={{
+            background: 'none',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 6,
+            width: 28,
+            height: 28,
+            cursor: 'pointer',
+            fontSize: 16,
+            color: 'var(--text-secondary)',
+          }}
+        >
+          ‹
+        </button>
+        <span
+          style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', minWidth: 180, textAlign: 'center' }}
+        >
           {fmtDate(weekStart.toISOString())} – {fmtDate(new Date(weekStart.getTime() + 6 * 86400000).toISOString())}
         </span>
-        <button onClick={nextWeek} style={{ background: 'none', border: '1px solid var(--border-subtle)', borderRadius: 6, width: 28, height: 28, cursor: 'pointer', fontSize: 16, color: 'var(--text-secondary)' }}>›</button>
+        <button
+          onClick={nextWeek}
+          style={{
+            background: 'none',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 6,
+            width: 28,
+            height: 28,
+            cursor: 'pointer',
+            fontSize: 16,
+            color: 'var(--text-secondary)',
+          }}
+        >
+          ›
+        </button>
         <button
           onClick={goToTasks}
-          style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-secondary)', background: 'none', border: '1px solid var(--border-subtle)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}
+          style={{
+            marginLeft: 'auto',
+            fontSize: 12,
+            color: 'var(--text-secondary)',
+            background: 'none',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 6,
+            padding: '4px 10px',
+            cursor: 'pointer',
+          }}
         >
           {t('weeklyReview.todoListButton')}
         </button>
@@ -80,8 +146,10 @@ export default function WeeklyReview() {
 
             {/* 우선순위별 분포 */}
             <div style={{ background: 'var(--bg-additive)', borderRadius: 10, padding: '16px' }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 12 }}>{t('weeklyReview.priorityBreakdown')}</div>
-              {(['urgent', 'mid', 'normal'] as const).map(p => {
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 12 }}>
+                {t('weeklyReview.priorityBreakdown')}
+              </div>
+              {(['urgent', 'mid', 'normal'] as const).map((p) => {
                 const { done, todo } = data.by_priority[p] ?? { done: 0, todo: 0 }
                 const total = done + todo
                 const pct = total ? Math.round((done / total) * 100) : 0
@@ -89,10 +157,20 @@ export default function WeeklyReview() {
                   <div key={p} style={{ marginBottom: 10 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
                       <span style={{ color: priorityAccent[p], fontWeight: 600 }}>{PRIORITY_LABEL[p]}</span>
-                      <span style={{ color: 'var(--text-disabled)' }}>{done}/{total}</span>
+                      <span style={{ color: 'var(--text-disabled)' }}>
+                        {done}/{total}
+                      </span>
                     </div>
                     <div style={{ height: 6, background: 'var(--border-subtle)', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${pct}%`, background: priorityAccent[p], borderRadius: 3, transition: 'width 0.4s' }} />
+                      <div
+                        style={{
+                          height: '100%',
+                          width: `${pct}%`,
+                          background: priorityAccent[p],
+                          borderRadius: 3,
+                          transition: 'width 0.4s',
+                        }}
+                      />
                     </div>
                   </div>
                 )
@@ -106,13 +184,33 @@ export default function WeeklyReview() {
                   {t('weeklyReview.overdueList', { count: data.overdue.length })}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  {data.overdue.map(item => (
+                  {data.overdue.map((item) => (
                     <button
                       key={item.id}
                       onClick={goToTasks}
-                      style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'var(--bg-additive)', border: 'none', borderRadius: 8, cursor: 'pointer', textAlign: 'left', fontSize: 13, color: 'var(--text-primary)' }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '8px 12px',
+                        background: 'var(--bg-additive)',
+                        border: 'none',
+                        borderRadius: 8,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        fontSize: 13,
+                        color: 'var(--text-primary)',
+                      }}
                     >
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: priorityAccent[item.priority], flexShrink: 0 }} />
+                      <span
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: '50%',
+                          background: priorityAccent[item.priority],
+                          flexShrink: 0,
+                        }}
+                      />
                       {item.name}
                     </button>
                   ))}

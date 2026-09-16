@@ -24,17 +24,11 @@ const DAYJS_LOCALE: Record<string, string> = { ko: 'ko', en: 'en', zh: 'zh-cn' }
 // 이 페이지만의 두 번째 사이드바를 두지 않기 위해, 진행률 요약은 세로 aside가
 // 아니라 본문 상단의 가로 요약 바로 배치한다 (Navigation | Status Sidebar | Content
 // 3단 구조를 피하기 위함 — WorkspaceLayout의 좌측 사이드바가 이미 Navigation을 담당).
-function TodoSummaryBar({
-  todos,
-  filter,
-}: {
-  todos: Todo[]
-  filter: NavFilter
-}) {
+function TodoSummaryBar({ todos, filter }: { todos: Todo[]; filter: NavFilter }) {
   const t = useT()
-  const active = todos.filter(todo => !todo.done)
-  const urgent = active.filter(todo => todo.priority === 'urgent')
-  const completed = todos.filter(todo => todo.done).length
+  const active = todos.filter((todo) => !todo.done)
+  const urgent = active.filter((todo) => todo.priority === 'urgent')
+  const completed = todos.filter((todo) => todo.done).length
   const completionRate = todos.length ? Math.round((completed / todos.length) * 100) : 0
 
   return (
@@ -44,7 +38,9 @@ function TodoSummaryBar({
         <div className="todo-summary-progress" aria-label={`${t('todo.overview.completionRate')} ${completionRate}%`}>
           <span style={{ width: `${completionRate}%` }} />
         </div>
-        <small>{completed} / {todos.length} {t('todo.summary.complete')}</small>
+        <small>
+          {completed} / {todos.length} {t('todo.summary.complete')}
+        </small>
       </div>
       <div className="todo-summary-bar-stats">
         <div className="todo-summary-stat">
@@ -70,7 +66,8 @@ export default function TodoPage() {
   const [filter, setFilter] = useState<NavFilter>('all')
   const selectedId = taskId ? Number(taskId) : null
 
-  const { todos, loading, reload, addTodo, editTodo, removeTodo, toggleDone, toastError, clearToastError } = useTodos(filter)
+  const { todos, loading, reload, addTodo, editTodo, removeTodo, toggleDone, toastError, clearToastError } =
+    useTodos(filter)
 
   useEffect(() => {
     if (!toastError) return
@@ -80,22 +77,28 @@ export default function TodoPage() {
   const { generateSteps, generatingSteps } = useAi()
 
   // handleAdd의 스텝 생성 폴링(아래) 타이머 — 언마운트 시 정리하기 위해 ref로 들고 있는다.
-  const pollTimersRef = useRef<{ interval?: ReturnType<typeof setInterval>; timeout?: ReturnType<typeof setTimeout> }>({})
+  const pollTimersRef = useRef<{ interval?: ReturnType<typeof setInterval>; timeout?: ReturnType<typeof setTimeout> }>(
+    {},
+  )
   useEffect(() => {
+    const pollTimers = pollTimersRef.current
     return () => {
-      if (pollTimersRef.current.interval) clearInterval(pollTimersRef.current.interval)
-      if (pollTimersRef.current.timeout) clearTimeout(pollTimersRef.current.timeout)
+      if (pollTimers.interval) clearInterval(pollTimers.interval)
+      if (pollTimers.timeout) clearTimeout(pollTimers.timeout)
     }
   }, [])
 
-  const selectedTodo = todos.find(t => t.id === selectedId) ?? null
+  const selectedTodo = todos.find((t) => t.id === selectedId) ?? null
 
   // 목록↔상세 전환은 라우트 이동이다 (/:username/tasks ↔ /:username/tasks/:taskId).
   // 브라우저 back/forward, 새로고침, 딥링크, 스와이프 뒤로가기 모두 라우터가 기본으로
   // 처리해주므로 예전처럼 pushState/popstate를 직접 다룰 필요가 없다.
-  const openTodo = useCallback((id: number) => {
-    navigate(`/${username}/tasks/${id}`)
-  }, [navigate, username])
+  const openTodo = useCallback(
+    (id: number) => {
+      navigate(`/${username}/tasks/${id}`)
+    },
+    [navigate, username],
+  )
 
   const closeTodo = useCallback(() => {
     navigate(`/${username}/tasks`)
@@ -106,13 +109,15 @@ export default function TodoPage() {
     openTodo(todo.id)
     await reload()
     // 백그라운드에서 AI 단계 생성 요청 후 steps 생길 때까지 폴링
-    api.generateStepsAsync({
-      todo_id: todo.id,
-      todo_name: todo.name,
-      memo: todo.memo,
-      priority: todo.priority,
-      deadline: todo.deadline,
-    }).catch(() => {});
+    api
+      .generateStepsAsync({
+        todo_id: todo.id,
+        todo_name: todo.name,
+        memo: todo.memo,
+        priority: todo.priority,
+        deadline: todo.deadline,
+      })
+      .catch(() => {})
     const poll = setInterval(async () => {
       const updated = await api.getTodos()
       const t = updated.find((t: { id: number }) => t.id === todo.id)
@@ -125,35 +130,53 @@ export default function TodoPage() {
     pollTimersRef.current.timeout = setTimeout(() => clearInterval(poll), 60_000) // 1분 후 자동 중단
   }
 
-  const handleToggleStep = useCallback(async (stepId: number) => {
-    await api.toggleStepDone(stepId)
-    await reload()
-  }, [reload])
+  const handleToggleStep = useCallback(
+    async (stepId: number) => {
+      await api.toggleStepDone(stepId)
+      await reload()
+    },
+    [reload],
+  )
 
-  const handleAddStep = useCallback(async (todoId: number, text: string, orderIndex = 999) => {
-    await api.addStep(todoId, { text, order_index: orderIndex })
-    await reload()
-  }, [reload])
+  const handleAddStep = useCallback(
+    async (todoId: number, text: string, orderIndex = 999) => {
+      await api.addStep(todoId, { text, order_index: orderIndex })
+      await reload()
+    },
+    [reload],
+  )
 
-  const handleDeleteStep = useCallback(async (stepId: number) => {
-    await api.deleteStep(stepId)
-    await reload()
-  }, [reload])
+  const handleDeleteStep = useCallback(
+    async (stepId: number) => {
+      await api.deleteStep(stepId)
+      await reload()
+    },
+    [reload],
+  )
 
   const handleGenerateSteps = useCallback(async (todo: Todo) => generateSteps(todo), [generateSteps])
 
-  const handleUpdate = useCallback(async (id: number, data: Partial<Todo>) => {
-    await editTodo(id, data)
-  }, [editTodo])
+  const handleUpdate = useCallback(
+    async (id: number, data: Partial<Todo>) => {
+      await editTodo(id, data)
+    },
+    [editTodo],
+  )
 
-  const handleDelete = useCallback(async (id: number) => {
-    await removeTodo(id)
-    closeTodo()
-  }, [removeTodo, closeTodo])
+  const handleDelete = useCallback(
+    async (id: number) => {
+      await removeTodo(id)
+      closeTodo()
+    },
+    [removeTodo, closeTodo],
+  )
 
-  const handleToggleDone = useCallback(async (id: number) => {
-    await toggleDone(id)
-  }, [toggleDone])
+  const handleToggleDone = useCallback(
+    async (id: number) => {
+      await toggleDone(id)
+    },
+    [toggleDone],
+  )
 
   const focusPanelProps = {
     todos,
@@ -167,12 +190,7 @@ export default function TodoPage() {
   }
 
   const toast = toastError ? (
-    <div style={{
-      position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
-      background: '#1f2937', color: '#f9fafb', borderRadius: 8,
-      padding: '10px 16px', fontSize: 'var(--fs-body)', zIndex: 9999,
-      boxShadow: '0 4px 12px rgba(0,0,0,0.25)', pointerEvents: 'none',
-    }}>
+    <div className="todo-error-toast" role="status">
       {toastError}
     </div>
   ) : null
@@ -180,75 +198,67 @@ export default function TodoPage() {
   if (isMobile) {
     return (
       <>
-      {selectedId !== null ? (
-        <div className="flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-base)' }}>
-          {loading && !selectedTodo ? (
-            <div className="flex-1 flex items-center justify-center">
-              <span style={{ fontSize: 'var(--fs-body)', color: 'var(--text-secondary)' }}>{t('todo.loading')}</span>
-            </div>
-          ) : (
-            <FocusPanel
-              todo={selectedTodo}
-              {...focusPanelProps}
-              onBack={closeTodo}
-            />
-          )}
-        </div>
-      ) : (
-        <TodoList
-          todos={todos}
-          filter={filter}
-          onFilter={setFilter}
-          selectedId={selectedId}
-          onSelect={openTodo}
-          onToggle={handleToggleDone}
-          onAdd={handleAdd}
-        />
-      )}
-      {toast}
+        {selectedId !== null ? (
+          <div className="flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-base)' }}>
+            {loading && !selectedTodo ? (
+              <div className="flex-1 flex items-center justify-center">
+                <span style={{ fontSize: 'var(--fs-body)', color: 'var(--text-secondary)' }}>{t('todo.loading')}</span>
+              </div>
+            ) : (
+              <FocusPanel todo={selectedTodo} {...focusPanelProps} onBack={closeTodo} />
+            )}
+          </div>
+        ) : (
+          <TodoList
+            todos={todos}
+            filter={filter}
+            onFilter={setFilter}
+            selectedId={selectedId}
+            onSelect={openTodo}
+            onToggle={handleToggleDone}
+            onAdd={handleAdd}
+          />
+        )}
+        {toast}
       </>
     )
   }
 
   return (
     <>
-    <div className="todo-desktop-frame">
-      <main className="todo-desktop-content">
-        {loading && todos.length === 0 ? (
-          <div className="todo-desktop-loading">
-            <span>{t('todo.loading')}</span>
-          </div>
-        ) : selectedTodo ? (
-          <FocusPanel
-            todo={selectedTodo}
-            {...focusPanelProps}
-            onBack={closeTodo}
-          />
-        ) : (
-          <>
-            <div className="app-page-intro-shell app-page-intro-shell--workspace todo-page-intro">
-              <PageHeader
-                kicker="Research planning"
-                icon={<ListTodo />}
-                title={t('todo.overview.heroTitle')}
-                description={t('todo.overview.heroDescription')}
-              />
+      <div className="todo-desktop-frame">
+        <main className="todo-desktop-content">
+          {loading && todos.length === 0 ? (
+            <div className="todo-desktop-loading">
+              <span>{t('todo.loading')}</span>
             </div>
-            <TodoSummaryBar todos={todos} filter={filter} />
-            <TodoList
-              todos={todos}
-              filter={filter}
-              onFilter={setFilter}
-              selectedId={selectedId}
-              onSelect={openTodo}
-              onToggle={handleToggleDone}
-              onAdd={handleAdd}
-            />
-          </>
-        )}
-      </main>
-    </div>
-    {toast}
+          ) : selectedTodo ? (
+            <FocusPanel todo={selectedTodo} {...focusPanelProps} onBack={closeTodo} />
+          ) : (
+            <>
+              <div className="app-page-intro-shell app-page-intro-shell--workspace todo-page-intro">
+                <PageHeader
+                  kicker={t('todo.kicker')}
+                  icon={<ListTodo />}
+                  title={t('todo.overview.heroTitle')}
+                  description={t('todo.overview.heroDescription')}
+                />
+              </div>
+              <TodoSummaryBar todos={todos} filter={filter} />
+              <TodoList
+                todos={todos}
+                filter={filter}
+                onFilter={setFilter}
+                selectedId={selectedId}
+                onSelect={openTodo}
+                onToggle={handleToggleDone}
+                onAdd={handleAdd}
+              />
+            </>
+          )}
+        </main>
+      </div>
+      {toast}
     </>
   )
 }

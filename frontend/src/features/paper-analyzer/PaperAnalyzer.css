@@ -50,7 +50,10 @@
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .paper-search-icon-btn:hover:not(:disabled) {
@@ -129,7 +132,9 @@
   align-items: start;
 }
 
-.paper-main--desktop { min-width: 0; }
+.paper-main--desktop {
+  min-width: 0;
+}
 
 /* Mobile results: single column, metadata card stacked above analysis. */
 .paper-results--mobile {
@@ -142,7 +147,9 @@
   padding: 0 var(--page-gutter) 32px;
 }
 
-.paper-main--mobile { min-width: 0; }
+.paper-main--mobile {
+  min-width: 0;
+}
 
 /* Paper metadata = current-paper context panel: a bordered card on the base
    surface, not the old full-height --bg-additive gray plane, and distinct from
@@ -167,7 +174,15 @@
   .paper-search-toolbar {
     padding: 0 var(--page-gutter) var(--page-section-gap);
   }
-  .paper-searchbar { height: var(--page-control-h); padding: 0 11px; }
-  .paper-search-input { font-size: 16px; }
-  .paper-empty { justify-content: flex-start; gap: 16px; }
+  .paper-searchbar {
+    height: var(--page-control-h);
+    padding: 0 11px;
+  }
+  .paper-search-input {
+    font-size: 16px;
+  }
+  .paper-empty {
+    justify-content: flex-start;
+    gap: 16px;
+  }
 }
