@@ -636,7 +636,7 @@
     }
   }
 
-  /* 2026-09-10: Android용 하단 네비게이션 (docs/os-nav-switching-plan.md 참고). iOS 캡슐 독과
+  /* 2026-09-10: Android용 하단 네비게이션 (docs/platform-navigation-rules.md 참고). iOS 캡슐 독과
      달리 화면 하단에 고정된 바(container) — 떠 있지 않고 좌우로 화면 끝까지 붙음. 선택된
      항목만 배경에 알약형(pill) 하이라이트를 준다(Material 3 관례). 구체적 색상/치수는
      기존 디자인 토큰(--accent-soft, --bg-base)으로 임시 배치한 것 — 실기기 확인 전 조정 가능. */

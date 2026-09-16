@@ -101,7 +101,7 @@
 }
 
 /* Desktop results share ONE reading rail with the header + search bar so all
-   three align on the same left/right baseline (design-system.md: Papers uses
+   three align on the same left/right baseline (ui-design-system.md: Papers uses
    --page-reading-max). The rail owns width + horizontal padding + scroll. */
 .paper-results--desktop {
   flex: 1;

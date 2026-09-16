@@ -72,7 +72,7 @@ export const WORKSPACE_NAV: NavGroup[] = [
 export const WORKSPACE_NAV_ITEMS: NavItem[] = WORKSPACE_NAV.flatMap((group) => group.items)
 
 // Mobile Capsule Navigation은 화면이 좁아 Tasks/Calendar를 "Plan" 하나로 합친다.
-// (모바일에서 하단 독 슬롯이 5개까지가 자연스럽다는 기존 결정 — capsule-dock-spec.md)
+// (모바일에서 하단 독 슬롯이 5개까지가 자연스럽다는 기존 결정 — ios-capsule-navigation.md)
 export type MobilePrimaryKey = 'plan' | 'papers' | 'translate' | 'models' | 'concepts'
 
 export const MOBILE_NAV: { key: MobilePrimaryKey; labelKey: string; Icon: HeroIcon; IconSolid: HeroIcon }[] = [
