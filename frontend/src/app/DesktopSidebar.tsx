@@ -9,7 +9,7 @@ export default function DesktopSidebar() {
 
   return (
     <nav className="workspace-sidebar" aria-label={t('shell.workspaceAria')}>
-      {WORKSPACE_NAV.map(group => (
+      {WORKSPACE_NAV.map((group) => (
         <div className="workspace-sidebar-group" key={group.group}>
           <span className="workspace-sidebar-group-label">{t(group.labelKey)}</span>
           {group.items.map(({ key, path, labelKey, Icon }) => (

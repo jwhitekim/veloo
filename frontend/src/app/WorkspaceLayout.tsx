@@ -21,7 +21,7 @@ export default function WorkspaceLayout() {
   const { username = '' } = useParams()
   const deviceOS = useDeviceOS()
 
-  const activeItem = WORKSPACE_NAV_ITEMS.find(item => location.pathname.startsWith(`/${username}/${item.path}`))
+  const activeItem = WORKSPACE_NAV_ITEMS.find((item) => location.pathname.startsWith(`/${username}/${item.path}`))
   useEffect(() => {
     document.title = activeItem ? t(activeItem.labelKey) : 'Veloo'
   }, [activeItem, t])
@@ -69,7 +69,9 @@ export default function WorkspaceLayout() {
             onClick={() => navigate(`/${username}/${loadLastPlanNav()}`)}
             aria-label={t('shell.home')}
           >
-            <span className="shell-brand-mark"><img src="/favicon.svg?v=2" alt="" width={20} height={20} /></span>
+            <span className="shell-brand-mark">
+              <img src="/favicon.svg?v=2" alt="" width={20} height={20} />
+            </span>
             <span className="shell-brand-text">Veloo</span>
           </button>
         </div>
@@ -78,7 +80,7 @@ export default function WorkspaceLayout() {
             <button
               type="button"
               className="shell-user-button"
-              onClick={() => setUserMenuOpen(open => !open)}
+              onClick={() => setUserMenuOpen((open) => !open)}
               aria-label={t('shell.accountMenu')}
               aria-expanded={userMenuOpen}
               aria-haspopup="menu"
@@ -89,7 +91,10 @@ export default function WorkspaceLayout() {
               <div className="shell-user-popover" role="menu">
                 <div className="shell-user-identity">
                   <span className="shell-user-avatar">{username.slice(0, 1).toUpperCase() || 'V'}</span>
-                  <div><strong>{username}</strong><small>veloo workspace</small></div>
+                  <div>
+                    <strong>{username}</strong>
+                    <small>{t('shell.workspaceLabel')}</small>
+                  </div>
                 </div>
                 <div className="shell-user-setting">
                   <span>{t('shell.language')}</span>
@@ -115,7 +120,9 @@ export default function WorkspaceLayout() {
         <DesktopSidebar />
         <main className="shell-content">
           {deviceOS === 'android' ? <MobileAndroidNavigation /> : <MobileCapsuleNavigation />}
-          <div className="shell-view"><Outlet /></div>
+          <div className="shell-view">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

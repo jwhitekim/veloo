@@ -29,7 +29,9 @@
   gap: 8px;
 }
 
-.shell-user-menu { position: relative; }
+.shell-user-menu {
+  position: relative;
+}
 
 .shell-user-button,
 .shell-user-avatar {
@@ -49,7 +51,9 @@
 .shell-user-button {
   border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border-subtle));
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .shell-user-button:hover,
@@ -57,7 +61,10 @@
   box-shadow: var(--focus-ring-accent);
   transform: translateY(-1px);
 }
-.shell-user-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.shell-user-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
 .shell-user-popover {
   position: absolute;
@@ -68,14 +75,20 @@
   padding: 8px;
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
-  background: rgba(255, 255, 255, .98);
+  background: rgba(255, 255, 255, 0.98);
   box-shadow: var(--shadow-popover);
   animation: shell-user-popover-in 160ms ease-out;
 }
 
 @keyframes shell-user-popover-in {
-  from { opacity: 0; transform: translateY(-6px) scale(.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .shell-user-identity {
@@ -85,9 +98,24 @@
   padding: 8px;
   border-bottom: 1px solid var(--border-subtle);
 }
-.shell-user-identity strong { display: block; overflow: hidden; max-width: 160px; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
-.shell-user-identity small { display: block; margin-top: 2px; color: var(--text-disabled); font-size: 10px; }
-.shell-user-avatar { width: 36px; height: 36px; }
+.shell-user-identity strong {
+  display: block;
+  overflow: hidden;
+  max-width: 160px;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shell-user-identity small {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-disabled);
+  font-size: 10px;
+}
+.shell-user-avatar {
+  width: 36px;
+  height: 36px;
+}
 
 .shell-user-setting {
   display: flex;
@@ -117,9 +145,18 @@
   font-weight: 600;
   text-align: left;
 }
-.shell-user-logout:hover:not(:disabled) { background: var(--bg-additive); color: var(--text-primary); }
-.shell-user-logout:disabled { cursor: wait; opacity: .55; }
-.shell-user-logout svg { width: 14px; height: 14px; }
+.shell-user-logout:hover:not(:disabled) {
+  background: var(--bg-additive);
+  color: var(--text-primary);
+}
+.shell-user-logout:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+.shell-user-logout svg {
+  width: 14px;
+  height: 14px;
+}
 
 .shell-brand {
   height: 40px;
@@ -184,6 +221,7 @@
   border-right: 1px solid var(--border-subtle);
   background: var(--bg-canvas);
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .workspace-sidebar-group {
@@ -197,7 +235,7 @@
   color: var(--text-disabled);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: .06em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -213,16 +251,26 @@
   font-size: 13px;
   font-weight: var(--fw-medium);
   text-decoration: none;
-  transition: background 150ms ease, color 150ms ease;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
 }
-.workspace-nav-item svg { flex: 0 0 auto; }
-.workspace-nav-item:hover { background: var(--bg-additive); color: var(--text-primary); }
+.workspace-nav-item svg {
+  flex: 0 0 auto;
+}
+.workspace-nav-item:hover {
+  background: var(--bg-additive);
+  color: var(--text-primary);
+}
 .workspace-nav-item.is-active {
   background: var(--bg-additive);
   color: var(--text-primary);
   font-weight: var(--fw-semibold);
 }
-.workspace-nav-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.workspace-nav-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 
 .shell-mobile-dock {
   display: none;
@@ -237,16 +285,30 @@
   overflow: hidden;
 }
 
-.shell-view { flex: 1; min-width: 0; min-height: 0; overflow: auto; }
-.shell-plan-switcher { display: none; }
+.shell-view {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+.shell-plan-switcher {
+  display: none;
+}
 
 @media (max-width: 980px) {
   .workspace-sidebar {
     width: var(--sidebar-w-mini);
   }
-  .workspace-sidebar-group-label { display: none; }
-  .workspace-nav-item span { display: none; }
-  .workspace-nav-item { justify-content: center; }
+  .workspace-sidebar-group-label {
+    display: none;
+  }
+  .workspace-nav-item span {
+    display: none;
+  }
+  .workspace-nav-item {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 640px) {
@@ -261,7 +323,9 @@
     justify-items: center;
   }
 
-  .shell-brand-wrap { grid-column: 2; }
+  .shell-brand-wrap {
+    grid-column: 2;
+  }
 
   .shell-topbar-end {
     grid-column: 3;
@@ -317,11 +381,7 @@
     height: 64px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 9999px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.56),
-      rgba(242, 242, 247, 0.32)
-    );
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.56), rgba(242, 242, 247, 0.32));
     -webkit-backdrop-filter: blur(24px) saturate(175%);
     backdrop-filter: blur(24px) saturate(175%);
     box-shadow:
@@ -513,7 +573,6 @@
     white-space: nowrap;
   }
 
-
   .shell-plan-switcher {
     min-height: 40px;
     flex: 0 0 auto;
@@ -545,9 +604,19 @@
 
   /* 2026-09-11: --accent(그린) 대신 --text-primary(검정) — "모두 초록이 아니라 검정"
      피드백. 하단 탭바(.shell-mobile-tab/.shell-android-tab)와 같은 방침으로 통일. */
-  .shell-plan-switcher button.is-active { background: var(--bg-base); color: var(--text-primary); box-shadow: 0 1px 4px rgba(24, 25, 48, 0.08); }
-  .shell-plan-switcher button:focus-visible { outline: 2px solid var(--text-primary); outline-offset: -2px; }
-  .shell-plan-switcher svg { width: 14px; height: 14px; }
+  .shell-plan-switcher button.is-active {
+    background: var(--bg-base);
+    color: var(--text-primary);
+    box-shadow: 0 1px 4px rgba(24, 25, 48, 0.08);
+  }
+  .shell-plan-switcher button:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: -2px;
+  }
+  .shell-plan-switcher svg {
+    width: 14px;
+    height: 14px;
+  }
 
   .shell-mobile-tab:focus-visible {
     outline: 2px solid rgba(0, 0, 0, 0.72);

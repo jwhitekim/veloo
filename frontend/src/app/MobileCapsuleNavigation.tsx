@@ -22,7 +22,7 @@ export default function MobileCapsuleNavigation() {
 
   // 현재 라우트에서 활성 NavKey를 유도한다 (route가 source of truth).
   const activeNavKey: NavKey =
-    WORKSPACE_NAV_ITEMS.find(item => location.pathname.startsWith(`/${username}/${item.path}`))?.key ?? 'tasks'
+    WORKSPACE_NAV_ITEMS.find((item) => location.pathname.startsWith(`/${username}/${item.path}`))?.key ?? 'tasks'
   const activeMobileKey = mobilePrimaryFor(activeNavKey)
 
   const goToNav = (key: NavKey) => {
@@ -166,11 +166,14 @@ export default function MobileCapsuleNavigation() {
     pendingClientXRef.current = null
     const gesture = gestureRef.current
     gestureRef.current = null
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    if (event.currentTarget.hasPointerCapture(event.pointerId))
+      event.currentTarget.releasePointerCapture(event.pointerId)
     if (gesture?.moved && !cancelled) {
       suppressClickRef.current = true
       selectMobileItem(gesture.target)
-      window.setTimeout(() => { suppressClickRef.current = false }, 0)
+      window.setTimeout(() => {
+        suppressClickRef.current = false
+      }, 0)
     }
     const snapKey = gesture?.moved && !cancelled ? gesture.target : activeMobileKey
     const button = tabRefs.current[snapKey]
@@ -189,11 +192,21 @@ export default function MobileCapsuleNavigation() {
     <>
       {activeMobileKey === 'plan' && (
         <nav className="shell-plan-switcher" aria-label={t('shell.workspace.plan')}>
-          <button type="button" onClick={() => goToNav('tasks')} className={activeNavKey === 'tasks' ? 'is-active' : ''}>
-            <MOBILE_NAV_TASKS_ICON />{t('shell.nav.todo')}
+          <button
+            type="button"
+            onClick={() => goToNav('tasks')}
+            className={activeNavKey === 'tasks' ? 'is-active' : ''}
+          >
+            <MOBILE_NAV_TASKS_ICON />
+            {t('shell.nav.todo')}
           </button>
-          <button type="button" onClick={() => goToNav('calendar')} className={activeNavKey === 'calendar' ? 'is-active' : ''}>
-            <MOBILE_NAV_CALENDAR_ICON />{t('shell.nav.calendar')}
+          <button
+            type="button"
+            onClick={() => goToNav('calendar')}
+            className={activeNavKey === 'calendar' ? 'is-active' : ''}
+          >
+            <MOBILE_NAV_CALENDAR_ICON />
+            {t('shell.nav.calendar')}
           </button>
         </nav>
       )}
@@ -205,8 +218,8 @@ export default function MobileCapsuleNavigation() {
           aria-label={t('shell.workspaceAria')}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
-          onPointerUp={event => finishGesture(event)}
-          onPointerCancel={event => finishGesture(event, true)}
+          onPointerUp={(event) => finishGesture(event)}
+          onPointerCancel={(event) => finishGesture(event, true)}
         >
           <div ref={trackRef} className="shell-mobile-tabs-track">
             {indicatorRect && (
@@ -219,7 +232,7 @@ export default function MobileCapsuleNavigation() {
                 }}
               />
             )}
-            {MOBILE_NAV.map(({ key, Icon, IconSolid, label }) => {
+            {MOBILE_NAV.map(({ key, Icon, IconSolid, labelKey }) => {
               // 드래그 중 인디케이터가 지나가며 "가리키는" 탭이 아니라, 실제로 선택이 확정된
               // (activeMobileKey가 바뀐) 탭만 굵은/면형 아이콘으로 바꾼다 — 지나가기만 해도
               // 굵어지면 "선택된 것"과 "지나가는 중"이 구분이 안 된다는 피드백(2026-09-06).
@@ -230,14 +243,18 @@ export default function MobileCapsuleNavigation() {
               return (
                 <button
                   key={key}
-                  ref={element => { tabRefs.current[key] = element }}
+                  ref={(element) => {
+                    tabRefs.current[key] = element
+                  }}
                   type="button"
-                  onClick={() => { if (!suppressClickRef.current) selectMobileItem(key) }}
+                  onClick={() => {
+                    if (!suppressClickRef.current) selectMobileItem(key)
+                  }}
                   className={`shell-mobile-tab${isActive ? ' is-active' : ''}`}
                   aria-current={activeMobileKey === key ? 'page' : undefined}
                 >
                   <TabIcon />
-                  <span>{label}</span>
+                  <span>{t(labelKey)}</span>
                 </button>
               )
             })}
@@ -268,5 +285,5 @@ function indicatorRectFor(button: HTMLButtonElement) {
 }
 
 // Plan 스위처 아이콘은 WORKSPACE_NAV_ITEMS에서 그대로 가져와 하드코딩 중복을 피한다.
-const MOBILE_NAV_TASKS_ICON = WORKSPACE_NAV_ITEMS.find(item => item.key === 'tasks')!.Icon
-const MOBILE_NAV_CALENDAR_ICON = WORKSPACE_NAV_ITEMS.find(item => item.key === 'calendar')!.Icon
+const MOBILE_NAV_TASKS_ICON = WORKSPACE_NAV_ITEMS.find((item) => item.key === 'tasks')!.Icon
+const MOBILE_NAV_CALENDAR_ICON = WORKSPACE_NAV_ITEMS.find((item) => item.key === 'calendar')!.Icon

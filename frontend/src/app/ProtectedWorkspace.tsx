@@ -18,7 +18,7 @@ export default function ProtectedWorkspace() {
       try {
         const response = await fetch('/api/me')
         if (!response.ok) throw new Error('unauthorized')
-        const data = await response.json() as { username?: string }
+        const data = (await response.json()) as { username?: string }
         if (!data.username) throw new Error('unauthorized')
         if (cancelled) return
 
@@ -38,7 +38,9 @@ export default function ProtectedWorkspace() {
     }
 
     verify()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [location.pathname, location.search, navigate, username])
 
   if (state !== 'ready') {
