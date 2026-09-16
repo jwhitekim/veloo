@@ -37,6 +37,7 @@
       "model-lab": "模型实验室"
     },
     "workspaceAria": "工作区",
+    "workspaceLabel": "veloo 工作区",
     "navMobile": {
       "todo": "任务",
       "calendar": "日历",
@@ -63,9 +64,24 @@
     "explore": "查看功能",
     "betaNote": "提交申请并经管理员批准后即可安全开始。",
     "previewAria": "Veloo 产品界面预览",
-    "preview": { "today": "今日进度", "complete": "完成", "focus": "专注时间", "papers": "已分析论文", "plan": "Today’s plan", "heading": "今日研究流程", "task1": "整理扩散模型论文核心", "task2": "比较模型架构", "task3": "整理实验结果与下一步", "insightTitle": "AI 行动建议", "insight": "下午实验前用表格整理模型差异，可以更快解释结果。" },
+    "copyright": "© 2026 Veloo",
+    "preview": {
+      "today": "今日进度",
+      "complete": "完成",
+      "focus": "专注时间",
+      "papers": "已分析论文",
+      "plan": "Today’s plan",
+      "date": "8月24日",
+      "heading": "今日研究流程",
+      "task1": "整理扩散模型论文核心",
+      "task2": "比较模型架构",
+      "task3": "整理实验结果与下一步",
+      "insightTitle": "AI 行动建议",
+      "insight": "下午实验前用表格整理模型差异，可以更快解释结果。"
+    },
     "proofAria": "Veloo 核心研究流程",
     "proof": "One workspace for",
+    "proofLabels": { "plan": "规划", "research": "研究", "learn": "学习" },
     "features": {
       "eyebrow": "Built for deep work",
       "title": "只保留研究所需工具，并紧密连接",
@@ -82,13 +98,22 @@
       "description": "Veloo 不是孤立 AI 功能的集合，而是连接今日任务与研究成果的统一工作区。",
       "step1": { "title": "规划今天的研究", "description": "设置优先级和截止时间，用 AI 建议的步骤将模糊任务具体化。" },
       "step2": { "title": "阅读并理解资料", "description": "通过论文分析、翻译和概念整理，快速获得所需上下文。" },
-      "step3": { "title": "将所学转化为行动", "description": "讲解模型并获得反馈，再将结果直接应用到下一项任务和日程。" }
+      "step3": {
+        "title": "将所学转化为行动",
+        "description": "讲解模型并获得反馈，再将结果直接应用到下一项任务和日程。"
+      }
     },
-    "cta": { "eyebrow": "Private beta", "title": "现在开始下一段研究流程。", "description": "申请 Beta 访问，率先体验 Veloo 工作区。", "button": "申请 Beta 访问" },
+    "cta": {
+      "eyebrow": "Private beta",
+      "title": "现在开始下一段研究流程。",
+      "description": "申请 Beta 访问，率先体验 Veloo 工作区。",
+      "button": "申请 Beta 访问"
+    },
     "footer": "Research tools, thoughtfully connected."
   },
   "login": {
     "tagline": "带着目标开启",
+    "researchTagline": "研究，顺畅进行。",
     "enter": "进入",
     "tabLogin": "登录",
     "tabRegister": "注册账号",
@@ -127,6 +152,7 @@
     }
   },
   "paper": {
+    "kicker": "研究工作区",
     "searching": "搜索中",
     "unsupportedUrl": "无法从 URL 中找到 DOI 或 arXiv ID。请通过论文标题搜索。",
     "unknownError": "未知错误",
@@ -150,6 +176,12 @@
       "qualityDesc": "对比期刊分区和引用信息。"
     },
     "sidebar": {
+      "paper": "论文",
+      "year": "年份",
+      "venue": "期刊",
+      "journalQuality": "期刊质量",
+      "type": "类型",
+      "country": "国家",
       "cited": "被引 {{count}} 次",
       "noOriginalLink": "无原始链接",
       "noData": "无数据",
@@ -162,6 +194,7 @@
       "meta": "{{year}}年 · {{venue}} · 被引 {{count}} 次"
     },
     "result": {
+      "provider": "由 Claude 提供",
       "theoryAnalysis": "🧠 理论分析",
       "relevance": "相关性 {{value}}",
       "problem": "问题",
@@ -182,6 +215,7 @@
     }
   },
   "translator": {
+    "kicker": "翻译工作区",
     "heroTitle": "保持阅读连贯性的翻译",
     "heroDescription": "将英文论文和技术文档实时翻译为自然的中文。",
     "sourceLabel": "原文",
@@ -215,6 +249,7 @@
     }
   },
   "reviewer": {
+    "kicker": "模型学习空间",
     "sections": {
       "overview": "整体流程",
       "modules": "各模块",
@@ -268,8 +303,9 @@
     "newUpload": "上传新论文"
   },
   "todo": {
+    "kicker": "研究规划",
     "todayPlan": "Today’s plan",
-    "researchFlow": "今日研究流程",
+    "researchFlow": "今日工作列表",
     "summary": {
       "today": "今日进度",
       "week": "本周进度",
@@ -305,7 +341,7 @@
       "save": "保存"
     },
     "overview": {
-      "heroTitle": "今日流程一目了然",
+      "heroTitle": "今日工作一目了然",
       "heroDescription": "选择待办任务即可查看详细步骤及 AI 执行策略。",
       "aiBadge": "AI 执行计划",
       "inProgress": "进行中",
@@ -334,6 +370,7 @@
     }
   },
   "calendar": {
+    "kicker": "每周计划",
     "heroTitle": "规划你的一周时间",
     "heroDescription": "将未分配的待办任务拖拽到所需时间段，轻松调整日程。",
     "eventsBadge": "{{count}} 个日程",
@@ -371,6 +408,7 @@
     "overdueList": "延期任务 ({{count}} 个)"
   },
   "contextor": {
+    "kicker": "模型实验室",
     "heroTitle": "透彻理解技术术语的上下文",
     "heroDescription": "不仅看词典定义，还对比其在机器学习（ML）与深度学习（DL）论文和实际实现中的具体应用。",
     "recentLookups": "最近查询 {{count}}",

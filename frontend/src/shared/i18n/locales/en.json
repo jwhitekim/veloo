@@ -37,6 +37,7 @@
       "model-lab": "Model Lab"
     },
     "workspaceAria": "Workspace",
+    "workspaceLabel": "veloo workspace",
     "navMobile": {
       "todo": "Todo",
       "calendar": "Cal",
@@ -53,7 +54,13 @@
   },
   "landing": {
     "navAria": "Homepage navigation",
-    "nav": { "features": "Features", "workflow": "How it works", "login": "Log in", "start": "Sign up", "workspace": "My workspace" },
+    "nav": {
+      "features": "Features",
+      "workflow": "How it works",
+      "login": "Log in",
+      "start": "Sign up",
+      "workspace": "My workspace"
+    },
     "eyebrow": "AI research workspace",
     "heroTitle": "Every part of research,",
     "heroAccent": "in one flow.",
@@ -63,32 +70,77 @@
     "explore": "Explore features",
     "betaNote": "Start securely after your beta request is approved.",
     "previewAria": "Preview of the Veloo product",
-    "preview": { "today": "Today's progress", "complete": "complete", "focus": "Focus time", "papers": "Papers analyzed", "plan": "Today’s plan", "heading": "Research flow", "task1": "Summarize diffusion paper", "task2": "Compare model architectures", "task3": "Review results and next steps", "insightTitle": "AI action insight", "insight": "Compare model differences in a table before the afternoon experiment to speed up interpretation." },
+    "copyright": "© 2026 Veloo",
+    "preview": {
+      "today": "Today's progress",
+      "complete": "complete",
+      "focus": "Focus time",
+      "papers": "Papers analyzed",
+      "plan": "Today’s plan",
+      "date": "AUG 24",
+      "heading": "Research flow",
+      "task1": "Summarize diffusion paper",
+      "task2": "Compare model architectures",
+      "task3": "Review results and next steps",
+      "insightTitle": "AI action insight",
+      "insight": "Compare model differences in a table before the afternoon experiment to speed up interpretation."
+    },
     "proofAria": "Veloo's core research workflow",
     "proof": "One workspace for",
+    "proofLabels": { "plan": "Plan", "research": "Research", "learn": "Learn" },
     "features": {
       "eyebrow": "Built for deep work",
       "title": "Only the tools research needs, connected",
       "description": "Spend less time switching apps and keep the context between thinking and doing.",
-      "plan": { "title": "Plans and calendar", "description": "Break work into actionable steps and manage your research schedule at a glance." },
-      "paper": { "title": "Paper analysis", "description": "Understand the problem, method, conclusion, and journal data from a title or URL." },
-      "translate": { "title": "Context-aware translation", "description": "Keep your reading flow with natural translation tuned for ML and DL." },
-      "model": { "title": "Model learning", "description": "Analyze architectures, explain them yourself, and deepen understanding with AI feedback." },
-      "concept": { "title": "Concept context", "description": "Structure unfamiliar terms in research context and make them easy to reuse." }
+      "plan": {
+        "title": "Plans and calendar",
+        "description": "Break work into actionable steps and manage your research schedule at a glance."
+      },
+      "paper": {
+        "title": "Paper analysis",
+        "description": "Understand the problem, method, conclusion, and journal data from a title or URL."
+      },
+      "translate": {
+        "title": "Context-aware translation",
+        "description": "Keep your reading flow with natural translation tuned for ML and DL."
+      },
+      "model": {
+        "title": "Model learning",
+        "description": "Analyze architectures, explain them yourself, and deepen understanding with AI feedback."
+      },
+      "concept": {
+        "title": "Concept context",
+        "description": "Structure unfamiliar terms in research context and make them easy to reuse."
+      }
     },
     "workflow": {
       "eyebrow": "A continuous workflow",
       "title": "A research process without broken context",
       "description": "Veloo is not a collection of isolated AI features. It is one workspace connecting today's tasks to research outcomes.",
-      "step1": { "title": "Plan today's research", "description": "Set priorities and deadlines, then turn vague work into concrete AI-suggested steps." },
-      "step2": { "title": "Read and understand", "description": "Move through paper analysis, translation, and concepts to gain context quickly." },
-      "step3": { "title": "Turn learning into action", "description": "Explain models, receive feedback, and apply the result to your next task and schedule." }
+      "step1": {
+        "title": "Plan today's research",
+        "description": "Set priorities and deadlines, then turn vague work into concrete AI-suggested steps."
+      },
+      "step2": {
+        "title": "Read and understand",
+        "description": "Move through paper analysis, translation, and concepts to gain context quickly."
+      },
+      "step3": {
+        "title": "Turn learning into action",
+        "description": "Explain models, receive feedback, and apply the result to your next task and schedule."
+      }
     },
-    "cta": { "eyebrow": "Private beta", "title": "Start your next research flow today.", "description": "Request beta access and be among the first to experience Veloo.", "button": "Request beta access" },
+    "cta": {
+      "eyebrow": "Private beta",
+      "title": "Start your next research flow today.",
+      "description": "Request beta access and be among the first to experience Veloo.",
+      "button": "Request beta access"
+    },
     "footer": "Research tools, thoughtfully connected."
   },
   "login": {
     "tagline": "Enter with intent",
+    "researchTagline": "Research, in flow.",
     "enter": "Enter",
     "tabLogin": "Log In",
     "tabRegister": "Create Account",
@@ -127,6 +179,7 @@
     }
   },
   "paper": {
+    "kicker": "Research workspace",
     "searching": "Searching",
     "unsupportedUrl": "Could not find DOI / arXiv ID in the URL. Please search by paper title.",
     "unknownError": "Unknown error",
@@ -150,6 +203,12 @@
       "qualityDesc": "Compare journal rankings and citation metrics."
     },
     "sidebar": {
+      "paper": "Paper",
+      "year": "Year",
+      "venue": "Venue",
+      "journalQuality": "Journal quality",
+      "type": "Type",
+      "country": "Country",
       "cited": "{{count}} citations",
       "noOriginalLink": "No original link",
       "noData": "No data",
@@ -162,6 +221,7 @@
       "meta": "{{year}} · {{venue}} · {{count}} citations"
     },
     "result": {
+      "provider": "via Claude",
       "theoryAnalysis": "🧠 Theory Analysis",
       "relevance": "Relevance {{value}}",
       "problem": "Problem",
@@ -182,6 +242,7 @@
     }
   },
   "translator": {
+    "kicker": "Translation workspace",
     "heroTitle": "Seamless translation without breaking your flow",
     "heroDescription": "Translate English research papers and technical documents into natural Korean in real-time.",
     "sourceLabel": "Source",
@@ -215,6 +276,7 @@
     }
   },
   "reviewer": {
+    "kicker": "Model learning lab",
     "sections": {
       "overview": "Overall Flow",
       "modules": "Individual Modules",
@@ -268,8 +330,9 @@
     "newUpload": "Upload new paper"
   },
   "todo": {
+    "kicker": "Research planning",
     "todayPlan": "Today's plan",
-    "researchFlow": "Today's research flow",
+    "researchFlow": "Today's work list",
     "summary": {
       "today": "Today's progress",
       "week": "This week's progress",
@@ -305,7 +368,7 @@
       "save": "Save"
     },
     "overview": {
-      "heroTitle": "Today's workflow at a glance",
+      "heroTitle": "Today's work at a glance",
       "heroDescription": "Select a task to view detailed steps and AI execution strategies.",
       "aiBadge": "AI Action Plan",
       "inProgress": "In Progress",
@@ -334,6 +397,7 @@
     }
   },
   "calendar": {
+    "kicker": "Weekly planner",
     "heroTitle": "Plan your week",
     "heroDescription": "Drag unscheduled tasks into time slots and organize your schedule at a glance.",
     "eventsBadge": "{{count}} events",
@@ -371,6 +435,7 @@
     "overdueList": "Overdue Tasks ({{count}})"
   },
   "contextor": {
+    "kicker": "Model lab",
     "heroTitle": "Understand technical terminology in context",
     "heroDescription": "Go beyond dictionary definitions to see how terms are actually used in ML/DL papers and implementations.",
     "recentLookups": "Recent searches {{count}}",

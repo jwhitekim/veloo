@@ -37,6 +37,7 @@
       "model-lab": "Model Lab"
     },
     "workspaceAria": "작업 공간",
+    "workspaceLabel": "veloo 작업 공간",
     "navMobile": {
       "todo": "Todo",
       "calendar": "Cal",
@@ -69,12 +70,14 @@
     "explore": "기능 살펴보기",
     "betaNote": "가입 신청 후 관리자 승인으로 안전하게 시작합니다.",
     "previewAria": "Veloo 제품 화면 미리보기",
+    "copyright": "© 2026 Veloo",
     "preview": {
       "today": "오늘의 진행률",
       "complete": "완료",
       "focus": "집중 시간",
       "papers": "분석한 논문",
       "plan": "Today’s plan",
+      "date": "8월 24일",
       "heading": "오늘의 연구 흐름",
       "task1": "Diffusion 논문 핵심 정리",
       "task2": "모델 구조 비교 분석",
@@ -84,23 +87,48 @@
     },
     "proofAria": "Veloo의 핵심 연구 과정",
     "proof": "One workspace for",
+    "proofLabels": { "plan": "계획", "research": "리서치", "learn": "학습" },
     "features": {
       "eyebrow": "Built for deep work",
       "title": "연구에 필요한 도구만, 더 긴밀하게",
       "description": "앱 사이를 오가는 시간을 줄이고 생각과 실행의 맥락을 그대로 이어갑니다.",
-      "plan": { "title": "계획과 캘린더", "description": "할 일을 실행 가능한 단계로 나누고 연구 일정을 한눈에 관리합니다." },
-      "paper": { "title": "논문 핵심 분석", "description": "제목이나 URL만으로 연구 문제, 방법, 결론과 저널 정보를 빠르게 파악합니다." },
-      "translate": { "title": "맥락을 지키는 번역", "description": "ML·DL 문맥에 맞춘 자연스러운 번역으로 읽기의 흐름을 유지합니다." },
-      "model": { "title": "모델 구조 학습", "description": "아키텍처 이미지를 분석하고 직접 설명한 뒤 AI 피드백으로 이해도를 높입니다." },
-      "concept": { "title": "개념 컨텍스트", "description": "낯선 용어와 표현을 연구 맥락에 맞춰 구조화하고 다시 활용합니다." }
+      "plan": {
+        "title": "계획과 캘린더",
+        "description": "할 일을 실행 가능한 단계로 나누고 연구 일정을 한눈에 관리합니다."
+      },
+      "paper": {
+        "title": "논문 핵심 분석",
+        "description": "제목이나 URL만으로 연구 문제, 방법, 결론과 저널 정보를 빠르게 파악합니다."
+      },
+      "translate": {
+        "title": "맥락을 지키는 번역",
+        "description": "ML·DL 문맥에 맞춘 자연스러운 번역으로 읽기의 흐름을 유지합니다."
+      },
+      "model": {
+        "title": "모델 구조 학습",
+        "description": "아키텍처 이미지를 분석하고 직접 설명한 뒤 AI 피드백으로 이해도를 높입니다."
+      },
+      "concept": {
+        "title": "개념 컨텍스트",
+        "description": "낯선 용어와 표현을 연구 맥락에 맞춰 구조화하고 다시 활용합니다."
+      }
     },
     "workflow": {
       "eyebrow": "A continuous workflow",
       "title": "생각이 끊기지 않는 연구 과정",
       "description": "Veloo는 개별 AI 기능의 모음이 아니라, 오늘 해야 할 일에서 연구 결과까지 이어지는 하나의 작업 공간입니다.",
-      "step1": { "title": "오늘의 연구를 계획하세요", "description": "우선순위와 마감을 정하고 AI가 제안한 실행 단계로 막연한 일을 구체화합니다." },
-      "step2": { "title": "자료를 읽고 이해하세요", "description": "논문 분석, 번역, 개념 정리를 오가며 필요한 맥락을 빠르게 확보합니다." },
-      "step3": { "title": "배운 것을 실행으로 연결하세요", "description": "모델을 설명하고 피드백을 받은 뒤 다음 할 일과 일정에 바로 반영합니다." }
+      "step1": {
+        "title": "오늘의 연구를 계획하세요",
+        "description": "우선순위와 마감을 정하고 AI가 제안한 실행 단계로 막연한 일을 구체화합니다."
+      },
+      "step2": {
+        "title": "자료를 읽고 이해하세요",
+        "description": "논문 분석, 번역, 개념 정리를 오가며 필요한 맥락을 빠르게 확보합니다."
+      },
+      "step3": {
+        "title": "배운 것을 실행으로 연결하세요",
+        "description": "모델을 설명하고 피드백을 받은 뒤 다음 할 일과 일정에 바로 반영합니다."
+      }
     },
     "cta": {
       "eyebrow": "Private beta",
@@ -112,6 +140,7 @@
   },
   "login": {
     "tagline": "Enter with intent",
+    "researchTagline": "Research, in flow.",
     "enter": "Enter",
     "tabLogin": "로그인",
     "tabRegister": "계정 만들기",
@@ -150,6 +179,7 @@
     }
   },
   "paper": {
+    "kicker": "리서치 작업 공간",
     "searching": "검색 중",
     "unsupportedUrl": "URL에서 DOI / arXiv ID를 찾을 수 없습니다. 논문 제목으로 검색해주세요.",
     "unknownError": "알 수 없는 오류",
@@ -173,6 +203,12 @@
       "qualityDesc": "저널 등급과 인용 정보를 함께 비교합니다."
     },
     "sidebar": {
+      "paper": "논문",
+      "year": "연도",
+      "venue": "학술지",
+      "journalQuality": "저널 품질",
+      "type": "유형",
+      "country": "국가",
       "cited": "{{count}}회",
       "noOriginalLink": "원본 링크 없음",
       "noData": "데이터 없음",
@@ -185,6 +221,7 @@
       "meta": "{{year}}년 · {{venue}} · 인용 {{count}}회"
     },
     "result": {
+      "provider": "Claude 제공",
       "theoryAnalysis": "🧠 이론 분석",
       "relevance": "관련성 {{value}}",
       "problem": "문제",
@@ -205,6 +242,7 @@
     }
   },
   "translator": {
+    "kicker": "번역 작업 공간",
     "heroTitle": "읽는 흐름을 끊지 않는 번역",
     "heroDescription": "영문 논문과 기술 문서를 자연스러운 한국어로 실시간 번역합니다.",
     "sourceLabel": "Source",
@@ -238,6 +276,7 @@
     }
   },
   "reviewer": {
+    "kicker": "모델 학습 공간",
     "sections": {
       "overview": "전체 흐름",
       "modules": "각 모듈",
@@ -291,8 +330,9 @@
     "newUpload": "새 논문 업로드"
   },
   "todo": {
+    "kicker": "연구 계획",
     "todayPlan": "Today’s plan",
-    "researchFlow": "오늘의 연구 흐름",
+    "researchFlow": "오늘의 작업 목록",
     "summary": {
       "today": "오늘의 진행률",
       "week": "이번주 진행률",
@@ -328,7 +368,7 @@
       "save": "저장하기"
     },
     "overview": {
-      "heroTitle": "오늘의 흐름을 한눈에",
+      "heroTitle": "오늘의 작업을 한눈에",
       "heroDescription": "할 일을 선택하면 세부 단계와 AI 실행 전략을 확인할 수 있어요.",
       "aiBadge": "AI 실행 계획",
       "inProgress": "진행 중",
@@ -357,6 +397,7 @@
     }
   },
   "calendar": {
+    "kicker": "주간 계획",
     "heroTitle": "한 주의 시간을 계획하세요",
     "heroDescription": "미배치 할 일을 원하는 시간대로 끌어놓고 일정을 한눈에 조정합니다.",
     "eventsBadge": "{{count}}개 일정",
@@ -371,7 +412,13 @@
     "loadingEvents": "일정 불러오는 중",
     "allPlaced": "모두 배치했습니다",
     "days": {
-      "mon": "월", "tue": "화", "wed": "수", "thu": "목", "fri": "금", "sat": "토", "sun": "일"
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
     }
   },
   "weeklyReview": {
@@ -388,6 +435,7 @@
     "overdueList": "밀린 할일 ({{count}}개)"
   },
   "contextor": {
+    "kicker": "모델 연구실",
     "heroTitle": "기술 용어를 맥락까지 이해하세요",
     "heroDescription": "사전적 의미를 넘어 ML·DL 논문과 구현에서 실제로 쓰이는 방식을 비교합니다.",
     "recentLookups": "최근 조회 {{count}}",
