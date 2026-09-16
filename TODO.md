@@ -1,7 +1,8 @@
 # TODO
 
 ## 완료
-- [x] 제품 디자인 스펙 동결 문서 작성 및 커밋
+- [x] 디자인 관련 문서 파일명과 전체 참조 경로 명확화
+- [x] 제품 디자인 규칙 동결 문서 작성 및 파일명 명확화
 - [x] 프론트엔드 디자인·코딩 규칙 위반 직접 수정 및 서브에이전트 재검수 (위반 없음 확인, 5개 커밋으로 분할 반영)
 - [x] 불필요한 ESLint/Prettier 제거
 - [x] 사용하지 않는 marketing-hero-art.png 및 관련 백엔드 예외 정리
@@ -26,7 +27,7 @@
 - [x] OS별(iOS/Android) 모바일 네비게이션 스위칭 구현 (useDeviceOS 훅, MobileAndroidNavigation 추가)
 - [x] 모바일 캡슐 독 밝기 버그 실제 수정 (is-dragging 순간 filter 전환 0s로 즉시 컷오프)
 - [x] OS별(iOS/Android) 네비게이션 스위칭 방향 문서 정리
-- [x] 모바일 캡슐 독 밝기 버그 원인 분석 (드래그 시작 시 brightness 전환이 중간에 역전 — docs/capsule-dock-spec.md 기록, 수정은 보류)
+- [x] 모바일 캡슐 독 밝기 버그 원인 분석 (드래그 시작 시 brightness 전환이 중간에 역전 — docs/ios-capsule-navigation.md 기록, 수정은 보류)
 - [x] 모바일 캡슐 독 드래그 애니메이션 추가 개선 (드래그 중 setState 제거, ref 직접 조작으로 리렌더 최소화)
 - [x] 모바일 캡슐 독 피드백 3건 수정 (밝기 필터 보간 버그, 드래그 rAF 스로틀링, 바 높이 58→64px)
 - [x] todo-guard 프로젝트 로컬 세팅
