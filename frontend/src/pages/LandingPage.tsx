@@ -29,9 +29,18 @@ const PREVIEW_TASKS = [
   { key: 'task3', time: '14:00 — 16:00', tag: 'Focus' },
 ] as const
 
+const PREVIEW_NAV = [
+  { key: 'todo', Icon: ListTodo },
+  { key: 'calendar', Icon: CalendarDays },
+  { key: 'paper', Icon: FileSearch },
+  { key: 'translate', Icon: Languages },
+  { key: 'model-review', Icon: Network },
+  { key: 'contextor', Icon: Braces },
+] as const
+
 function useReducedMotion() {
-  const [reduced, setReduced] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  const [reduced, setReduced] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
 
   useEffect(() => {
@@ -145,20 +154,22 @@ export default function LandingPage() {
   const [activeTask, setActiveTask] = useState(0)
 
   useEffect(() => {
-    document.title = 'Veloo — Research, in flow'
+    document.title = 'Veloo'
     let cancelled = false
     fetch('/api/me')
-      .then(response => response.ok ? response.json() : null)
-      .then(data => {
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
         if (!cancelled && data?.username) setUsername(data.username)
       })
       .catch(() => undefined)
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {
     if (reducedMotion) return
-    const timer = window.setInterval(() => setActiveTask(current => (current + 1) % PREVIEW_TASKS.length), 1900)
+    const timer = window.setInterval(() => setActiveTask((current) => (current + 1) % PREVIEW_TASKS.length), 1900)
     return () => window.clearInterval(timer)
   }, [reducedMotion])
 
@@ -188,17 +199,20 @@ export default function LandingPage() {
     page.classList.add('motion-ready')
 
     if (reducedMotion) {
-      elements.forEach(element => element.classList.add('is-visible'))
+      elements.forEach((element) => element.classList.add('is-visible'))
       return
     }
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        entry.target.classList.toggle('is-visible', entry.isIntersecting)
-      })
-    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-visible', entry.isIntersecting)
+        })
+      },
+      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' },
+    )
 
-    elements.forEach(element => observer.observe(element))
+    elements.forEach((element) => observer.observe(element))
     return () => observer.disconnect()
   }, [reducedMotion])
 
@@ -241,7 +255,11 @@ export default function LandingPage() {
         </nav>
         <div className="marketing-actions">
           <LanguageSwitcher />
-          {!username && <Link className="marketing-login" to="/login">{t('landing.nav.login')}</Link>}
+          {!username && (
+            <Link className="marketing-login" to="/login">
+              {t('landing.nav.login')}
+            </Link>
+          )}
           <Link className="button button-small button-dark" to={workspaceHref}>
             {username ? t('landing.nav.workspace') : t('landing.nav.start')}
           </Link>
@@ -252,7 +270,10 @@ export default function LandingPage() {
         <section className="marketing-hero">
           <ResearchField reducedMotion={reducedMotion} />
           <div className="hero-copy">
-            <div className="eyebrow"><Sparkles size={14} />{t('landing.eyebrow')}</div>
+            <div className="eyebrow">
+              <Sparkles size={14} />
+              {t('landing.eyebrow')}
+            </div>
             <h1 className={`hero-title hero-title-${language}`}>
               <span className="hero-title-line">{t('landing.heroTitle')}</span>
               <span className="hero-title-accent">{t('landing.heroAccent')}</span>
@@ -260,13 +281,25 @@ export default function LandingPage() {
             <p>{t('landing.heroDescription')}</p>
             <div className="hero-actions">
               <Link className="button button-primary" to={workspaceHref}>
-                {username ? t('landing.openWorkspace') : t('landing.startBeta')}<ArrowRight size={17} />
+                {username ? t('landing.openWorkspace') : t('landing.startBeta')}
+                <ArrowRight size={17} />
               </Link>
-              <a className="button button-secondary" href="#features">{t('landing.explore')}</a>
+              <a className="button button-secondary" href="#features">
+                {t('landing.explore')}
+              </a>
             </div>
-            <div className="hero-note"><Check size={14} />{t('landing.betaNote')}</div>
+            <div className="hero-note">
+              <Check size={14} />
+              {t('landing.betaNote')}
+            </div>
           </div>
 
+          <div className="hero-visual" data-reveal>
+            <img className="marketing-hero-art" src="/marketing/hero-research.png" alt="" aria-hidden="true" />
+          </div>
+        </section>
+
+        <section className="marketing-product-showcase" data-reveal>
           <div
             ref={previewRef}
             className="product-preview"
@@ -277,33 +310,75 @@ export default function LandingPage() {
             <div className="preview-pointer-glow" aria-hidden="true" />
             <div className="preview-scanline" aria-hidden="true" />
             <div className="preview-topbar">
-              <div className="preview-brand"><img src="/favicon.svg?v=2" alt="" />Veloo</div>
-              <div className="preview-tabs">
-                <span className="is-active">Tasks</span><span>Calendar</span><span>Papers</span><span>Translate</span><span>Models</span><span>Concepts</span>
+              <div className="preview-brand">
+                <img src="/favicon.svg?v=2" alt="" />
+                Veloo
               </div>
               <div className="preview-avatar">J</div>
             </div>
             <div className="preview-body">
               <aside className="preview-sidebar">
-                <strong>{t('landing.preview.today')}</strong>
-                <div className="preview-progress"><span style={{ width: `${52 + activeTask * 13}%` }} /></div>
-                <small>4 / 6 {t('landing.preview.complete')}</small>
-                <div className="preview-stat"><span>{t('landing.preview.focus')}</span><b>3h 20m</b></div>
-                <div className="preview-stat"><span>{t('landing.preview.papers')}</span><b>8</b></div>
+                <span className="preview-nav-label">{t('shell.workspaceLabel')}</span>
+                {PREVIEW_NAV.map(({ Icon, key }, index) => (
+                  <div className={`preview-nav-item${index === 0 ? ' is-active' : ''}`} key={key}>
+                    <Icon size={13} />
+                    <span>{t(`shell.nav.${key}`)}</span>
+                  </div>
+                ))}
               </aside>
               <div className="preview-content">
                 <div className="preview-heading">
-                  <div><small>{t('landing.preview.plan')}</small><h2>{t('landing.preview.heading')}</h2></div>
-                  <span className="preview-date">AUG 24</span>
+                  <div>
+                    <small>{t('todo.kicker')}</small>
+                    <h2>{t('landing.preview.heading')}</h2>
+                    <p>{t('todo.overview.heroDescription')}</p>
+                  </div>
+                  <ListTodo aria-hidden="true" />
+                </div>
+                <div className="preview-summary">
+                  <div>
+                    <b>{t('landing.preview.today')}</b>
+                    <div className="preview-progress">
+                      <span style={{ width: `${52 + activeTask * 13}%` }} />
+                    </div>
+                    <small>4 / 6 {t('landing.preview.complete')}</small>
+                  </div>
+                  <div className="preview-stat">
+                    <span>{t('landing.preview.focus')}</span>
+                    <b>3h 20m</b>
+                  </div>
+                  <div className="preview-stat">
+                    <span>{t('landing.preview.papers')}</span>
+                    <b>8</b>
+                  </div>
+                </div>
+                <div className="preview-list-heading">
+                  <div>
+                    <small>{t('landing.preview.plan')}</small>
+                    <b>{t('todo.researchFlow')}</b>
+                  </div>
+                  <span className="preview-date">{t('landing.preview.date')}</span>
                 </div>
                 {PREVIEW_TASKS.map((task, index) => (
-                  <div className={`preview-task${index < activeTask ? ' is-done' : ''}${index === activeTask ? ' is-current' : ''}`} key={task.key}>
+                  <div
+                    className={`preview-task${index < activeTask ? ' is-done' : ''}${index === activeTask ? ' is-current' : ''}`}
+                    key={task.key}
+                  >
                     <span className="task-check">{index < activeTask && <Check />}</span>
-                    <div><b>{t(`landing.preview.${task.key}`)}</b><small>{task.time}</small></div>
+                    <div>
+                      <b>{t(`landing.preview.${task.key}`)}</b>
+                      <small>{task.time}</small>
+                    </div>
                     <em>{task.tag}</em>
                   </div>
                 ))}
-                <div className={`preview-insight preview-insight-${activeTask}`}><Sparkles /><div><b>{t('landing.preview.insightTitle')}</b><p>{t('landing.preview.insight')}</p></div></div>
+                <div className={`preview-insight preview-insight-${activeTask}`}>
+                  <Sparkles />
+                  <div>
+                    <b>{t('landing.preview.insightTitle')}</b>
+                    <p>{t('landing.preview.insight')}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -311,7 +386,39 @@ export default function LandingPage() {
 
         <section className="marketing-proof" aria-label={t('landing.proofAria')} data-reveal>
           <span>{t('landing.proof')}</span>
-          <div><ListTodo />Plan</div><div><FileSearch />Research</div><div><Network />Learn</div>
+          <div>
+            <ListTodo />
+            {t('landing.proofLabels.plan')}
+          </div>
+          <div>
+            <FileSearch />
+            {t('landing.proofLabels.research')}
+          </div>
+          <div>
+            <Network />
+            {t('landing.proofLabels.learn')}
+          </div>
+        </section>
+
+        <section className="marketing-visual-stories" aria-label={t('landing.features.title')}>
+          <article className="visual-story" data-reveal>
+            <img src="/marketing/paper-translation.png" alt="" aria-hidden="true" />
+            <div>
+              <span>01</span>
+              <h2>{t('landing.features.paper.title')}</h2>
+              <p>{t('landing.features.paper.description')}</p>
+              <p>{t('landing.features.translate.description')}</p>
+            </div>
+          </article>
+          <article className="visual-story visual-story-reverse" data-reveal>
+            <img src="/marketing/model-learning.png" alt="" aria-hidden="true" />
+            <div>
+              <span>02</span>
+              <h2>{t('landing.features.model.title')}</h2>
+              <p>{t('landing.features.model.description')}</p>
+              <p>{t('landing.features.concept.description')}</p>
+            </div>
+          </article>
         </section>
 
         <section id="features" className="marketing-section features-section">
@@ -322,8 +429,15 @@ export default function LandingPage() {
           </div>
           <div className="feature-grid">
             {FEATURES.map(({ key, Icon }, index) => (
-              <article className={`feature-card feature-card-${index + 1}`} key={key} data-reveal onPointerMove={handleCardMove}>
-                <div className="feature-icon"><Icon /></div>
+              <article
+                className={`feature-card feature-card-${index + 1}`}
+                key={key}
+                data-reveal
+                onPointerMove={handleCardMove}
+              >
+                <div className="feature-icon">
+                  <Icon />
+                </div>
                 <h3>{t(`landing.features.${key}.title`)}</h3>
                 <p>{t(`landing.features.${key}.description`)}</p>
                 <span>{String(index + 1).padStart(2, '0')}</span>
@@ -339,10 +453,13 @@ export default function LandingPage() {
             <p>{t('landing.workflow.description')}</p>
           </div>
           <ol className="workflow-list">
-            {[1, 2, 3].map(step => (
+            {[1, 2, 3].map((step) => (
               <li key={step} data-reveal>
                 <span>0{step}</span>
-                <div><h3>{t(`landing.workflow.step${step}.title`)}</h3><p>{t(`landing.workflow.step${step}.description`)}</p></div>
+                <div>
+                  <h3>{t(`landing.workflow.step${step}.title`)}</h3>
+                  <p>{t(`landing.workflow.step${step}.description`)}</p>
+                </div>
               </li>
             ))}
           </ol>
@@ -355,15 +472,19 @@ export default function LandingPage() {
             <p>{t('landing.cta.description')}</p>
           </div>
           <Link className="button button-light" to={workspaceHref}>
-            {username ? t('landing.openWorkspace') : t('landing.cta.button')}<ArrowRight size={17} />
+            {username ? t('landing.openWorkspace') : t('landing.cta.button')}
+            <ArrowRight size={17} />
           </Link>
         </section>
       </main>
 
       <footer className="marketing-footer">
-        <div className="marketing-brand"><img src="/favicon.svg?v=2" alt="" /><span>Veloo</span></div>
+        <div className="marketing-brand">
+          <img src="/favicon.svg?v=2" alt="" />
+          <span>Veloo</span>
+        </div>
         <p>{t('landing.footer')}</p>
-        <span>© 2026 Veloo</span>
+        <span>{t('landing.copyright')}</span>
       </footer>
     </div>
   )

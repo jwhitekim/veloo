@@ -68,6 +68,7 @@ app.mount("/model-review", arch_app)
 app.mount("/todo", todo_app)
 app.mount("/contextor", contextor_app)
 app.mount("/assets", StaticFiles(directory=os.path.join(DIST, "assets")), name="assets")
+app.mount("/marketing", StaticFiles(directory=os.path.join(DIST, "marketing")), name="marketing-assets")
 
 
 @app.get("/favicon.svg")

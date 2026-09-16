@@ -31,12 +31,14 @@ export default function LoginPage({ mode }: Props) {
 
     let cancelled = false
     fetch('/api/me')
-      .then(response => response.ok ? response.json() : null)
-      .then(data => {
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
         if (!cancelled && data?.username) navigate(`/${data.username}/`, { replace: true })
       })
       .catch(() => undefined)
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [mode, navigate, t])
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -64,7 +66,7 @@ export default function LoginPage({ mode }: Props) {
         return
       }
 
-      const me = await fetch('/api/me').then(result => result.json())
+      const me = await fetch('/api/me').then((result) => result.json())
       navigate(redirectTo ?? `/${me.username}/`, { replace: true })
     } catch {
       setError(t('login.errors.serverError'))
@@ -85,9 +87,12 @@ export default function LoginPage({ mode }: Props) {
 
       <main className="auth-main">
         <section className="auth-story">
-          <Link className="auth-back" to="/"><ArrowLeft />{t('login.backHome')}</Link>
+          <Link className="auth-back" to="/">
+            <ArrowLeft />
+            {t('login.backHome')}
+          </Link>
           <div>
-            <span className="auth-kicker">Research, in flow.</span>
+            <span className="auth-kicker">{t('login.researchTagline')}</span>
             <h1>{mode === 'login' ? t('login.welcomeTitle') : t('login.signupTitle')}</h1>
             <p>{mode === 'login' ? t('login.welcomeDescription') : t('login.signupDescription')}</p>
           </div>
@@ -101,10 +106,17 @@ export default function LoginPage({ mode }: Props) {
           <div className="auth-card">
             {registered ? (
               <div className="auth-success">
-                <span><Check /></span>
+                <span>
+                  <Check />
+                </span>
                 <h2>{t('login.registeredTitle')}</h2>
-                <p>{t('login.registeredMessage')} {t('login.registeredNote')}</p>
-                <Link className="auth-submit" to="/login">{t('login.backToLogin')}<ArrowRight /></Link>
+                <p>
+                  {t('login.registeredMessage')} {t('login.registeredNote')}
+                </p>
+                <Link className="auth-submit" to="/login">
+                  {t('login.backToLogin')}
+                  <ArrowRight />
+                </Link>
               </div>
             ) : (
               <>
@@ -123,7 +135,7 @@ export default function LoginPage({ mode }: Props) {
                       placeholder={t('login.usernamePlaceholder')}
                       autoComplete="username"
                       value={username}
-                      onChange={event => setUsername(event.target.value)}
+                      onChange={(event) => setUsername(event.target.value)}
                       minLength={3}
                       maxLength={30}
                       autoFocus
@@ -137,18 +149,26 @@ export default function LoginPage({ mode }: Props) {
                       placeholder={t('login.passwordPlaceholder')}
                       autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                       value={password}
-                      onChange={event => setPassword(event.target.value)}
+                      onChange={(event) => setPassword(event.target.value)}
                       minLength={mode === 'signup' ? 8 : undefined}
                     />
                     {mode === 'signup' && <small>{t('login.passwordHint')}</small>}
                   </label>
 
-                  {error && <div className="auth-error" role="alert">{error}</div>}
+                  {error && (
+                    <div className="auth-error" role="alert">
+                      {error}
+                    </div>
+                  )}
 
                   <button className="auth-submit" type="submit" disabled={loading || !username || !password}>
                     {loading
-                      ? (mode === 'login' ? t('login.checking') : t('login.processing'))
-                      : (mode === 'login' ? t('login.loginButton') : t('login.registerButton'))}
+                      ? mode === 'login'
+                        ? t('login.checking')
+                        : t('login.processing')
+                      : mode === 'login'
+                        ? t('login.loginButton')
+                        : t('login.registerButton')}
                     {!loading && <ArrowRight />}
                   </button>
                 </form>

@@ -57,7 +57,7 @@ _OPEN_PATHS = {
     "/registerSW.js",
     "/sw.js",
 }
-_OPEN_PREFIXES = ("/assets/", "/workbox-")
+_OPEN_PREFIXES = ("/assets/", "/marketing/", "/workbox-")
 
 USERNAME_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])?$")
 RESERVED_USERNAMES = {
