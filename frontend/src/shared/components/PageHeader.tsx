@@ -14,7 +14,11 @@ export default function PageHeader({ kicker, title, description, icon, badge, cl
   return (
     <header className={`app-page-header${className ? ` ${className}` : ''}`}>
       <div className="app-page-header-main">
-        {icon && <span className="app-page-header-icon" aria-hidden="true">{icon}</span>}
+        {icon && (
+          <span className="app-page-header-icon" aria-hidden="true">
+            {icon}
+          </span>
+        )}
         <div className="app-page-header-copy">
           <span className="app-page-kicker">{kicker}</span>
           <h1>{title}</h1>

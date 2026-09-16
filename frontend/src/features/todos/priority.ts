@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 // TodoItem/FocusPanel이 공유하는 우선순위 배지 스타일 — 앱 전역 흑백 톤(--selected-bg 등)에 맞춤.
 export const priorityStyle: Record<string, CSSProperties> = {
   urgent: { background: 'var(--selected-bg)', color: 'var(--selected-text)' },
-  mid:    { background: 'var(--bg-additive)', color: 'var(--text-primary)' },
+  mid: { background: 'var(--bg-additive)', color: 'var(--text-primary)' },
   normal: { background: 'var(--bg-additive)', color: 'var(--text-secondary)' },
 }
 
@@ -11,7 +11,7 @@ export const priorityStyle: Record<string, CSSProperties> = {
 export function priorityLabels(t: (key: string) => string): Record<string, string> {
   return {
     urgent: t('todo.priority.urgent'),
-    mid:    t('todo.priority.mid'),
+    mid: t('todo.priority.mid'),
     normal: t('todo.priority.normal'),
   }
 }
@@ -21,6 +21,6 @@ export function priorityLabels(t: (key: string) => string): Record<string, strin
 // mid(옅은 회색 배경)·normal(투명)이 단독 색상표시용으로 쓰면 거의 안 보이기 때문.
 export const priorityAccent: Record<string, string> = {
   urgent: '#a32d2d',
-  mid:    '#854f0b',
+  mid: '#854f0b',
   normal: 'var(--accent)',
 }

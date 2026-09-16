@@ -1,0 +1,16 @@
+.session-expired-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint-card);
+  color: var(--text-primary);
+  font-size: var(--fs-label);
+}
+
+.session-expired-message a {
+  color: var(--accent);
+  font-weight: var(--fw-medium);
+}

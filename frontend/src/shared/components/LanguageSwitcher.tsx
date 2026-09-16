@@ -21,20 +21,28 @@ export function LanguageSwitcher({ className }: Props) {
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [open])
 
-  const current = LANGUAGES.find(l => l.code === language) ?? LANGUAGES[0]
+  const current = LANGUAGES.find((l) => l.code === language) ?? LANGUAGES[0]
 
   return (
     <div ref={rootRef} className={className} style={{ position: 'relative' }}>
       <button
         type="button"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         aria-label={t('shell.language')}
         aria-expanded={open}
         style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          height: 32, padding: '0 10px', borderRadius: 'var(--radius-sm)',
-          border: '1px solid var(--border-subtle)', background: 'transparent',
-          color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 12.5, fontWeight: 600,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          height: 32,
+          padding: '0 10px',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border-subtle)',
+          background: 'transparent',
+          color: 'var(--text-secondary)',
+          cursor: 'pointer',
+          fontSize: 12.5,
+          fontWeight: 600,
         }}
       >
         <Languages size={14} />
@@ -44,9 +52,16 @@ export function LanguageSwitcher({ className }: Props) {
         <div
           role="menu"
           style={{
-            position: 'absolute', top: 'calc(100% + 6px)', right: 0, zIndex: 20,
-            minWidth: 140, background: 'var(--bg-base)', border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)', boxShadow: '0 8px 24px rgba(0,0,0,0.14)', padding: 6,
+            position: 'absolute',
+            top: 'calc(100% + 6px)',
+            right: 0,
+            zIndex: 20,
+            minWidth: 140,
+            background: 'var(--bg-base)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.14)',
+            padding: 6,
           }}
         >
           {LANGUAGES.map(({ code, label }) => (
@@ -54,16 +69,32 @@ export function LanguageSwitcher({ className }: Props) {
               key={code}
               type="button"
               role="menuitem"
-              onClick={() => { setLanguage(code); setOpen(false) }}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                width: '100%', textAlign: 'left', padding: '8px 10px', borderRadius: 'var(--radius-sm)',
-                border: 'none', cursor: 'pointer', fontFamily: 'var(--font-sans)', fontSize: 13,
-                background: code === language ? 'var(--bg-additive)' : 'transparent',
-                color: 'var(--text-primary, inherit)', fontWeight: code === language ? 600 : 400,
+              onClick={() => {
+                setLanguage(code)
+                setOpen(false)
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-additive)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = code === language ? 'var(--bg-additive)' : 'transparent' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+                textAlign: 'left',
+                padding: '8px 10px',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-sans)',
+                fontSize: 13,
+                background: code === language ? 'var(--bg-additive)' : 'transparent',
+                color: 'var(--text-primary, inherit)',
+                fontWeight: code === language ? 600 : 400,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--bg-additive)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = code === language ? 'var(--bg-additive)' : 'transparent'
+              }}
             >
               {label}
             </button>

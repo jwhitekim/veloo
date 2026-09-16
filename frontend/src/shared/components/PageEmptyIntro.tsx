@@ -12,7 +12,9 @@ interface PageEmptyIntroProps {
 export default function PageEmptyIntro({ icon: Icon, title, description, actions }: PageEmptyIntroProps) {
   return (
     <div className="app-page-empty-intro">
-      <span className="app-page-empty-icon"><Icon aria-hidden="true" /></span>
+      <span className="app-page-empty-icon">
+        <Icon aria-hidden="true" />
+      </span>
       <div className="app-page-empty-copy">
         <h2>{title}</h2>
         <p>{description}</p>

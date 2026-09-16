@@ -86,8 +86,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const t = useCallback((key: string, params?: Record<string, string | number>) =>
-    resolve(language, key, params), [language])
+  const t = useCallback(
+    (key: string, params?: Record<string, string | number>) => resolve(language, key, params),
+    [language],
+  )
 
   const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t])
 

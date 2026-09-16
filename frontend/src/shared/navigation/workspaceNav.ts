@@ -1,6 +1,6 @@
 import type { ComponentType, SVGProps } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { Braces, CalendarDays, FileSearch, LayoutDashboard, Languages, ListTodo, Network } from 'lucide-react'
+import { Braces, CalendarDays, FileSearch, Languages, ListTodo, Network } from 'lucide-react'
 // 모바일 하단 독 5개 아이콘 전용 — lucide는 순수 스트로크(선형) 아이콘 세트라 "선택 시 면형으로
 // 바뀌는" 요구를 못 채워서(2026-09-06), outline/solid 쌍을 모두 제공하는 heroicons를 이 5개
 // 아이콘에 한해 추가로 쓴다. 데스크톱 사이드바(WORKSPACE_NAV)는 기존 lucide 그대로 유지.
@@ -69,18 +69,23 @@ export const WORKSPACE_NAV: NavGroup[] = [
   },
 ]
 
-export const WORKSPACE_NAV_ITEMS: NavItem[] = WORKSPACE_NAV.flatMap(group => group.items)
+export const WORKSPACE_NAV_ITEMS: NavItem[] = WORKSPACE_NAV.flatMap((group) => group.items)
 
 // Mobile Capsule Navigation은 화면이 좁아 Tasks/Calendar를 "Plan" 하나로 합친다.
 // (모바일에서 하단 독 슬롯이 5개까지가 자연스럽다는 기존 결정 — capsule-dock-spec.md)
 export type MobilePrimaryKey = 'plan' | 'papers' | 'translate' | 'models' | 'concepts'
 
-export const MOBILE_NAV: { key: MobilePrimaryKey; label: string; Icon: HeroIcon; IconSolid: HeroIcon }[] = [
-  { key: 'plan', label: 'Plan', Icon: Squares2X2Icon, IconSolid: Squares2X2IconSolid },
-  { key: 'papers', label: 'Paper', Icon: DocumentMagnifyingGlassIcon, IconSolid: DocumentMagnifyingGlassIconSolid },
-  { key: 'translate', label: 'Trans', Icon: GlobeAltIcon, IconSolid: GlobeAltIcon },
-  { key: 'models', label: 'Models', Icon: CpuChipIcon, IconSolid: CpuChipIconSolid },
-  { key: 'concepts', label: 'Concepts', Icon: LightBulbIcon, IconSolid: LightBulbIconSolid },
+export const MOBILE_NAV: { key: MobilePrimaryKey; labelKey: string; Icon: HeroIcon; IconSolid: HeroIcon }[] = [
+  { key: 'plan', labelKey: 'shell.workspaceMobile.plan', Icon: Squares2X2Icon, IconSolid: Squares2X2IconSolid },
+  {
+    key: 'papers',
+    labelKey: 'shell.navMobile.paper',
+    Icon: DocumentMagnifyingGlassIcon,
+    IconSolid: DocumentMagnifyingGlassIconSolid,
+  },
+  { key: 'translate', labelKey: 'shell.navMobile.translate', Icon: GlobeAltIcon, IconSolid: GlobeAltIcon },
+  { key: 'models', labelKey: 'shell.navMobile.model-review', Icon: CpuChipIcon, IconSolid: CpuChipIconSolid },
+  { key: 'concepts', labelKey: 'shell.navMobile.contextor', Icon: LightBulbIcon, IconSolid: LightBulbIconSolid },
 ]
 
 export function mobilePrimaryFor(navKey: NavKey): MobilePrimaryKey {

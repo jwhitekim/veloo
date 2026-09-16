@@ -24,17 +24,58 @@
   color: var(--accent);
 }
 
-.app-page-guide-icon > svg { width: 18px; height: 18px; }
-.app-page-guide-number { position: absolute; top: var(--space-lg); right: var(--space-lg); color: var(--text-disabled); font-size: var(--fs-meta); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
-.app-page-guide-card strong { display: block; margin-top: var(--space-md); color: var(--text-primary); font-size: var(--fs-label); line-height: var(--lh-snug); }
-.app-page-guide-card p { margin: var(--space-xs) 0 0; color: var(--text-secondary); font-size: var(--fs-small); line-height: var(--lh-relaxed); }
+.app-page-guide-icon > svg {
+  width: 18px;
+  height: 18px;
+}
+.app-page-guide-number {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  color: var(--text-disabled);
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+.app-page-guide-card strong {
+  display: block;
+  margin-top: var(--space-md);
+  color: var(--text-primary);
+  font-size: var(--fs-label);
+  line-height: var(--lh-snug);
+}
+.app-page-guide-card p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-small);
+  line-height: var(--lh-relaxed);
+}
 
 @media (max-width: 640px) {
-  .app-page-guide { grid-template-columns: 1fr; }
-  .app-page-guide-card { min-height: 0; padding: 14px; }
-  .app-page-guide-icon { width: 32px; height: 32px; }
-  .app-page-guide-icon > svg { width: 16px; height: 16px; }
-  .app-page-guide-number { top: 14px; right: 14px; }
-  .app-page-guide-card strong { margin-top: 10px; font-size: var(--fs-body); }
-  .app-page-guide-card p { font-size: var(--fs-meta); }
+  .app-page-guide {
+    grid-template-columns: 1fr;
+  }
+  .app-page-guide-card {
+    min-height: 0;
+    padding: 14px;
+  }
+  .app-page-guide-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .app-page-guide-icon > svg {
+    width: 16px;
+    height: 16px;
+  }
+  .app-page-guide-number {
+    top: 14px;
+    right: 14px;
+  }
+  .app-page-guide-card strong {
+    margin-top: 10px;
+    font-size: var(--fs-body);
+  }
+  .app-page-guide-card p {
+    font-size: var(--fs-meta);
+  }
 }
