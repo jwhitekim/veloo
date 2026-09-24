@@ -1,4 +1,5 @@
-// docs/platform-navigation-rules.md의 "전환 기준" 참고. UA로 iOS/Android를 구분해 모바일
+// openspec/specs/mobile-navigation/spec.md의 "OS별 하단 네비게이션 컴포넌트 분기" 참고.
+// UA로 iOS/Android를 구분해 모바일
 // 하단 네비게이션(iOS: 캡슐 독 / Android: 하단 고정 바)을 분기하기 위한 훅.
 const OVERRIDE_KEY = 'veloo:os-override'
 

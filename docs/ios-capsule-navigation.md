@@ -1,8 +1,10 @@
-# iOS 캡슐 내비게이션
+# iOS 캡슐 내비게이션 — 설계 히스토리
 
-앱 전환 탭의 "슬라이딩 캡슐 인디케이터" 컴포넌트 스펙. 데스크톱(상단)과 모바일(하단)에 각각 다른 형태로 구현되어 있고, 코드는 `frontend/src/app/Shell.tsx` + `frontend/src/app/Shell.css`.
+**시스템의 실제 동작은 [`openspec/specs/mobile-navigation/spec.md`](../openspec/specs/mobile-navigation/spec.md)가 단일 진실이다.** 아래는 지금 값이 된 이유를 시행착오·피드백 순으로 남긴 기록이라, 코드 파일 경로(`Shell.tsx` 등)나 세부 수치가 최신 스펙과 다를 수 있음.
 
-디자인 근거·출처는 [`capsule-navigation-research.md`](./capsule-navigation-research.md) 참고. 본 문서는 "왜"가 아니라 "지금 정확히 어떤 값인가"를 기록함. **2026-08-16 기준 — 앱이 6개(Todo/Calendar/Paper/Translate/Model Review/Contextor)로 늘고 모바일에서 Todo+Calendar가 "Plan" 탭으로 합쳐진 구조를 반영.**
+앱 전환 탭의 "슬라이딩 캡슐 인디케이터" 컴포넌트 히스토리. 데스크톱(상단)과 모바일(하단)에 각각 다른 형태로 구현됨.
+
+디자인 근거·출처는 [`capsule-navigation-research.md`](./capsule-navigation-research.md) 참고. **2026-08-16 기준 — 앱이 6개(Todo/Calendar/Paper/Translate/Model Review/Contextor)로 늘고 모바일에서 Todo+Calendar가 "Plan" 탭으로 합쳐진 구조를 반영.**
 
 ## 앱 구조
 

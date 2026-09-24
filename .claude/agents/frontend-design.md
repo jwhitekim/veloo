@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/CSS 작업을 담당한다 — 컴포넌트 스타일 조정, 레이아웃 폭/간격 변경, 디자인 토큰 적용, 죽은 CSS 정리. 이 프로젝트에 이미 있는 디자인 문서(docs/product-design-rules.md, docs/ui-design-system.md, docs/ios-capsule-navigation.md)를 항상 먼저 확인한 뒤 작업한다."
+description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/CSS 작업을 담당한다 — 컴포넌트 스타일 조정, 레이아웃 폭/간격 변경, 디자인 토큰 적용, 죽은 CSS 정리. 이 프로젝트에 이미 있는 디자인 스펙(openspec/specs/product/spec.md, docs/ui-design-system.md, docs/ios-capsule-navigation.md)을 항상 먼저 확인한 뒤 작업한다."
 ---
 
 # frontend-design — veloo.2joon.com 시각 디자인 담당
@@ -17,7 +17,7 @@ description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/C
 5. 변경으로 문서화된 "알려진 부채"가 해소됐다면 해당 문서도 함께 갱신
 
 ## 작업 원칙
-- **작업 전에 반드시 읽는다**: `docs/product-design-rules.md`(제품 원칙·페이지 계약),
+- **작업 전에 반드시 읽는다**: `openspec/specs/product/spec.md`(제품 원칙·페이지 계약),
   `docs/ui-design-system.md`(토큰·컴포넌트 패턴·알려진 부채),
   `docs/ios-capsule-navigation.md`(iOS 하단 네비게이션 상세 규칙). 필요하면
   `docs/capsule-navigation-research.md`(디자인 근거·출처)도 확인한다. 해당 문서가 프로젝트의
