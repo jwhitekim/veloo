@@ -12,10 +12,10 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 [React Frontend (TypeScript)] → frontend/dist/ (정적 서빙)
 [FastAPI Root — backend/main.py]
     ├── /paper        → backend/app/paper_analyzer/
-    ├── /translate    → backend/app/translator_api.py
-    ├── /model-review → backend/app/reviwer_api.py
+    ├── /translate    → backend/app/translator.py
+    ├── /model-review → backend/app/reviwer.py
     ├── /todo         → backend/app/todo/
-    └── /contextor    → backend/app/contextor_api.py
+    └── /contextor    → backend/app/contextor.py
 ```
 
 ## 기술 스택
@@ -84,15 +84,15 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 
 ### translator (`/translate`)
 
-ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역하는 스트리밍 API. `backend/app/translator_api.py` 단일 파일 (폴더 없음).
+ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역하는 스트리밍 API. `backend/app/translator.py` 단일 파일 (폴더 없음).
 
 - 엔드포인트: `POST /api/translate`(스트리밍, Supabase `translation_history` 캐시 히트 시 `X-Cache: HIT`), `GET /api/history`
-- 번역 규칙(수식·고유명사 보존, 특정 용어 영어 유지 등)은 `translator_api.py`의 `_SYSTEM` 프롬프트에 하드코딩 — 톤/규칙 수정 시 여기를 고칠 것
+- 번역 규칙(수식·고유명사 보존, 특정 용어 영어 유지 등)은 `translator.py`의 `_SYSTEM` 프롬프트에 하드코딩 — 톤/규칙 수정 시 여기를 고칠 것
 - `CLAUDE_MODEL_SMART`로 모델 오버라이드(기본 `claude-sonnet-4-6`)
 
-### arch_trainer / reviwer_api (`/model-review`)
+### arch_trainer / reviwer (`/model-review`)
 
-논문 아키텍처 그림을 보고 스스로 설명하는 연습 → Claude가 기준 설명 생성, 사용자 설명을 채점/교정. `backend/app/reviwer_api.py` 단일 파일 (폴더 없음, 파일명 오탈자 "reviwer" 그대로 사용 중).
+논문 아키텍처 그림을 보고 스스로 설명하는 연습 → Claude가 기준 설명 생성, 사용자 설명을 채점/교정. `backend/app/reviwer.py` 단일 파일 (폴더 없음, 파일명 오탈자 "reviwer" 그대로 사용 중).
 
 - 엔드포인트: `POST /api/explain`(이미지 업로드, 최대 10MB → JSON 스키마 설명 생성, Supabase `arch_history` 저장), `POST /api/feedback`(사용자 설명 채점), `GET /api/history`
 - Claude 응답은 JSON만 나오도록 프롬프트로 강제, `_parse_json`이 코드펜스 제거 — 스키마 변경 시 파싱 로직도 확인
@@ -109,12 +109,12 @@ ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역�
 
 ### contextor (`/contextor`)
 
-영어 단어/짧은 구를 ML/DL 논문 맥락별 의미로 구조화된 JSON으로 설명. `backend/app/contextor_api.py` 단일 파일 (폴더 없음).
+영어 단어/짧은 구를 ML/DL 논문 맥락별 의미로 구조화된 JSON으로 설명. `backend/app/contextor.py` 단일 파일 (폴더 없음).
 
 - 엔드포인트: `POST /api/lookup`(Supabase `contextor_history` 캐시), `GET /api/history`
 - 응답 스키마(`hasMlUsage`, `cases[]`, `note`)는 few-shot 프롬프트로 강제, `_extract_json`이 코드펜스 유무와 무관하게 JSON만 추출
 - 다른 서브앱과 달리 `CLAUDE_MODEL_FAST`(기본 `claude-haiku-4-5-20251001`)가 기본 — 응답 속도 우선
-- Supabase 클라이언트를 `backend.app.database.get_supabase()`가 아니라 `contextor_api.py` 내부에서 직접 생성 (다른 서브앱과의 사소한 불일치, 동작엔 문제 없음)
+- Supabase 클라이언트를 `backend.app.database.get_supabase()`가 아니라 `contextor.py` 내부에서 직접 생성 (다른 서브앱과의 사소한 불일치, 동작엔 문제 없음)
 
 ## 브랜치 전략
 
