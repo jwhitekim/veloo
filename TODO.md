@@ -1,9 +1,7 @@
 # TODO
 
-## 진행 중
-- [ ] docs/를 OpenSpec 관례(openspec/specs, openspec/changes)로 재구성 (CLI 설치·스캐폴드 완료, capability spec 작성 남음)
-
 ## 완료
+- [x] docs/를 OpenSpec 관례(openspec/specs, openspec/changes)로 재구성 (backend 6개 capability + product + mobile-navigation spec 작성, API.md/product-design-rules.md/platform-navigation-rules.md 삭제, doc-guard openspec/ 스킵 처리, CLAUDE.md 파일명 오기 수정)
 - [x] 디자인 관련 문서 파일명과 전체 참조 경로 명확화
 - [x] 제품 디자인 규칙 동결 문서 작성 및 파일명 명확화
 - [x] 프론트엔드 디자인·코딩 규칙 위반 직접 수정 및 서브에이전트 재검수 (위반 없음 확인, 5개 커밋으로 분할 반영)
