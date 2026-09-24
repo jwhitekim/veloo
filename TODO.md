@@ -1,5 +1,8 @@
 # TODO
 
+## 진행 중
+- [ ] docs/를 OpenSpec 관례(openspec/specs, openspec/changes)로 재구성 (CLI 설치·스캐폴드 완료, capability spec 작성 남음)
+
 ## 완료
 - [x] 디자인 관련 문서 파일명과 전체 참조 경로 명확화
 - [x] 제품 디자인 규칙 동결 문서 작성 및 파일명 명확화
