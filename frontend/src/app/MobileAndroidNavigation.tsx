@@ -9,7 +9,7 @@ import {
   type NavKey,
 } from '@/shared/navigation/workspaceNav'
 
-// Android용 하단 네비게이션. openspec/specs/mobile-navigation/spec.md 참고 —
+// Android용 하단 네비게이션. docs/specs/mobile-navigation/spec.md 참고 —
 // iOS의 플로팅 캡슐 독과 달리 Material 3 관례를 따라 하단 고정 바(container) + 아이콘/라벨,
 // 선택된 항목만 배경에 알약형(pill) 하이라이트를 준다(독 전체가 뜨는 캡슐 방식이 아님).
 // 드래그로 미끄러지는 인디케이터 제스처는 iOS 캡슐 독 전용 상호작용이라 여기엔 없음 — 탭만 지원.

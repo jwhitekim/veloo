@@ -28,7 +28,6 @@ build/
 *.db
 
 # 디자인 레퍼런스 영상/프레임 (개인 참고용, 커밋 대상 아님)
-design-refs/
 *.mp4
 
 # macOS
@@ -44,3 +43,6 @@ prompt.md
 # todo-guard local state
 .claude/todo-guard/
 .claude/settings.json.bak-*
+
+# Design reference assets
+docs/design-refs/

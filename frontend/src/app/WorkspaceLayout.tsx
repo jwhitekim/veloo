@@ -13,7 +13,7 @@ import './WorkspaceLayout.css'
 // Workspace Layout — 화면 선택은 하지 않는다 (그건 Router의 일이다).
 // TopBar + DesktopSidebar + 모바일 하단 네비게이션을 배치하고, 실제 페이지는
 // <Outlet />이 현재 route에 맞는 것을 그려준다. 모바일 하단 네비게이션은 iOS/Android로
-// 컴포넌트 자체가 갈린다(openspec/specs/mobile-navigation/spec.md) — useDeviceOS()로 분기.
+// 컴포넌트 자체가 갈린다(docs/specs/mobile-navigation/spec.md) — useDeviceOS()로 분기.
 export default function WorkspaceLayout() {
   const t = useT()
   const navigate = useNavigate()

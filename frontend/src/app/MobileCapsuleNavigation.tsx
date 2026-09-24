@@ -12,7 +12,7 @@ import {
 } from '@/shared/navigation/workspaceNav'
 
 // 모바일 하단 캡슐 독. 시각 디자인·제스처는 기존 Shell.tsx 구현을 그대로 옮긴 것 —
-// ios-capsule-navigation.md의 "반드시 유지" 대상이라 애니메이션/스타일은 건드리지 않았고,
+// docs/ios-capsule-navigation.md의 "반드시 유지" 대상이라 애니메이션/스타일은 건드리지 않았고,
 // 탭 선택이 로컬 state 대신 라우트 이동(navigate)으로 바뀐 것만 다르다.
 export default function MobileCapsuleNavigation() {
   const t = useT()

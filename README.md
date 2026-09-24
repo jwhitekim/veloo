@@ -73,7 +73,7 @@ SQL Editor. Full environment variable list is in `CLAUDE.md`.
 ## Docs
 
 - [Feature details](docs/features.md)
-- [Specs (API, product, mobile nav)](openspec/specs/)
+- [Specs (API, product, mobile nav)](docs/specs/)
 - [Changelog](CHANGELOG.md)
 - [UI design system](docs/ui-design-system.md)
 

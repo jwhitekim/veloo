@@ -2,7 +2,7 @@
 
 앱 전체에 적용되는 디자인 토큰과 규칙. 토큰 정의는 `frontend/src/shared/styles/index.css`.
 제품 수준의 화면 구조, 정보 위계, 이미지, 완료 기준은
-[`openspec/specs/product/spec.md`](../openspec/specs/product/spec.md)를 우선 적용.
+[`docs/specs/product/spec.md`](specs/product/spec.md)를 우선 적용.
 
 ## 브랜드 정체성
 
