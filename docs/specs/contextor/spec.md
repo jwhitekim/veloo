@@ -60,10 +60,12 @@ The system SHALL cache lookup results per user and query text in Supabase when S
 The system SHALL expose the authenticated user's lookup history, and a count-only mode, both scoped to `user_id`.
 
 #### Scenario: 최근 히스토리 조회
+- GIVEN 인증된 사용자
 - WHEN `GET /api/history` 호출 (기본, `count` 미지정 또는 `false`)
 - THEN 현재 사용자의 `contextor_history`에서 `id, query, result, created_at`을 생성일 역순으로 최대 10개 반환, `{"items": [...]}` 형태
 
 #### Scenario: 개수만 조회
+- GIVEN 인증된 사용자
 - WHEN `GET /api/history?count=true` 호출
 - THEN 현재 사용자의 히스토리 총 개수를 `{"count": <숫자>}` 형태로 반환
 

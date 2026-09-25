@@ -35,6 +35,7 @@ The system SHALL allow creating, reading, updating, and deleting todos, each sco
 - THEN `exclude_unset=True`로 `memo`만 갱신되고 나머지 필드는 그대로 유지
 
 #### Scenario: todo 삭제
+- GIVEN 인증된 사용자
 - WHEN `DELETE /api/todos/{todo_id}` 호출
 - THEN `todos` row 삭제되고 `{"ok": true}` 반환 (row 존재 여부와 무관하게 성공 응답)
 
@@ -54,14 +55,17 @@ The system SHALL let a todo be scheduled onto a calendar slot via `start_time`/`
 - AND `reminded`가 `false`로 초기화됨
 
 #### Scenario: start_time을 null로 해제
+- GIVEN todo에 `start_time`이 설정되어 있음
 - WHEN `PATCH /api/todos/{todo_id}`에 `start_time: null` 전송
 - THEN `remind_at`도 `null`로 초기화되고 `reminded`는 `false`로 초기화됨
 
 #### Scenario: remind_at을 명시적으로 함께 전송
+- GIVEN 기존 todo가 존재
 - WHEN `PATCH /api/todos/{todo_id}`에 `start_time`과 `remind_at`을 함께 전송
 - THEN 자동 계산을 건너뛰고 전달된 `remind_at` 값을 그대로 저장
 
 #### Scenario: 캘린더 범위 조회
+- GIVEN 인증된 사용자
 - WHEN `GET /api/todos/calendar?start=<ISO>&end=<ISO>` 호출
 - THEN `start_time`이 해당 구간(`gte start`, `lte end`)에 속하는 현재 사용자의 todo 목록을 `start_time` 오름차순으로 반환
 
@@ -69,15 +73,18 @@ The system SHALL let a todo be scheduled onto a calendar slot via `start_time`/`
 The system SHALL support `filter` query parameter values `week`, `today`, and `memo` on `GET /api/todos`, applying deadline-text parsing for `week`/`today`.
 
 #### Scenario: filter=week
+- GIVEN 인증된 사용자
 - WHEN `GET /api/todos?filter=week` 호출
 - THEN `done=false`인 todo 중 `deadline` 텍스트를 파싱한 날짜가 이번 주(월~일, KST) 범위에 속하는 항목만 반환
 - AND `deadline`을 파싱할 수 없는 항목은 제외
 
 #### Scenario: filter=today
+- GIVEN 인증된 사용자
 - WHEN `GET /api/todos?filter=today` 호출
 - THEN `deadline` 텍스트를 파싱한 날짜가 오늘(KST)과 일치하는 항목만 반환 (done 여부 무관)
 
 #### Scenario: filter=memo
+- GIVEN 인증된 사용자
 - WHEN `GET /api/todos?filter=memo` 호출
 - THEN `memo`가 빈 문자열이 아닌 todo를 생성일 역순으로 반환
 
@@ -90,20 +97,24 @@ The system SHALL support `filter` query parameter values `week`, `today`, and `m
 The system SHALL allow creating steps under a todo and updating/toggling/deleting individual steps.
 
 #### Scenario: todo에 step 추가
+- GIVEN 대상 todo가 존재
 - WHEN `POST /api/todos/{todo_id}/steps`에 `{text, done, order_index}`(StepCreate) 전송
 - THEN `steps` 테이블에 `todo_id`를 포함해 삽입되고 생성된 StepOut 반환
 
 #### Scenario: step 부분 수정
+- GIVEN 대상 step이 존재
 - WHEN `PATCH /api/steps/{step_id}`에 일부 필드만 포함한 StepUpdate 전송
 - THEN `exclude_none=True`로 값이 있는 필드만 갱신
 - AND 대상 step이 없으면 404 "Step not found"
 
 #### Scenario: step done 토글
+- GIVEN step의 현재 `done` 값
 - WHEN `PATCH /api/steps/{step_id}/done` 호출
 - THEN 현재 `done` 값의 반전이 저장되고 갱신된 StepOut 반환
 - AND 대상 step이 없으면 404 "Step not found"
 
 #### Scenario: step 삭제
+- GIVEN 대상 step이 존재
 - WHEN `DELETE /api/steps/{step_id}` 호출
 - THEN `steps` row 삭제되고 `{"ok": true}` 반환
 
@@ -116,6 +127,7 @@ The system SHALL allow creating steps under a todo and updating/toggling/deletin
 The system SHALL generate 3-4 actionable steps for a todo via an AI provider, in synchronous and asynchronous (background) variants, returning structured JSON.
 
 #### Scenario: 동기 단계 생성
+- GIVEN AI 프로바이더가 정상 응답
 - WHEN `POST /api/ai/generate-steps`에 `{todo_name, memo, priority, deadline}`(GenerateStepsRequest, `todo_id` 없이도 가능) 전송
 - THEN AI 프로바이더 응답에서 JSON을 추출해 `{"steps": [...]}` 형태로 반환
 
@@ -143,6 +155,7 @@ The system SHALL generate 3-4 actionable steps for a todo via an AI provider, in
 The system SHALL provide an endpoint that generates a one-sentence scheduling suggestion for a given todo based on all incomplete todos, and persist it on the todo, even though the current frontend has no caller for it (2026-09-01 UI 제거, 엔드포인트는 되살리기 쉽도록 유지).
 
 #### Scenario: 전략 생성
+- GIVEN `todo_id`에 해당하는 todo가 존재
 - WHEN `POST /api/ai/generate-strategy`에 `{todo_id}`(GenerateStrategyRequest) 전송
 - THEN 대상 todo 이름과, `done=false`인 전체 todo 목록(우선순위·마감 포함)을 AI에 전달해 한 문장 조언을 받고
 - AND 해당 문장을 대상 todo의 `ai_strategy` 필드에 저장한 뒤 갱신된 TodoOut 반환
@@ -161,6 +174,7 @@ The system SHALL compute weekly completion statistics for the authenticated user
 - THEN `week_start`부터 7일간(`week_end` = `week_start + 7일`)의 `completed`(기간 내 완료), `created`(기간 내 생성), `completion_rate`(`completed/created`, 소수 3자리, `created`가 0이면 0.0), `overdue`(기간 시작 이전 생성되고 아직 미완료인 항목), `by_priority`(urgent/mid/normal별 done/todo 개수, 전체 todo 기준)를 반환
 
 #### Scenario: week_start 형식 오류
+- GIVEN 인증된 사용자
 - WHEN `GET /api/reviews/weekly?week_start=invalid` 호출
 - THEN 400과 "week_start 형식 오류 (ISO 8601)" 반환
 
@@ -197,5 +211,6 @@ The system SHALL run a background scheduler that sends reminder emails for due t
 The system SHALL expose a health check endpoint for the todo subapp.
 
 #### Scenario: 헬스체크 호출
+- GIVEN 서버가 정상 기동됨
 - WHEN `GET /health` 호출
 - THEN `{"status": "ok"}` 반환
