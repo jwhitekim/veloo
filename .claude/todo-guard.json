@@ -1,4 +1,10 @@
 {
   "docRules": true,
-  "allowOutside": ["/Users/joon/.claude/skills/todo-guard/scripts", "/Users/joon/.claude/plans/virtual-crunching-lagoon.md"]
+  "allowOutside": [
+    "/Users/joon/.claude/skills/todo-guard/scripts",
+    "/Users/joon/.claude/plans/virtual-crunching-lagoon.md",
+    "/Users/joon/.claude/plans/vck-6kekq538gq8d4qkr3xzawzqvzqq0vcdutfe4-cuddly-pony.md",
+    "/Users/joon/.claude/skills/jev",
+    "/Users/joon"
+  ]
 }

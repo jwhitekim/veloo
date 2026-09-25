@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # 껍데기. 내용은 ~/.claude/skills/todo-guard/scripts/pre-tool.sh 에 한 벌만 둔다.
-# 셸의 현재 위치가 서브폴더로 드리프트돼 있어도(예: cd frontend && npm run build 이후) 항상
-# 프로젝트 루트 기준으로 돌게 cd 한다.
-cd "${CLAUDE_PROJECT_DIR:-$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")}" || exit 0
-exec bash "$HOME/.claude/skills/todo-guard/scripts/pre-tool.sh" "$@"
+#   exec 가 아니라 source 로 부른다. exec 는 bash 를 한 번 더 띄우는데
+#   윈도우에서 그 한 번이 0.6초다. 도구를 부를 때마다 붙는 시간이다
+. "$HOME/.claude/skills/todo-guard/scripts/pre-tool.sh"
