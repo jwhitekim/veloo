@@ -107,6 +107,7 @@
 .todo-desktop-content .todo-list-panel {
   flex: 1;
   min-width: 0;
+  min-height: 0;
   border-left: 0;
 }
 .todo-list-header {
