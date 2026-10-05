@@ -2,7 +2,7 @@
 프론트엔드 UI 다국어 번역 파일 생성 스크립트.
 
 frontend/src/shared/i18n/locales/ko.json(원본)을 읽어 en.json / zh.json을
-backend/app/ai_provider.py(AI_PROVIDER env로 선택된 프로바이더)로 일괄 번역해
+server/app/ai_provider.py(AI_PROVIDER env로 선택된 프로바이더)로 일괄 번역해
 같은 폴더에 덮어쓴다. 1회성/수동 실행 도구 — 런타임에는 쓰이지 않음. ko.json에
 새 문자열을 추가한 뒤 다시 실행하면 전체를 재번역한다(부분 갱신 아님).
 
@@ -22,7 +22,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))  # backend.app.ai_provider import를 레포 루트 기준으로 찾기 위함
+sys.path.insert(0, str(ROOT))  # server.app.ai_provider import를 레포 루트 기준으로 찾기 위함
 load_dotenv(ROOT / ".env")
 
 # .env의 AI_PROVIDER를 그대로 따른다(현재 프로젝트 설정: gemini). ClaudeProvider로
@@ -76,7 +76,7 @@ def _strip_trailing_commas(text: str) -> str:
 
 
 def translate_locale(ko_data: dict, lang_code: str) -> dict:
-    from backend.app.ai_provider import get_ai_provider
+    from server.app.ai_provider import get_ai_provider
 
     provider = get_ai_provider()
     target_language = LANGUAGE_NAMES[lang_code]

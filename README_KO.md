@@ -25,7 +25,7 @@
 
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m backend.main          # http://localhost:9000
+python -m server.main          # http://localhost:9000
 
 cd frontend && npm install && npm run dev    # http://localhost:5173
 ```
@@ -34,7 +34,7 @@ cd frontend && npm install && npm run dev    # http://localhost:5173
 
 ```bash
 cd frontend && npm run build && cd ..
-python -m backend.main
+python -m server.main
 ```
 
 ```bash
@@ -43,7 +43,7 @@ docker build -t veloo .
 docker run --env-file .env -p 9000:9000 veloo
 ```
 
-Supabase 스키마는 `backend/schema.sql`에 위치해 있으며, Supabase SQL(Structured Query Language) Editor에서 한 번 실행해 주시면 됩니다. 전체 환경변수 목록은 `CLAUDE.md`를 참고하세요.
+Supabase 스키마는 `server/schema.sql`에 위치해 있으며, Supabase SQL(Structured Query Language) Editor에서 한 번 실행해 주시면 됩니다. 전체 환경변수 목록은 `CLAUDE.md`를 참고하세요.
 
 ## 기술 스택
 

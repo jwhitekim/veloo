@@ -9,13 +9,13 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.paper_analyzer import app as paper_app
-from backend.app.translator import app as translate_app
-from backend.app.contextor import app as contextor_app
-from backend.app.reviwer import app as arch_app
-from backend.app.todo import app as todo_app
-from backend.app.todo.core.scheduler import start_scheduler, stop_scheduler
-from backend.app.auth import router as auth_router, AuthMiddleware
+from server.app.paper_analyzer import app as paper_app
+from server.app.translator import app as translate_app
+from server.app.contextor import app as contextor_app
+from server.app.reviwer import app as arch_app
+from server.app.todo import app as todo_app
+from server.app.todo.core.scheduler import start_scheduler, stop_scheduler
+from server.app.auth import router as auth_router, AuthMiddleware
 
 BASE = os.path.dirname(os.path.dirname(__file__))
 DIST = os.path.join(BASE, "frontend", "dist")
@@ -101,4 +101,4 @@ async def spa(full_path: str):
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 9000))
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run("server.main:app", host="0.0.0.0", port=port, reload=False)

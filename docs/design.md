@@ -5,20 +5,20 @@ capability별 요구사항은 `specs/<capability>/spec.md`에 있다. 여기는 
 ## 백엔드 구성
 
 ```
-[FastAPI Root — backend/main.py]
-    ├── (prefix 없음) → backend/app/auth.py         # 인증 미들웨어 + 로그인/회원가입/로그아웃
-    ├── /paper        → backend/app/paper_analyzer/
-    ├── /translate    → backend/app/translator.py
-    ├── /model-review → backend/app/reviwer.py
-    ├── /todo         → backend/app/todo/
-    └── /contextor    → backend/app/contextor.py
+[FastAPI Root — server/main.py]
+    ├── (prefix 없음) → server/app/auth.py         # 인증 미들웨어 + 로그인/회원가입/로그아웃
+    ├── /paper        → server/app/paper_analyzer/
+    ├── /translate    → server/app/translator.py
+    ├── /model-review → server/app/reviwer.py
+    ├── /todo         → server/app/todo/
+    └── /contextor    → server/app/contextor.py
 ```
 
-각 서브앱은 독립된 `FastAPI()` 인스턴스로 선언한 뒤 `backend/main.py`에서 mount한다. `auth.py`의 `AuthMiddleware`는 root app에 등록되어 모든 요청을 가로챈다(경로별 예외는 `specs/auth/spec.md` 참고).
+각 서브앱은 독립된 `FastAPI()` 인스턴스로 선언한 뒤 `server/main.py`에서 mount한다. `auth.py`의 `AuthMiddleware`는 root app에 등록되어 모든 요청을 가로챈다(경로별 예외는 `specs/auth/spec.md` 참고).
 
 ## AI 프로바이더 추상화
 
-`backend/app/ai_provider.py`(서브앱 전용 폴더가 아닌 `backend/app/` 레벨 공용 모듈)가 Claude/Gemini를 `AI_PROVIDER` 환경변수로 전환 가능하게 추상화한다.
+`server/app/ai_provider.py`(서브앱 전용 폴더가 아닌 `server/app/` 레벨 공용 모듈)가 Claude/Gemini를 `AI_PROVIDER` 환경변수로 전환 가능하게 추상화한다.
 
 - `complete(system, user, max_tokens, tier="fast"|"smart", images=[...])` — 단일턴 완성 응답. `images`로 멀티모달 입력(model-review의 `/api/explain`이 사용).
 - `stream(system, user, max_tokens, tier="smart")` — 토큰 단위 스트리밍(async generator, translator의 `/api/translate`가 사용).
@@ -27,7 +27,7 @@ capability별 요구사항은 `specs/<capability>/spec.md`에 있다. 여기는 
 
 ## 데이터베이스
 
-`backend/app/database.py`가 Supabase 클라이언트를 제공한다. contextor는 이 공용 모듈을 쓰지 않고 자체적으로 Supabase 클라이언트를 생성한다 — 다른 서브앱과의 알려진 불일치이며 동작에는 문제 없음.
+`server/app/database.py`가 Supabase 클라이언트를 제공한다. contextor는 이 공용 모듈을 쓰지 않고 자체적으로 Supabase 클라이언트를 생성한다 — 다른 서브앱과의 알려진 불일치이며 동작에는 문제 없음.
 
 ## 프론트엔드 규칙
 

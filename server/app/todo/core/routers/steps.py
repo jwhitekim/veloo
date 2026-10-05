@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from supabase import Client
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 import schemas
 
 router = APIRouter(prefix="/api/steps", tags=["steps"])

@@ -83,7 +83,7 @@ Veloo는 승인된 계정마다 `/:username` 개인 워크스페이스를 제공
 | 개발 도구 | Claude Code (에이전틱 코딩) |
 
 로컬 실행 기준:
-- 백엔드: `python -m backend.main` > `http://localhost:9000`
+- 백엔드: `python -m server.main` > `http://localhost:9000`
 - 프론트엔드: `npm run dev` > `http://localhost:5173`
 - Docker 이미지 빌드 및 실행 지원
 
@@ -93,7 +93,7 @@ Veloo는 승인된 계정마다 `/:username` 개인 워크스페이스를 제공
 
 - 라이브 데모: veloo.2joon.com — 프라이빗 베타, 가입 요청은 수동 승인
 - 현재는 개인 API 키와 개인 Supabase 프로젝트로 운영되는 개인 배포판이며, 공유 랩 도구는 아님
-- GitHub 저장소: `.claude`, `backend`, `frontend`, `docs`, `scripts` 등으로 구성, 224회 커밋 진행
+- GitHub 저장소: `.claude`, `server`, `frontend`, `docs`, `scripts` 등으로 구성, 224회 커밋 진행
 
 ---
 

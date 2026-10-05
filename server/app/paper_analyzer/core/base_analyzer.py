@@ -1,4 +1,4 @@
-from backend.app.ai_provider import JSON_OUTPUT_CONTRACT, extract_json
+from server.app.ai_provider import JSON_OUTPUT_CONTRACT, extract_json
 
 PROMPT_TEMPLATE = """다음은 논문의 초록입니다.
 

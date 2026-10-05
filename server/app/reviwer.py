@@ -10,7 +10,7 @@ from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from backend.app.ai_provider import get_ai_provider
+from server.app.ai_provider import get_ai_provider
 
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 
@@ -18,7 +18,7 @@ app = FastAPI(title="Model Review")
 
 _ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 _supabase = get_supabase()
 
 EXPLAIN_PROMPT = """\

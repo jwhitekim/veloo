@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 EXPOSE 9000
-CMD ["python", "-m", "backend.main"]
+CMD ["python", "-m", "server.main"]

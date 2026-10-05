@@ -9,13 +9,13 @@ from fastapi.responses import StreamingResponse, JSONResponse
 from pathlib import Path
 from pydantic import BaseModel
 
-from backend.app.ai_provider import get_ai_provider
+from server.app.ai_provider import get_ai_provider
 
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 
 app = FastAPI(title="Translation Studio")
 
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 _supabase = get_supabase()
 
 _SYSTEM = """\

@@ -17,7 +17,7 @@ description: "veloo.2joon.com 배포의 원격 확인 단계를 담당한다 —
 ## 작업 원칙
 - GitHub Actions 감시는 `gh run watch`(또는 `gh run list --workflow=deploy.yml --limit 1` 폴링)를 사용한다. `gh`는 이미 인증되어 있다.
 - 프로덕션 스모크 테스트는 **WebFetch를 사용한다 — Bash의 curl이 아니다.** 이 환경의 Bash 샌드박스는 일반 인터넷 아웃바운드가 막혀 있어 `curl https://veloo.2joon.com`가 `Could not resolve host`로 실패한다. WebFetch는 이 제약이 없다.
-- 스모크 테스트 대상 (인증 없이 접근 가능한 경로, `backend/app/auth.py`의 `_OPEN_PATHS` 기준):
+- 스모크 테스트 대상 (인증 없이 접근 가능한 경로, `server/app/auth.py`의 `_OPEN_PATHS` 기준):
   - `https://veloo.2joon.com/` — 200 응답 + HTML(SPA) 반환 확인
   - `https://veloo.2joon.com/login` — 200 응답 확인
   - `https://veloo.2joon.com/api/me` — 200 응답 확인 (미인증 상태에서도 열려 있는 엔드포인트)

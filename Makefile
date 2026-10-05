@@ -20,7 +20,7 @@ install:
 	conda run -n $(ENV_NAME) pip install -r requirements.txt
 
 run:
-	conda run --no-capture-output -n $(ENV_NAME) python -m backend.main
+	conda run --no-capture-output -n $(ENV_NAME) python -m server.main
 
 frontend-install:
 	cd frontend && npm install
@@ -32,7 +32,7 @@ frontend-build:
 	cd frontend && npm run build
 
 build: frontend-build
-	conda run --no-capture-output -n $(ENV_NAME) python -m backend.main
+	conda run --no-capture-output -n $(ENV_NAME) python -m server.main
 
 docker-build:
 	docker build -t veloo .

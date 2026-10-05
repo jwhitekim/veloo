@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from pathlib import Path
 from pydantic import BaseModel
 
-from backend.app.ai_provider import get_ai_provider
+from server.app.ai_provider import get_ai_provider
 
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 

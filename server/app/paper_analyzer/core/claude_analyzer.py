@@ -1,5 +1,5 @@
 from .base_analyzer import EMPTY_RESULT, build_prompt, parse_json_response
-from backend.app.ai_provider import get_ai_provider, JSON_OUTPUT_CONTRACT
+from server.app.ai_provider import get_ai_provider, JSON_OUTPUT_CONTRACT
 
 _TITLE_PROMPT = """다음 논문의 제목만 주어집니다. 제목에서 유추 가능한 내용을 바탕으로 분석하세요.
 초록이 없으므로 제목으로부터 합리적으로 추론하되, 불확실한 부분은 솔직히 표현하세요.

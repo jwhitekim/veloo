@@ -1,8 +1,8 @@
 import logging
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from supabase import Client
-from backend.app.database import get_supabase
-from backend.app.ai_provider import get_ai_provider, extract_json, JSON_OUTPUT_CONTRACT
+from server.app.database import get_supabase
+from server.app.ai_provider import get_ai_provider, extract_json, JSON_OUTPUT_CONTRACT
 import schemas
 
 router = APIRouter(prefix="/api/ai", tags=["ai"])

@@ -21,7 +21,7 @@ docs/
 
 - `contract.md`만 FROZEN이다. 그 위에 아무것도 더 얹지 않는다 — "무엇이 절대 안 바뀌는가"를 한 파일로 유지해야 나중에 뭐가 계약이고 뭐가 구현 선택인지 헷갈리지 않는다.
 - 나머지(`proposal.md`/`design.md`/`tasks.md`/`specs/*/spec.md`)는 "지금 유효한 스펙"이다. OpenSpec처럼 `changes/<change-id>/` 델타 폴더로 버전을 쪼개지 않는다 — capability가 8개, change가 사실상 소수인 규모에서는 폴더 계층을 늘리는 비용이 이득보다 크다. 변경 이력은 폴더가 아니라 `proposal.md` 끝의 변경이력 표와 git 커밋 로그로 관리한다.
-- `specs/<capability>/spec.md`가 요구사항만 담고 모듈 경계(구현 세부사항)를 담지 않는 이유: 구현이 끝나면 코드(`backend/app/<capability>/`, `frontend/src/...`) 자체가 모듈 경계의 정답이 된다. spec에 다시 적으면 코드가 바뀔 때마다 두 곳을 고쳐야 해서 어긋나기 쉽다.
+- `specs/<capability>/spec.md`가 요구사항만 담고 모듈 경계(구현 세부사항)를 담지 않는 이유: 구현이 끝나면 코드(`server/app/<capability>/`, `frontend/src/...`) 자체가 모듈 경계의 정답이 된다. spec에 다시 적으면 코드가 바뀔 때마다 두 곳을 고쳐야 해서 어긋나기 쉽다.
 
 ## 규칙 (에이전트가 반드시 지킬 것)
 

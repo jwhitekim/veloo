@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 from email_sender import send_email  # noqa: F401 — local email.py
 
 _scheduler = BackgroundScheduler(timezone="Asia/Seoul")

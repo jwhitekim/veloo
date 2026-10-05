@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import JSONResponse
 from supabase import Client
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 
 KST = timezone(timedelta(hours=9))
 router = APIRouter(prefix="/api/reviews", tags=["reviews"])

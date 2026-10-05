@@ -41,7 +41,7 @@ for the full write-up of each module.
 
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m backend.main          # http://localhost:9000
+python -m server.main          # http://localhost:9000
 
 cd frontend && npm install && npm run dev    # http://localhost:5173
 ```
@@ -50,7 +50,7 @@ Production build check:
 
 ```bash
 cd frontend && npm run build && cd ..
-python -m backend.main
+python -m server.main
 ```
 
 ```bash
@@ -59,7 +59,7 @@ docker build -t veloo .
 docker run --env-file .env -p 9000:9000 veloo
 ```
 
-Supabase schema lives in `backend/schema.sql` — run it once in the Supabase
+Supabase schema lives in `server/schema.sql` — run it once in the Supabase
 SQL Editor. Full environment variable list is in `CLAUDE.md`.
 
 ## Tech stack

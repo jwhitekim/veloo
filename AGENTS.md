@@ -3,19 +3,19 @@
 ## 프로젝트 개요
 
 개인 연구 허브 (가천대 PRML Lab 소속 연구자가 혼자 쓰는 개인용 도구, 랩 공용 도구 아님).
-FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
+FastAPI 루트(server/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 배포: veloo.2joon.com (Docker + Cloudflare Tunnel, GitHub Actions 자동 배포)
 
 ## 아키텍처
 
 ```
 [React Frontend (TypeScript)] → frontend/dist/ (정적 서빙)
-[FastAPI Root — backend/main.py]
-    ├── /paper        → backend/app/paper_analyzer/
-    ├── /translate    → backend/app/translator.py
-    ├── /model-review → backend/app/reviwer.py
-    ├── /todo         → backend/app/todo/
-    └── /contextor    → backend/app/contextor.py
+[FastAPI Root — server/main.py]
+    ├── /paper        → server/app/paper_analyzer/
+    ├── /translate    → server/app/translator.py
+    ├── /model-review → server/app/reviwer.py
+    ├── /todo         → server/app/todo/
+    └── /contextor    → server/app/contextor.py
 ```
 
 ## 기술 스택
@@ -36,8 +36,8 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 | SUPABASE_KEY         | 전 모듈                                                            |
 | SUPABASE_SERVICE_KEY | 전 모듈                                                            |
 | S2_API_KEY           | paper_analyzer                                                  |
-| SECURE_COOKIE        | backend/main.py                                                 |
-| AI_PROVIDER          | 전 모듈 (backend/app/ai_provider.py, "claude"|"gemini", 기본 claude) |
+| SECURE_COOKIE        | server/main.py                                                 |
+| AI_PROVIDER          | 전 모듈 (server/app/ai_provider.py, "claude"|"gemini", 기본 claude) |
 | GEMINI_API_KEY       | 전 모듈 (AI_PROVIDER=gemini일 때)                                    |
 
 
@@ -55,10 +55,10 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 ## 공통 코드 규칙
 
 - 환경변수 하드코딩 절대 금지
-- 각 서브앱은 FastAPI() 인스턴스로 독립 선언 후 backend/main.py에서 mount
+- 각 서브앱은 FastAPI() 인스턴스로 독립 선언 후 server/main.py에서 mount
 - Pydantic v2 문법 사용
 - 임시 파일은 /tmp에 저장, 요청 종료 시 삭제
-- AI 호출은 `backend/app/ai_provider.py`(Claude/Gemini 프로바이더 추상화, `AI_PROVIDER` env로 선택)를 통해 수행 — `backend/app/database.py`처럼 서브앱 전용 폴더가 아닌 `backend/app/` 레벨의 공용 모듈. 전 서브앱(paper_analyzer/translator/reviwer/todo/contextor)이 이 프로바이더를 사용
+- AI 호출은 `server/app/ai_provider.py`(Claude/Gemini 프로바이더 추상화, `AI_PROVIDER` env로 선택)를 통해 수행 — `server/app/database.py`처럼 서브앱 전용 폴더가 아닌 `server/app/` 레벨의 공용 모듈. 전 서브앱(paper_analyzer/translator/reviwer/todo/contextor)이 이 프로바이더를 사용
   - `complete(system, user, max_tokens, tier="fast"|"smart", images=[(media_type, bytes), ...])`: 단일턴 완성 응답. `tier`로 CLAUDE_MODEL_FAST/SMART(또는 GEMINI_MODEL_FAST/SMART) 선택, `images`로 멀티모달(이미지) 입력 첨부(reviwer의 `/api/explain`이 사용)
   - `stream(system, user, max_tokens, tier="smart")`: 토큰 단위 스트리밍(async generator). translator의 `/api/translate`가 사용
   - sync 컨텍스트(todo 라우터, paper_analyzer)는 `complete()` 직접 호출, async 컨텍스트(contextor, reviwer)는 `asyncio.to_thread(provider.complete, ...)`로 감싸 이벤트 루프 블로킹 방지
@@ -72,7 +72,7 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 
 ## 스키마
 
-- 단일 스키마 파일: backend/schema.sql
+- 단일 스키마 파일: server/schema.sql
 - Supabase 마이그레이션은 대시보드에서 직접 실행
 
 ## 서브앱 상세
@@ -81,14 +81,14 @@ FastAPI 루트(backend/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 
 논문 검색·분석. PDF 업로드 또는 제목/URL 검색 → Semantic Scholar로 메타데이터·저자 조회 → Claude로 요약 → SJR 저널 품질 조회.
 
-- 구조: `backend/app/paper_analyzer/api.py`(엔드포인트) / `core/semantic_scholar.py`(검색·저자 enrich) / `core/claude_analyzer.py`(요약) / `core/journal_quality.py`(`data/scimagojr 2025.csv` 기반 SJR 조회) / `core/pdf_extractor.py`(PDF에서 제목·초록·DOI·arXiv ID·그림 추출) / `data/venue_aliases.json`(저널명 별칭)
+- 구조: `server/app/paper_analyzer/api.py`(엔드포인트) / `core/semantic_scholar.py`(검색·저자 enrich) / `core/claude_analyzer.py`(요약) / `core/journal_quality.py`(`data/scimagojr 2025.csv` 기반 SJR 조회) / `core/pdf_extractor.py`(PDF에서 제목·초록·DOI·arXiv ID·그림 추출) / `data/venue_aliases.json`(저널명 별칭)
 - 엔드포인트: `GET /history`, `POST /search`, `POST /analyze`(paper_id 또는 url), `POST /analyze-pdf`(최대 50MB)
 - `__init__.py`가 `core/`를 flat import 하도록 `sys.path`에 추가 — `core.xxx`로 임포트
 - `S2_API_KEY`로 Semantic Scholar 레이트리밋 완화, Supabase 미설정 시 히스토리/캐시는 조용히 비활성화
 
 ### translator (`/translate`)
 
-ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역하는 스트리밍 API. `backend/app/translator.py` 단일 파일 (폴더 없음).
+ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역하는 스트리밍 API. `server/app/translator.py` 단일 파일 (폴더 없음).
 
 - 엔드포인트: `POST /api/translate`(스트리밍, Supabase `translation_history` 캐시 히트 시 `X-Cache: HIT`), `GET /api/history`
 - 번역 규칙(수식·고유명사 보존, 특정 용어 영어 유지 등)은 `translator.py`의 `_SYSTEM` 프롬프트에 하드코딩 — 톤/규칙 수정 시 여기를 고칠 것
@@ -96,7 +96,7 @@ ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역�
 
 ### arch_trainer / reviwer (`/model-review`)
 
-논문 아키텍처 그림을 보고 스스로 설명하는 연습 → Claude가 기준 설명 생성, 사용자 설명을 채점/교정. `backend/app/reviwer.py` 단일 파일 (폴더 없음, 파일명 오탈자 "reviwer" 그대로 사용 중).
+논문 아키텍처 그림을 보고 스스로 설명하는 연습 → Claude가 기준 설명 생성, 사용자 설명을 채점/교정. `server/app/reviwer.py` 단일 파일 (폴더 없음, 파일명 오탈자 "reviwer" 그대로 사용 중).
 
 - 엔드포인트: `POST /api/explain`(이미지 업로드, 최대 10MB → JSON 스키마 설명 생성, Supabase `arch_history` 저장), `POST /api/feedback`(사용자 설명 채점), `GET /api/history`
 - Claude 응답은 JSON만 나오도록 프롬프트로 강제, `_parse_json`이 코드펜스 제거 — 스키마 변경 시 파싱 로직도 확인
@@ -106,19 +106,19 @@ ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역�
 
 연구 할 일/단계/우선순위, AI 기반 단계 분해·전략 제안, 주간 리뷰, 마감일 리마인드 이메일.
 
-- 구조: `backend/app/todo/api.py`(라우터 include) / `core/routers/{todos,steps,ai,reviews}.py` / `core/scheduler.py`(리마인드 이메일, `SMTP_USER` 설정 시에만 시작) / `core/email_sender.py` / `core/schemas.py` / `core/research_todo.db`(로컬 SQLite, gitignore 대상)
+- 구조: `server/app/todo/api.py`(라우터 include) / `core/routers/{todos,steps,ai,reviews}.py` / `core/scheduler.py`(리마인드 이메일, `SMTP_USER` 설정 시에만 시작) / `core/email_sender.py` / `core/schemas.py` / `core/research_todo.db`(로컬 SQLite, gitignore 대상)
 - 엔드포인트: `/api/todos`(CRUD, `/calendar` 목록, `/{id}/done`, `/{id}/steps`), `/api/steps/{id}`(CRUD, `/done`), `/api/ai/generate-steps`·`/generate-steps-async`·`/generate-strategy`, `/api/reviews/weekly`, `/health`
 - `__init__.py`가 `core/`를 flat import 하도록 `sys.path`에 추가 — `routers.xxx`, `database`, `schemas`로 임포트
 - 마감일은 달력 UI로 지정(텍스트 입력 아님). `frontend/src/features/calendar/`(타임블로킹 캘린더·주간 리뷰)는 현재 `Shell.tsx`에서 네비게이션이 주석 처리되어 임시 비활성 상태이나 라우팅은 남아 있음
 
 ### contextor (`/contextor`)
 
-영어 단어/짧은 구를 ML/DL 논문 맥락별 의미로 구조화된 JSON으로 설명. `backend/app/contextor.py` 단일 파일 (폴더 없음).
+영어 단어/짧은 구를 ML/DL 논문 맥락별 의미로 구조화된 JSON으로 설명. `server/app/contextor.py` 단일 파일 (폴더 없음).
 
 - 엔드포인트: `POST /api/lookup`(Supabase `contextor_history` 캐시), `GET /api/history`
 - 응답 스키마(`hasMlUsage`, `cases[]`, `note`)는 few-shot 프롬프트로 강제, `_extract_json`이 코드펜스 유무와 무관하게 JSON만 추출
 - 다른 서브앱과 달리 `CLAUDE_MODEL_FAST`(기본 `claude-haiku-4-5-20251001`)가 기본 — 응답 속도 우선
-- Supabase 클라이언트를 `backend.app.database.get_supabase()`가 아니라 `contextor.py` 내부에서 직접 생성 (다른 서브앱과의 사소한 불일치, 동작엔 문제 없음)
+- Supabase 클라이언트를 `server.app.database.get_supabase()`가 아니라 `contextor.py` 내부에서 직접 생성 (다른 서브앱과의 사소한 불일치, 동작엔 문제 없음)
 
 ## 작업 규칙 원천 (`.claude/`)
 

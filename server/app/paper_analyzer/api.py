@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from backend.app.database import get_supabase
+from server.app.database import get_supabase
 _supabase = get_supabase()
 
 from core.semantic_scholar import (
