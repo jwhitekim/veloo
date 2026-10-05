@@ -1,6 +1,6 @@
 # Veloo UI 디자인 시스템
 
-앱 전체에 적용되는 디자인 토큰과 규칙. 토큰 정의는 `frontend/src/shared/styles/index.css`.
+앱 전체에 적용되는 디자인 토큰과 규칙. 토큰 정의는 `web/src/shared/styles/index.css`.
 제품 수준의 화면 구조, 정보 위계, 이미지, 완료 기준은
 [`docs/specs/product/spec.md`](specs/product/spec.md)를 우선 적용.
 
@@ -37,7 +37,7 @@
 - 새 UI에 색을 추가할 때는 항상 위 토큰에서 골라 씀. 새 hex 값 직접 박아넣기 금지.
 - 빨강(`--c-error`)은 삭제·에러 등 파괴적/경고 동작에만 사용. 액센트(`--accent`)와 혼동 금지.
 - `--bg-canvas`는 페이지 바깥(헤더 등), `--bg-base`는 실제 작업 패널/카드에 사용 — 두 토큰을 같은 색으로 섞어 쓰지 않음.
-- `--bg-additive`는 "패널 전체"가 아니라 "작은 웰(필터 탭 트랙 등)"에만 사용 — Todo 리스트 패널 전체를 회색으로 칠했다가 흰색으로 되돌린 전례 있음(`465bb06` 이전 작업, `frontend/src/features/todos/TodoList.tsx`). 현재는 웰 배경 위에 그린 액센트가 얹힌 구조이므로 재적용 시 참고.
+- `--bg-additive`는 "패널 전체"가 아니라 "작은 웰(필터 탭 트랙 등)"에만 사용 — Todo 리스트 패널 전체를 회색으로 칠했다가 흰색으로 되돌린 전례 있음(`465bb06` 이전 작업, `web/src/features/todos/TodoList.tsx`). 현재는 웰 배경 위에 그린 액센트가 얹힌 구조이므로 재적용 시 참고.
 - 레거시 별칭(`--c-card`, `--c-sidebar`, `--c-accent` 등)이 `index.css`에 남아있음 — Todo/Login 하위호환용. 새 코드에서는 위 1차 토큰만 쓸 것.
 - `--border-subtle`은 원래 `#e5e5e5`로 `--bg-canvas`/`--bg-base` 대비 1.17~~1.26:1(사실상 식별 불가)이었음 — `#cfd3cd`(1.41~~1.52:1)로 조정. `--accent-soft`도 같은 이유로 `#e6f0ec`(1.08~~1.16:1)에서 `#cfe6da`(1.22~~1.31:1)로 조정.
 - `--shadow-card`는 원래 `index.css`에 정의가 없어 `Todo.css`/`ArchTrainerPage.tsx`의 `var(--shadow-card)` 참조가 조용히 무효화(그림자 없음)되던 버그였음 — 이제 정의됨. 카드/패널에 그림자를 줄 땐 값을 새로 만들지 말고 위 토큰을 쓸 것.
@@ -105,13 +105,13 @@
 
 ### 히스토리 드롭다운
 
-- `frontend/src/shared/components/HistoryDropdown.tsx` — Translator/Contextor/Paper Analyzer가 공유.
+- `web/src/shared/components/HistoryDropdown.tsx` — Translator/Contextor/Paper Analyzer가 공유.
 - 규칙: 최근 기록을 페이지 본문에 상시 노출하지 않음. 헤더의 아이콘 버튼(시계 아이콘) 클릭 시에만 드롭다운으로 펼침. 항목이 0개면 버튼 자체를 숨김.
 - 배경 클릭 시 자동으로 닫힘.
 
 ### 우선순위 표시 (Todo / Calendar)
 
-공유 모듈은 `frontend/src/features/todos/priority.ts` 하나. 용도별로 export가 나뉨 — **컴포넌트마다 새로 정의하지 말고 반드시 `priority.ts`에서 import할 것.**
+공유 모듈은 `web/src/features/todos/priority.ts` 하나. 용도별로 export가 나뉨 — **컴포넌트마다 새로 정의하지 말고 반드시 `priority.ts`에서 import할 것.**
 
 
 | export              | 용도                            | 값                                                                            |
@@ -130,7 +130,7 @@
 
 ### 다국어 (i18n)
 
-- `frontend/src/shared/i18n/` — `LanguageContext.tsx`(provider) + `locales/{ko,en,zh}.json` + `index.ts`의 `useT()` 훅.
+- `web/src/shared/i18n/` — `LanguageContext.tsx`(provider) + `locales/{ko,en,zh}.json` + `index.ts`의 `useT()` 훅.
 - 화면에 보이는 문자열은 하드코딩하지 않고 `t('네임스페이스.키')`로 가져옴 (예: `t('shell.nav.todo')`). 새 문자열 추가 시 `ko.json`을 기준으로 세 언어 파일에 전부 키를 넣을 것 — 하나만 빠뜨리면 해당 언어에서 키가 그대로 노출됨.
 - 언어 전환 UI는 `LanguageSwitcher` 컴포넌트, 데스크톱 헤더 우측(`shell-topbar-end`)에 위치.
 

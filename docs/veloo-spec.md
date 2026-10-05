@@ -93,7 +93,7 @@ Veloo는 승인된 계정마다 `/:username` 개인 워크스페이스를 제공
 
 - 라이브 데모: veloo.2joon.com — 프라이빗 베타, 가입 요청은 수동 승인
 - 현재는 개인 API 키와 개인 Supabase 프로젝트로 운영되는 개인 배포판이며, 공유 랩 도구는 아님
-- GitHub 저장소: `.claude`, `server`, `frontend`, `docs`, `scripts` 등으로 구성, 224회 커밋 진행
+- GitHub 저장소: `.claude`, `server`, `web`, `docs`, `scripts` 등으로 구성, 224회 커밋 진행
 
 ---
 

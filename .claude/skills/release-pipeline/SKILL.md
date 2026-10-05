@@ -128,5 +128,5 @@ _workspace/release/
 ### 에러 흐름
 1. 사용자: "배포해줘"
 2. Phase 1: `release-preparer`가 `npm run build` 실행 중 TypeScript 에러 발견
-3. `release-preparer`가 버전 변경을 되돌리고(`git checkout -- frontend/package.json`) 실패 보고
+3. `release-preparer`가 버전 변경을 되돌리고(`git checkout -- web/package.json`) 실패 보고
 4. `release-pipeline`이 Phase 2로 진행하지 않고, 사용자에게 빌드 에러 전문을 그대로 전달하며 중단

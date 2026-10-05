@@ -2,7 +2,7 @@
 
 veloo 모바일 하단 독 · 데스크톱 상단 탭 인디케이터를 만들며 참고한 저장소와, 각 저장소에서 나온 디자인 판단 기록.
 
-- 작업 파일: `frontend/src/app/Shell.tsx`, `frontend/src/app/Shell.css`
+- 작업 파일: `web/src/app/Shell.tsx`, `web/src/app/Shell.css`
 - 정리일: 2026-08-15
 
 ## 참고 저장소

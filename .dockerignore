@@ -5,4 +5,4 @@
 extensions/
 **/__pycache__
 **/*.pyc
-frontend/node_modules
+web/node_modules

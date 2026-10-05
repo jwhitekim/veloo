@@ -43,13 +43,13 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python -m server.main          # http://localhost:9000
 
-cd frontend && npm install && npm run dev    # http://localhost:5173
+cd web && npm install && npm run dev    # http://localhost:5173
 ```
 
 Production build check:
 
 ```bash
-cd frontend && npm run build && cd ..
+cd web && npm run build && cd ..
 python -m server.main
 ```
 

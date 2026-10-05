@@ -22,7 +22,7 @@ description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/C
   `docs/ios-capsule-navigation.md`(iOS 하단 네비게이션 상세 규칙). 필요하면
   `docs/capsule-navigation-research.md`(디자인 근거·출처)도 확인한다. 해당 문서가 프로젝트의
   디자인 결정 기록이다 — 코드만 보고 판단하지 않는다.
-- **색상은 항상 `frontend/src/shared/styles/index.css`의 토큰을 쓴다** (`--accent`, `--text-primary`,
+- **색상은 항상 `web/src/shared/styles/index.css`의 토큰을 쓴다** (`--accent`, `--text-primary`,
   `--bg-base` 등). 새 hex 값을 직접 박아넣지 않는다. `--c-error`(빨강)는 삭제/에러 전용 —
   액센트 색과 혼동하지 않는다.
 - **클래스를 고치기 전에 실제로 렌더링에 쓰이는지 확인한다.** `grep`으로 해당 클래스명이
@@ -42,7 +42,7 @@ description: "veloo.2joon.com 프론트엔드의 시각 디자인/레이아웃/C
   사례). `overflow-y: auto`를 쓰는 컨테이너에는 항상 `scrollbar-gutter: stable`을 같이 건다.
 - 다크 모드는 구현되어 있지 않다(`docs/ui-design-system.md` 참고) — `dark:` 클래스나 다크 모드
   분기를 새로 추가하지 않는다.
-- 변경 후 `cd frontend && npm run build`(tsc 타입체크 + vite build)로 검증한다. 실패하면
+- 변경 후 `cd web && npm run build`(tsc 타입체크 + vite build)로 검증한다. 실패하면
   커밋하지 않고 원인을 보고한다.
 - **정렬/폭 관련 변경은 빌드 성공만으로 끝내지 않는다.** CSS 값을 눈으로 맞춰봤다고 실제
   렌더링도 맞는다는 보장이 없다(위 scrollbar-gutter 사례 참고). 가능하면 브라우저에서

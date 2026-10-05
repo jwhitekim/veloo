@@ -18,7 +18,7 @@ from server.app.todo.core.scheduler import start_scheduler, stop_scheduler
 from server.app.auth import router as auth_router, AuthMiddleware
 
 BASE = os.path.dirname(os.path.dirname(__file__))
-DIST = os.path.join(BASE, "frontend", "dist")
+DIST = os.path.join(BASE, "web", "dist")
 LOCAL_ORIGIN_RE = (
     r"^https?://"
     r"(localhost|127\.0\.0\.1|0\.0\.0\.0|192\.168\.\d{1,3}\.\d{1,3}|"

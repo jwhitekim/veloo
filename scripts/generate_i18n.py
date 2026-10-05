@@ -1,7 +1,7 @@
 """
 프론트엔드 UI 다국어 번역 파일 생성 스크립트.
 
-frontend/src/shared/i18n/locales/ko.json(원본)을 읽어 en.json / zh.json을
+web/src/shared/i18n/locales/ko.json(원본)을 읽어 en.json / zh.json을
 server/app/ai_provider.py(AI_PROVIDER env로 선택된 프로바이더)로 일괄 번역해
 같은 폴더에 덮어쓴다. 1회성/수동 실행 도구 — 런타임에는 쓰이지 않음. ko.json에
 새 문자열을 추가한 뒤 다시 실행하면 전체를 재번역한다(부분 갱신 아님).
@@ -28,7 +28,7 @@ load_dotenv(ROOT / ".env")
 # .env의 AI_PROVIDER를 그대로 따른다(현재 프로젝트 설정: gemini). ClaudeProvider로
 # 강제하고 싶으면 실행 전 `AI_PROVIDER=claude` 를 셸에서 export할 것.
 
-LOCALES_DIR = ROOT / "frontend" / "src" / "shared" / "i18n" / "locales"
+LOCALES_DIR = ROOT / "web" / "src" / "shared" / "i18n" / "locales"
 KO_PATH = LOCALES_DIR / "ko.json"
 
 LANGUAGE_NAMES = {

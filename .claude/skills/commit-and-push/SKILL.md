@@ -15,7 +15,7 @@ description: 검증을 통과한 변경사항을 커밋하고 원격에 푸시�
 pytest/mypy/ruff 같은 백엔드 검증 도구가 없다 — 유일한 자동 검증은 프론트엔드 빌드다.
 
 ```bash
-cd frontend && npm run build
+cd web && npm run build
 ```
 
 증거(명령 실행 결과 전체)를 보고에 포함한다. "통과했다"고 말로만 하지 않는다
@@ -79,7 +79,7 @@ design decision(D-001처럼)을 따른 변경이면, 여유가 있을 때 괄호
 이전 커밋들과 합쳐진 상태에서 문제가 없는지 한 번 더 확인한다.
 
 ```bash
-cd frontend && npm run build
+cd web && npm run build
 ```
 
 실패하면 푸시하지 않는다. 실패 내용을 사람에게 보고하고, 로컬 커밋은 그대로 둔다

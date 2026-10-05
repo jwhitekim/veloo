@@ -32,14 +32,14 @@ capability별 요구사항은 `specs/<capability>/spec.md`에 있다. 여기는 
 ## 프론트엔드 규칙
 
 - 백엔드 호출은 상대경로 사용(`/paper`, `/translate`, `/model-review`, `/todo`, `/contextor`) — 별도 baseURL 환경변수 불필요(동일 origin 서빙).
-- 화면 문자열은 `frontend/src/shared/i18n/`에서 관리(하드코딩 금지, en/ko/zh 동시 추가) — `contract.md` 4절 참고.
-- 디자인 토큰은 `frontend/src/shared/styles/index.css`에 정의, 세부 값·타이포·컴포넌트 표면 근거는 `ui-design-system.md` 참고, 화면 구조 원칙은 `contract.md` 참고.
-- 공유 UI(`PageHeader`, `PageGuide`, `PageEmptyIntro`, `StatePanel`, `WorkspaceControls` 등)는 `frontend/src/shared/components/`에서 정의하고 각 탭에서 재사용 — `contract.md` D-004.
-- 우선순위 표현은 `frontend/src/features/todos/priority.ts`만 사용 — 다른 곳에서 재구현하지 않는다.
+- 화면 문자열은 `web/src/shared/i18n/`에서 관리(하드코딩 금지, en/ko/zh 동시 추가) — `contract.md` 4절 참고.
+- 디자인 토큰은 `web/src/shared/styles/index.css`에 정의, 세부 값·타이포·컴포넌트 표면 근거는 `ui-design-system.md` 참고, 화면 구조 원칙은 `contract.md` 참고.
+- 공유 UI(`PageHeader`, `PageGuide`, `PageEmptyIntro`, `StatePanel`, `WorkspaceControls` 등)는 `web/src/shared/components/`에서 정의하고 각 탭에서 재사용 — `contract.md` D-004.
+- 우선순위 표현은 `web/src/features/todos/priority.ts`만 사용 — 다른 곳에서 재구현하지 않는다.
 
 ## 모바일 OS별 네비게이션 분기
 
-`frontend/src/shared/hooks/useDeviceOS.ts`가 `navigator.userAgent`로 iOS/Android를 판별해 `WorkspaceLayout.tsx`에서 `MobileCapsuleNavigation`(iOS) 또는 `MobileAndroidNavigation`(Android)을 분기 렌더한다. 상세 동작은 `specs/mobile-navigation/spec.md`, 값이 지금 형태로 정착한 시행착오 과정은 `ios-capsule-navigation.md`(설계 히스토리) 참고.
+`web/src/shared/hooks/useDeviceOS.ts`가 `navigator.userAgent`로 iOS/Android를 판별해 `WorkspaceLayout.tsx`에서 `MobileCapsuleNavigation`(iOS) 또는 `MobileAndroidNavigation`(Android)을 분기 렌더한다. 상세 동작은 `specs/mobile-navigation/spec.md`, 값이 지금 형태로 정착한 시행착오 과정은 `ios-capsule-navigation.md`(설계 히스토리) 참고.
 
 ## 환경변수
 
@@ -54,4 +54,4 @@ capability별 요구사항은 `specs/<capability>/spec.md`에 있다. 여기는 
 
 ## 배포
 
-Docker + GitHub Actions SSH → nginx → Cloudflare Tunnel. 프론트엔드 수정 후 `frontend`에서 `npm run build` 실행 필수, `frontend/dist/` 직접 수정 금지.
+Docker + GitHub Actions SSH → nginx → Cloudflare Tunnel. 프론트엔드 수정 후 `web`에서 `npm run build` 실행 필수, `web/dist/` 직접 수정 금지.

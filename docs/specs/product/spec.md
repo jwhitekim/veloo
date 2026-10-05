@@ -43,7 +43,7 @@ veloo는 연구자의 계획, 탐색, 번역, 모델 분석, 개념 학습을 �
 #### Scenario: 새 탭에 헤더 추가
 - GIVEN 새로운 기능 탭을 추가하는 중
 - WHEN 페이지 상단 헤더가 필요함
-- THEN `frontend/src/shared/components/PageHeader`를 재사용
+- THEN `web/src/shared/components/PageHeader`를 재사용
 - AND 해당 탭 폴더 안에 헤더를 새로 구현하지 않음
 
 ### Requirement: D-005 타이포그래피와 간격
@@ -71,12 +71,12 @@ veloo는 연구자의 계획, 탐색, 번역, 모델 분석, 개념 학습을 �
 - THEN 직접 SVG(Scalable Vector Graphics) 작성 대신 라이브러리 안에서 대안을 우선 탐색
 
 ### Requirement: D-008 이미지
-시스템은 제품 설명을 보조하는 이미지에만 GPT 생성 이미지를 사용해야 하며(SHALL), 제품 화면 내부의 실제 입력·결과·상태를 이미지로 대체해서는 안 된다(SHALL NOT). 공개 마케팅 이미지는 `frontend/public/marketing/`에 위치해야 한다(SHALL).
+시스템은 제품 설명을 보조하는 이미지에만 GPT 생성 이미지를 사용해야 하며(SHALL), 제품 화면 내부의 실제 입력·결과·상태를 이미지로 대체해서는 안 된다(SHALL NOT). 공개 마케팅 이미지는 `web/public/marketing/`에 위치해야 한다(SHALL).
 
 #### Scenario: 마케팅 히어로 이미지 추가
 - GIVEN 랜딩 페이지에 새 히어로 이미지를 추가
 - WHEN 이미지를 배치함
-- THEN `frontend/public/marketing/`에 저장
+- THEN `web/public/marketing/`에 저장
 - AND 이미지 위에 제품 미리보기 전체를 덮는 레이아웃을 쓰지 않음
 - AND 빈 대체 텍스트와 `aria-hidden` 적용
 
@@ -107,7 +107,7 @@ Tasks/Calendar는 `PageHeader > TodoSummaryBar > TodoList` 구조와 `priority.t
 - AND 안내 카드(`PageGuide`/`PageEmptyIntro`)는 유지됨
 
 ### Requirement: 접근성과 콘텐츠
-화면에 보이는 모든 문자열은 `frontend/src/shared/i18n/`에서 관리해야 하며(SHALL), 한국어·영어·중국어 키를 동시에 추가해야 한다(SHALL). 색상만으로 선택·오류·우선순위를 표현해서는 안 된다(SHALL NOT).
+화면에 보이는 모든 문자열은 `web/src/shared/i18n/`에서 관리해야 하며(SHALL), 한국어·영어·중국어 키를 동시에 추가해야 한다(SHALL). 색상만으로 선택·오류·우선순위를 표현해서는 안 된다(SHALL NOT).
 
 #### Scenario: 새 UI 문자열 추가
 - GIVEN 새 버튼 라벨을 추가함
@@ -116,7 +116,7 @@ Tasks/Calendar는 `PageHeader > TodoSummaryBar > TodoList` 구조와 `priority.t
 
 ## Notes (프로세스, 시스템 동작 아님)
 
-**완료 기준**: 공유 컴포넌트 재사용 검토, 하드코딩 없음, 같은 계열 레일 일치, 360px/1280px 확인, 로딩/오류/빈/결과 상태 확인, en/ko/zh 레이아웃 유지, `prefers-reduced-motion` 대응, `cd frontend && npm run build` 성공, 관련 문서·TODO.md 갱신.
+**완료 기준**: 공유 컴포넌트 재사용 검토, 하드코딩 없음, 같은 계열 레일 일치, 360px/1280px 확인, 로딩/오류/빈/결과 상태 확인, en/ko/zh 레이아웃 유지, `prefers-reduced-motion` 대응, `cd web && npm run build` 성공, 관련 문서·TODO.md 갱신.
 
 **변경 절차**: 기존 결정 번호·공유 컴포넌트 확인 → 기존 규칙으로 해결 가능하면 코드만 수정 → 신규 패턴이 필요하면 이 스펙을 먼저 수정하고 `docs/proposal.md` 변경이력에 기록 → 신규 토큰보다 기존 토큰 조합 우선 → 대표 화면 1개 검증 후 같은 계열 적용 → 빌드·문서 검사 통과 후 커밋.
 

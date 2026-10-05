@@ -117,7 +117,7 @@ StatePanel
 - 제품 화면 내부의 입력, 결과, 상태를 이미지로 대체 금지
 - 이미지 위에 제품 미리보기 전체를 덮는 레이아웃 금지
 - 장식 이미지의 빈 대체 텍스트와 `aria-hidden` 적용
-- 공개 마케팅 자산 경로: `frontend/public/marketing/`
+- 공개 마케팅 자산 경로: `web/public/marketing/`
 - 생성 이미지 방향: 아이보리 배경, 녹색 계열, 절제된 입체 편집 스타일
 - 생성 이미지 안의 문자, 로고, 워터마크 금지
 
@@ -180,7 +180,7 @@ StatePanel
 
 ## 4. 접근성과 콘텐츠
 
-- 화면 문자열은 `frontend/src/shared/i18n/`에서 관리
+- 화면 문자열은 `web/src/shared/i18n/`에서 관리
 - 한국어, 영어, 중국어 키 동시 추가
 - 아이콘 단독 버튼의 `aria-label` 필수
 - 로딩 상태의 `role="status"`와 상태 문구 제공
@@ -200,7 +200,7 @@ StatePanel
 - 로딩, 오류, 빈 상태, 결과 상태 확인
 - 한국어, 영어, 중국어의 레이아웃 유지
 - `prefers-reduced-motion` 대응 확인
-- `cd frontend && npm run build` 성공
+- `cd web && npm run build` 성공
 - 관련 문서와 `TODO.md` 갱신
 
 ## 6. 변경 절차

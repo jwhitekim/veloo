@@ -9,7 +9,7 @@ FastAPI 루트(server/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 ## 아키텍처
 
 ```
-[React Frontend (TypeScript)] → frontend/dist/ (정적 서빙)
+[React Frontend (TypeScript)] → web/dist/ (정적 서빙)
 [FastAPI Root — server/main.py]
     ├── /paper        → server/app/paper_analyzer/
     ├── /translate    → server/app/translator.py
@@ -21,7 +21,7 @@ FastAPI 루트(server/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 ## 기술 스택
 
 - Backend: Python 3.11, FastAPI, Uvicorn, Pydantic v2
-- Frontend: React 18 + TypeScript + Vite → frontend/dist/
+- Frontend: React 18 + TypeScript + Vite → web/dist/
 - AI: Anthropic SDK (claude-haiku-4-5 / claude-sonnet-4-6)
 - DB: Supabase (전 모듈 히스토리 + 인증)
 - 배포: Docker + GitHub Actions SSH → nginx → Cloudflare Tunnel
@@ -47,10 +47,10 @@ FastAPI 루트(server/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 - 별도 baseURL 환경변수 불필요 (동일 origin 서빙)
 - 수정 후 npm run build 실행하여 dist/ 갱신
 - dist/ 직접 수정 금지
-- 화면 문자열 하드코딩 금지, `frontend/src/shared/i18n/` 사용
+- 화면 문자열 하드코딩 금지, `web/src/shared/i18n/` 사용
 - 디자인 토큰 우선 사용, 새 색상값 직접 작성 금지
-- 공통 UI는 `frontend/src/shared/components/`에서 정의하고 각 탭에서 재사용
-- 우선순위 표현은 `frontend/src/features/todos/priority.ts` 사용
+- 공통 UI는 `web/src/shared/components/`에서 정의하고 각 탭에서 재사용
+- 우선순위 표현은 `web/src/features/todos/priority.ts` 사용
 
 ## 공통 코드 규칙
 
@@ -66,7 +66,7 @@ FastAPI 루트(server/main.py)가 5개 서브앱을 마운트하는 SPA 구조.
 
 ## 버전 관리
 
-- 버전 소스는 `frontend/package.json`의 `version` 필드 하나뿐 (백엔드에는 버전 문자열 없음)
+- 버전 소스는 `web/package.json`의 `version` 필드 하나뿐 (백엔드에는 버전 문자열 없음)
 - "릴리즈해줘"/"배포해줘" 요청은 `release-pipeline` 하네스가 범프→빌드검증→커밋→푸시→배포확인까지 처리 (아래 하네스 섹션 참고)
 - 버전 범프는 main 브랜치에서 직접 실행 (별도 브랜치 없음)
 
@@ -109,7 +109,7 @@ ML/DL/CV/NLP 논문 문장·구·용어를 자연스러운 한국어로 번역�
 - 구조: `server/app/todo/api.py`(라우터 include) / `core/routers/{todos,steps,ai,reviews}.py` / `core/scheduler.py`(리마인드 이메일, `SMTP_USER` 설정 시에만 시작) / `core/email_sender.py` / `core/schemas.py` / `core/research_todo.db`(로컬 SQLite, gitignore 대상)
 - 엔드포인트: `/api/todos`(CRUD, `/calendar` 목록, `/{id}/done`, `/{id}/steps`), `/api/steps/{id}`(CRUD, `/done`), `/api/ai/generate-steps`·`/generate-steps-async`·`/generate-strategy`, `/api/reviews/weekly`, `/health`
 - `__init__.py`가 `core/`를 flat import 하도록 `sys.path`에 추가 — `routers.xxx`, `database`, `schemas`로 임포트
-- 마감일은 달력 UI로 지정(텍스트 입력 아님). `frontend/src/features/calendar/`(타임블로킹 캘린더·주간 리뷰)는 현재 `Shell.tsx`에서 네비게이션이 주석 처리되어 임시 비활성 상태이나 라우팅은 남아 있음
+- 마감일은 달력 UI로 지정(텍스트 입력 아님). `web/src/features/calendar/`(타임블로킹 캘린더·주간 리뷰)는 현재 `Shell.tsx`에서 네비게이션이 주석 처리되어 임시 비활성 상태이나 라우팅은 남아 있음
 
 ### contextor (`/contextor`)
 
